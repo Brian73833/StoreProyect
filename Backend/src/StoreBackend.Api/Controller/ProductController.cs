@@ -60,26 +60,21 @@ namespace StoreBackend.Api.Controller
 
                 if (product.ImageFile != null)
                 {
-                    // 1. Definir carpeta de destino
                     string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads", "products");
                     
-                    // Asegurar que la carpeta exista
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    // 2. Generar nombre único
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + product.ImageFile.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    // 3. Guardar el archivo físicamente
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await product.ImageFile.CopyToAsync(fileStream);
                     }
 
-                    // 4. Guardar la ruta RELATIVA en el DTO
                     dto.ImagePath = Path.Combine("uploads", "products", uniqueFileName).Replace("\\", "/");
                 }
 

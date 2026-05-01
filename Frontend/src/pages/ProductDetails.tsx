@@ -394,7 +394,7 @@ const ProductDetail: React.FC = () => {
                   try {
                     await deleteProduct(id!);
                     navigate("/products");
-                  } catch (err) {
+                  } catch {
                     alert("Error al eliminar el producto");
                     setShowDeleteModal(false);
                   }

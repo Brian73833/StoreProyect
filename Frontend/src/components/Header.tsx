@@ -45,6 +45,30 @@ const Header: React.FC = () => {
             </span>
           </button>
 
+          {/* Desktop Navigation */}
+          {isLoggedIn && (
+            <nav className="hidden md:flex items-center gap-1 bg-stone-100/50 p-1.5 rounded-2xl border border-stone-200/50">
+              <button
+                onClick={() => navigate("/")}
+                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-[#E2725B] hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
+              >
+                Home
+              </button>
+              <button
+                onClick={() => navigate("/products")}
+                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-[#E2725B] hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
+              >
+                Catálogo
+              </button>
+              <button
+                onClick={() => navigate("/profile")}
+                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-[#E2725B] hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
+              >
+                Perfil
+              </button>
+            </nav>
+          )}
+
           {/* Right Side */}
           {!isLoggedIn ? (
             /* Login Button */
@@ -112,6 +136,19 @@ const Header: React.FC = () => {
 
                 {/* Menu Items */}
                 <div className="py-2">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/");
+                    }}
+                    id="header-menu-home"
+                    className="w-full flex items-center gap-3 px-5 py-3 text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-all duration-200 group"
+                  >
+                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-[#E2725B] transition-colors">
+                      home
+                    </span>
+                    <span className="text-sm font-semibold">Home</span>
+                  </button>
                   <button
                     onClick={() => {
                       setMenuOpen(false);
