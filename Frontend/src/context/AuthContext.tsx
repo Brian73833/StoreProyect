@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (user: User) => void;
   logout: () => void;
   isLoggedIn: boolean;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,6 +21,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Load user from localStorage on initial load
@@ -32,6 +34,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.removeItem("user");
       }
     }
+    setIsLoading(false);
   }, []);
 
   const login = (userData: User) => {
@@ -47,7 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const isLoggedIn = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoggedIn }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoggedIn, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

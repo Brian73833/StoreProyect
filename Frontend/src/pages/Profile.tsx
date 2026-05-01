@@ -162,6 +162,18 @@ export default function Profile() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      {/* Back to Home */}
+      <div className="mb-6">
+        <button
+          onClick={() => navigate("/")}
+          className="inline-flex items-center gap-2 text-stone-500 hover:text-[#E2725B] font-semibold transition-colors duration-200 group"
+        >
+          <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform duration-200">
+            arrow_back
+          </span>
+          Volver al inicio
+        </button>
+      </div>
       <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-stone-200/50 overflow-hidden border border-stone-100">
         {/* Banner / Header Section */}
         <div className="bg-gradient-to-br from-[#E2725B] to-[#c95d47] px-8 py-14 text-white relative overflow-hidden">

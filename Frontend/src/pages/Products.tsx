@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ProductModal from "../components/ProductModal";
 import CategoryModal from "../components/CategoryModal";
 import ProductCard from "../components/ProductCard";
@@ -8,6 +9,7 @@ import { ICON_STYLE } from "../lib/utils";
 
 const Products: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const isAdmin = user?.isAdmin || false;
 
   const { products, categories, loading, error, addProduct, addCategory } =
@@ -27,6 +29,18 @@ const Products: React.FC = () => {
 
   return (
     <main className="pt-8 pb-20 px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface font-body-md">
+      {/* Back to Home */}
+      <div className="mb-6">
+        <button
+          onClick={() => navigate("/")}
+          className="inline-flex items-center gap-2 text-secondary hover:text-primary font-semibold transition-colors duration-200 group"
+        >
+          <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform duration-200">
+            arrow_back
+          </span>
+          Volver al inicio
+        </button>
+      </div>
       {isAdmin && (
         <div className="mb-12 flex flex-col sm:flex-row justify-end gap-4">
           <button

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { Category, Product } from "../lib/types";
 import { addProduct } from "../services/productService";
 
@@ -26,7 +26,30 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!isOpen) return null;
+  // Sync categoryId whenever the categories list changes (e.g. loaded async)
+  useEffect(() => {
+    if (categories.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        categoryId: prev.categoryId === 0 ? categories[0].categoryId : prev.categoryId,
+      }));
+    }
+  }, [categories]);
+
+  // Reset form every time the modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        name: "",
+        description: "",
+        price: 0,
+        stock: 0,
+        categoryId: categories.length > 0 ? categories[0].categoryId : 0,
+      });
+      setImageFile(null);
+      setError(null);
+    }
+  }, [isOpen]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -83,6 +106,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
       setLoading(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
