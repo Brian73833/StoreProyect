@@ -1,0 +1,58 @@
+# --- General ---
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+
+# --- Frontend (Node.js / React / Vite) ---
+Frontend/node_modules/
+Frontend/dist/
+Frontend/build/
+Frontend/.eslintcache
+Frontend/*.tsbuildinfo
+
+# --- Backend (.NET / C#) ---
+Backend/**/bin/
+Backend/**/obj/
+Backend/**/App_Data/
+Backend/**/ClientApp/dist/
+Backend/**/Generated\ Files/
+Backend/**/*.user
+Backend/**/*.userosscache
+Backend/**/*.sln.docstates
+Backend/**/*.suo
+
+# Visual Studio files
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# Publish folders
+publish/
+*.publish.xml
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Database
+*.db
+*.sqlite
+Backend/**/appsettings.Development.json
+# Backend/**/appsettings.json # Often kept, but sensitive info should be in secrets/env

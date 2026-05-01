@@ -1,0 +1,87 @@
+@import "tailwindcss";
+@theme {
+  --color-primary: #c45b3f;
+  --color-primary-container: #ffdad1;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #3b0a00;
+
+  --color-secondary: #77574e;
+  --color-secondary-container: #ffdad1;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #2c150f;
+
+  --color-tertiary: #6c5d2f;
+  --color-tertiary-fixed: #f7e8b4;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-fixed: #231b00;
+  --color-on-tertiary-fixed-variant: #534517;
+
+  --color-background: #fffbff;
+  --color-on-background: #201a18;
+  --color-surface: #fffbff;
+  --color-on-surface: #201a18;
+  --color-on-surface-variant: #53433f;
+  --color-surface-container: #f5efed;
+  --color-surface-container-low: #fbf5f3;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #efe9e7;
+  --color-outline: #85736e;
+  --color-outline-variant: #d8c2bb;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+
+  --font-headline: "Outfit", sans-serif;
+  --font-body: "Outfit", sans-serif;
+  --font-label: "Outfit", sans-serif;
+
+  --text-headline-xl: 3.5rem;
+  --text-headline-lg: 2.5rem;
+  --text-headline-md: 1.5rem;
+  --text-label-caps: 0.75rem;
+  --text-body-lg: 1.125rem;
+  --text-body-md: 1rem;
+  --text-body-sm: 0.875rem;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    @apply bg-background text-on-surface;
+  }
+}
+
+@layer components {
+  .font-headline-xl { font-family: var(--font-headline); font-size: var(--text-headline-xl); }
+  .font-headline-lg { font-family: var(--font-headline); font-size: var(--text-headline-lg); }
+  .font-headline-md { font-family: var(--font-headline); font-size: var(--text-headline-md); }
+  .font-label-caps { 
+    font-family: var(--font-label); 
+    font-size: var(--text-label-caps); 
+    text-transform: uppercase; 
+    letter-spacing: 0.15em;
+  }
+  .font-body-lg { font-family: var(--font-body); font-size: var(--text-body-lg); }
+  .font-body-md { font-family: var(--font-body); font-size: var(--text-body-md); }
+  .font-body-sm { font-family: var(--font-body); font-size: var(--text-body-sm); }
+}
+
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
