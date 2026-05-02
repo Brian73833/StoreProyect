@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using StoreBackend.Api.Models.Responses;
 using StoreBackend.Dto;
 using StoreBackend.Facade;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreBackend.Api.Controller;
 
@@ -35,6 +36,7 @@ public class CategoryController : ControllerBase
         }
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> AddCategory([FromBody] CategoryDto category)
     {

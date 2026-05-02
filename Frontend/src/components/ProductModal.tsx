@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import type { Category, Product } from "../lib/types";
 import { addProduct } from "../services/productService";
+import { useAuth } from "../context/AuthContext";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
 
   // Sync categoryId whenever the categories list changes (e.g. loaded async)
   useEffect(() => {
@@ -87,7 +89,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
         data.append("imageFile", imageFile);
       }
 
-      const newProduct = await addProduct(data);
+      const newProduct = await addProduct(data, token!);
       onProductAdded(newProduct);
       onClose();
       // Reset form

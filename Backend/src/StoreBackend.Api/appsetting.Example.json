@@ -1,0 +1,20 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,tuPuerto;Database=nombreDeTuBaseDeDatos;User Id=tuUsuario;Password=tuContraseña;TrustServerCertificate=True;"
+  },
+  "Cors": {
+    "AllowedOrigins": ["tuUrlFrontend"]
+  },
+  "Jwt": {
+    "Key": "Escribe_Aqui_Una_Llave_De_Al_Menos_32_Caracteres_Para_Desarrollo",
+    "Issuer": "StoreBackend",
+    "Audience": "StoreFrontend",
+    "ExpiresInMinutes": 60
+  }
+}

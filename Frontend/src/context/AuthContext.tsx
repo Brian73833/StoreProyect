@@ -9,6 +9,7 @@ import type { User } from "../lib/types";
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
   login: (user: User) => void;
   logout: () => void;
   isLoggedIn: boolean;
@@ -48,9 +49,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const isLoggedIn = !!user;
+  const token = user?.token ?? null;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoggedIn, isLoading }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoggedIn, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

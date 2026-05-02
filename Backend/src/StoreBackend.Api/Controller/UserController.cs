@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StoreBackend.Api.Mappers;
 using StoreBackend.Api.Models.Requests;
+using StoreBackend.Api.Services;
 using StoreBackend.Dto;
 using StoreBackend.Exceptions;
 using StoreBackend.Facade;
@@ -12,10 +14,12 @@ namespace StoreBackend.Api.Controller
     public class UserController : ControllerBase
     {
         private readonly IUserFacade _userFacade;
+        private readonly JwtService _jwtService;
 
-        public UserController(IUserFacade userFacade)
+        public UserController(IUserFacade userFacade, JwtService jwtService)
         {
             _userFacade = userFacade;
+            _jwtService = jwtService;
         }
 
         [HttpPost("login")]
@@ -26,6 +30,7 @@ namespace StoreBackend.Api.Controller
                 var loginDto = UserMapper.ToDto(loginRequestModel);
                 var userDto = await _userFacade.LoginAsync(loginDto);
                 var userModel = UserMapper.ToModel(userDto);
+                userModel.Token = _jwtService.GenerateToken(userDto);
                 return Ok(userModel);
             }
             catch (BadRequestResponseException ex)
@@ -46,6 +51,7 @@ namespace StoreBackend.Api.Controller
                 var createDto = UserMapper.ToDto(createUserRequestModel);
                 var userDto = await _userFacade.CreateAsync(createDto);
                 var userModel = UserMapper.ToModel(userDto);
+                userModel.Token = _jwtService.GenerateToken(userDto);
                 return Ok(userModel);
             }
             catch (BadRequestResponseException ex)
@@ -58,6 +64,7 @@ namespace StoreBackend.Api.Controller
             }
         }
 
+        [Authorize]
         [HttpPut("{resourceId}")]
         public async Task<IActionResult> UpdateUserAsync(Guid resourceId, [FromBody] UpdateUserRequestModel updateUserRequestModel)
         {
@@ -78,6 +85,7 @@ namespace StoreBackend.Api.Controller
             }
         }
 
+        [Authorize]
         [HttpDelete("{resourceId}")]
         public async Task<IActionResult> DeleteUserAsync(Guid resourceId, [FromBody] DeleteUserRequestModel deleteUserRequestModel)
         {

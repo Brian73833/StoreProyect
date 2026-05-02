@@ -7,7 +7,7 @@ import { getPasswordStrength } from "../lib/utils";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { user, login, logout } = useAuth();
+  const { user, login, logout, token } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -110,7 +110,7 @@ export default function Profile() {
           ? formData.currentPassword
           : undefined,
         newPassword: shouldChangePassword ? formData.newPassword : undefined,
-      });
+      }, token!);
 
       login(updatedUser);
       setSuccess("Información actualizada correctamente");
@@ -137,7 +137,7 @@ export default function Profile() {
     setDeleteError(null);
 
     try {
-      await deleteUser(user.userResourceId, deletePassword);
+      await deleteUser(user.userResourceId, deletePassword, token!);
       logout();
       navigate("/");
     } catch (err: any) {

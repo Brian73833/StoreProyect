@@ -3,6 +3,7 @@ using StoreBackend.Api.Mappers;
 using StoreBackend.Api.Models.Requests;
 using StoreBackend.Exceptions;
 using StoreBackend.Facade;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreBackend.Api.Controller
 {
@@ -50,6 +51,7 @@ namespace StoreBackend.Api.Controller
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddProduct([FromForm] ProductRequestModel product)
@@ -88,6 +90,7 @@ namespace StoreBackend.Api.Controller
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {

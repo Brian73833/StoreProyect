@@ -23,9 +23,12 @@ export async function getProductById(id: string): Promise<Product> {
   return response.json();
 }
 
-export async function addProduct(product: FormData): Promise<Product> {
+export async function addProduct(product: FormData, token: string): Promise<Product> {
   const response = await fetch(`${BASE_URL}/api/products`, {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     body: product,
   });
   if (!response.ok) {
@@ -34,9 +37,12 @@ export async function addProduct(product: FormData): Promise<Product> {
   return response.json();
 }
 
-export async function deleteProduct(id: string): Promise<void> {
+export async function deleteProduct(id: string, token: string): Promise<void> {
   const response = await fetch(`${BASE_URL}/api/products/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
   if (!response.ok) {
     throw new Error("Failed to delete product");

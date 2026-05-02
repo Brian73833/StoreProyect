@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import type { Category } from "../lib/types";
 import { addCategory } from "../services/categoryService";
+import { useAuth } from "../context/AuthContext";
 
 interface CategoryModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onCatego
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
 
   if (!isOpen) return null;
 
@@ -20,7 +22,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onCatego
     setLoading(true);
     setError(null);
     try {
-      const newCategory = await addCategory({ name });
+      const newCategory = await addCategory({ name }, token!);
       onCategoryAdded(newCategory);
       onClose();
       setName("");

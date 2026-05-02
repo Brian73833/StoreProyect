@@ -1,8 +1,12 @@
-using StoreBackend.Infrastructure;
-using StoreBackend.Infrastructure.Repositories;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using StoreBackend.Api.Services;
 using StoreBackend.DomainService;
 using StoreBackend.Facade;
-using Microsoft.EntityFrameworkCore;
+using StoreBackend.Infrastructure;
+using StoreBackend.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -12,7 +16,6 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 // Add services to the container.
 builder.Services.AddControllers();
-
 
 builder.Services.AddCors(options =>
 {
@@ -38,6 +41,29 @@ builder.Services.AddCors(options =>
     });
 });
 
+// ─── JWT Authentication ────────────────────────────────────────────────────────
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT Key is not configured.");
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -62,6 +88,9 @@ builder.Services.AddScoped<IProductFacade, ProductFacade>();
 builder.Services.AddScoped<IUserFacade, UserFacade>();
 builder.Services.AddScoped<ICategoryFacade, CategoryFacade>();
 
+// JWT Service
+builder.Services.AddSingleton<JwtService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -76,6 +105,7 @@ app.UseStaticFiles();
 
 app.UseCors("SecurePolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
