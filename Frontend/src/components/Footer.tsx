@@ -129,7 +129,7 @@ const Footer: React.FC = () => {
 
       {/* Bottom bar */}
       <div className="border-t border-stone-800">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-6 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <p className="text-stone-500 text-xs font-medium tracking-wide">
             © {currentYear} Store. Todos los derechos reservados.
           </p>

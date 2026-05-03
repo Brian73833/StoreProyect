@@ -196,7 +196,7 @@ const ProductDetail: React.FC = () => {
               </span>
             </div>
 
-            <h1 className="font-headline-xl text-5xl lg:text-6xl font-bold leading-[0.9] tracking-tighter text-on-surface uppercase mb-6">
+            <h1 className="font-headline-xl text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tighter text-on-surface uppercase mb-6 break-words">
               {product.name}
             </h1>
 
@@ -210,20 +210,20 @@ const ProductDetail: React.FC = () => {
           <div className="bg-surface-container-low border border-outline-variant p-8 mb-10 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
 
-            <div className="flex justify-between items-end mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
               <div>
                 <p className="font-label-caps text-[10px] text-outline uppercase tracking-widest mb-1">
                   MSRP (Unit Price)
                 </p>
-                <p className="font-headline-md text-4xl font-bold text-on-surface">
+                <p className="font-headline-md text-3xl sm:text-4xl font-bold text-on-surface">
                   ₡{product.price}
                 </p>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <p className="font-label-caps text-[10px] text-outline uppercase tracking-widest mb-1">
                   Stock Status
                 </p>
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center gap-2">
                   <span
                     className={`w-2 h-2 rounded-full ${product.stock > 10 ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`}
                   />
@@ -304,9 +304,9 @@ const ProductDetail: React.FC = () => {
 
         {/* ── Contextual Section ── */}
         <section className="col-span-12 mt-24 border-t border-outline-variant pt-20">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 sm:mb-16 gap-6 sm:gap-8">
             <div className="max-w-2xl">
-              <h2 className="font-headline-lg text-4xl font-bold text-on-surface uppercase tracking-tight mb-4 leading-none">
+              <h2 className="font-headline-lg text-2xl sm:text-4xl font-bold text-on-surface uppercase tracking-tight mb-4 leading-tight">
                 Applied Context
               </h2>
               <p className="text-secondary font-body-lg">
@@ -315,7 +315,7 @@ const ProductDetail: React.FC = () => {
                 in contemporary architectural projects across the globe.
               </p>
             </div>
-            <button className="font-label-caps text-xs text-primary uppercase tracking-[0.2em] border-b-2 border-primary pb-1 hover:text-secondary hover:border-secondary transition-all">
+            <button className="font-label-caps text-xs text-primary uppercase tracking-[0.2em] border-b-2 border-primary pb-1 hover:text-secondary hover:border-secondary transition-all flex-shrink-0">
               View All Case Studies
             </button>
           </div>

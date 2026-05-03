@@ -28,7 +28,7 @@ const Products: React.FC = () => {
   });
 
   return (
-    <main className="pt-8 pb-20 px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface font-body-md">
+    <main className="pt-8 pb-16 sm:pb-20 px-4 sm:px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface font-body-md">
       {/* Back to Home */}
       <div className="mb-6">
         <button
@@ -42,19 +42,19 @@ const Products: React.FC = () => {
         </button>
       </div>
       {isAdmin && (
-        <div className="mb-12 flex flex-col sm:flex-row justify-end gap-4">
+        <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
           <button
             onClick={() => setIsCategoryModalOpen(true)}
-            className="flex items-center gap-2 bg-secondary text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-secondary/20 hover:shadow-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-sm"
+            className="flex items-center justify-center gap-2 bg-secondary text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold shadow-xl shadow-secondary/20 hover:shadow-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs sm:text-sm"
           >
-            <span className="material-symbols-outlined">category</span>
+            <span className="material-symbols-outlined text-lg">category</span>
             Añadir Categoría
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-sm"
+            className="flex items-center justify-center gap-2 bg-primary text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs sm:text-sm"
           >
-            <span className="material-symbols-outlined">add_circle</span>
+            <span className="material-symbols-outlined text-lg">add_circle</span>
             Añadir Producto
           </button>
         </div>
@@ -148,21 +148,21 @@ const Products: React.FC = () => {
       )}
 
       {/* ── Estándares de calidad ── */}
-      <section className="mt-20 pt-12 border-t-2 border-slate-400">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
+      <section className="mt-16 sm:mt-20 pt-10 sm:pt-12 border-t-2 border-slate-400">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+          <div className="space-y-4 sm:space-y-6">
             <span className="font-label-caps text-xs text-primary uppercase tracking-widest block">
               Quality Standards
             </span>
-            <h2 className="font-headline-xl text-5xl font-bold leading-tight tracking-tight text-on-surface">
+            <h2 className="font-headline-xl text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight text-on-surface">
               Architectural Integrity
             </h2>
-            <p className="font-body-lg text-xl text-secondary leading-relaxed">
+            <p className="font-body-lg text-lg sm:text-xl text-secondary leading-relaxed">
               Every ceramic component produced in our factory undergoes rigorous
               thermal stress testing and compression analysis to ensure
               structural longevity.
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6">
               <div className="border-l-4 border-primary pl-4">
                 <h4 className="font-headline-md text-2xl font-semibold text-on-surface">
                   ISO 9001

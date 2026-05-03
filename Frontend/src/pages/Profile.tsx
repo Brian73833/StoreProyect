@@ -180,21 +180,21 @@ export default function Profile() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
-          <div className="relative flex flex-col md:flex-row items-center md:items-end gap-6">
+          <div className="relative flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
             <div className="bg-white/20 p-1 rounded-3xl backdrop-blur-md shadow-inner">
-              <div className="w-28 h-28 bg-white rounded-[1.25rem] flex items-center justify-center shadow-lg">
-                <span className="material-symbols-outlined text-[#E2725B] text-6xl font-light">
+              <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-[1.25rem] flex items-center justify-center shadow-lg">
+                <span className="material-symbols-outlined text-[#E2725B] text-5xl md:text-6xl font-light">
                   person
                 </span>
               </div>
             </div>
-            <div className="text-center md:text-left pb-2">
-              <h1 className="text-4xl font-black tracking-tight">
+            <div className="pb-2">
+              <h1 className="text-3xl md:text-4xl font-black tracking-tight">
                 {user.name}
               </h1>
               <div className="flex items-center justify-center md:justify-start gap-2 mt-2 opacity-90">
                 <span className="material-symbols-outlined text-lg">mail</span>
-                <p className="font-medium">{user.email}</p>
+                <p className="font-medium text-sm md:text-base">{user.email}</p>
               </div>
               {user.isAdmin && (
                 <div className="inline-flex items-center gap-1.5 mt-4 px-4 py-1.5 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em] backdrop-blur-sm border border-white/30">
@@ -208,10 +208,10 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="p-8 md:p-14 space-y-10">
+        <div className="p-6 sm:p-8 md:p-14 space-y-10">
           {/* Main Profile Form */}
           <form onSubmit={handleSubmit} className="space-y-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
               {/* Personal Information */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">

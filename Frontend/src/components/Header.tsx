@@ -38,15 +38,15 @@ const Header: React.FC = () => {
           {/* Logo + Store Name */}
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2.5 group cursor-pointer"
+            className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer"
             id="header-logo"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-[#E2725B] to-[#c95d47] rounded-xl flex items-center justify-center shadow-lg shadow-[#E2725B]/20 group-hover:shadow-xl group-hover:shadow-[#E2725B]/30 transition-all duration-300 group-hover:scale-105">
-              <span className="material-symbols-outlined text-white text-xl">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#E2725B] to-[#c95d47] rounded-xl flex items-center justify-center shadow-lg shadow-[#E2725B]/20 group-hover:shadow-xl group-hover:shadow-[#E2725B]/30 transition-all duration-300 group-hover:scale-105">
+              <span className="material-symbols-outlined text-white text-lg sm:text-xl">
                 storefront
               </span>
             </div>
-            <span className="text-lg sm:text-xl font-extrabold tracking-tight uppercase text-stone-800 group-hover:text-[#E2725B] transition-colors duration-300">
+            <span className="text-base sm:text-xl font-extrabold tracking-tight uppercase text-stone-800 group-hover:text-[#E2725B] transition-colors duration-300">
               Store
             </span>
           </button>
@@ -81,9 +81,9 @@ const Header: React.FC = () => {
             <button
               onClick={() => navigate("/auth")}
               id="header-login-btn"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#E2725B] to-[#d4634e] text-white font-bold text-sm rounded-xl shadow-lg shadow-[#E2725B]/20 hover:shadow-xl hover:shadow-[#E2725B]/30 hover:scale-105 active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-[#E2725B] to-[#d4634e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-[#E2725B]/20 hover:shadow-xl hover:shadow-[#E2725B]/30 hover:scale-105 active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
             >
-              <span className="material-symbols-outlined text-lg">login</span>
+              <span className="material-symbols-outlined text-base sm:text-lg">login</span>
               <span className="hidden sm:inline">Iniciar Sesión</span>
             </button>
           ) : (
