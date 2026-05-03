@@ -27,8 +27,8 @@ const Footer: React.FC = () => {
               </span>
             </button>
             <p className="text-stone-400 text-sm leading-relaxed max-w-xs">
-              Soluciones cerámicas de alta calidad para proyectos arquitectónicos
-              contemporáneos. Más de 100 años de excelencia.
+              Soluciones cerámicas de alta calidad para proyectos
+              arquitectónicos contemporáneos. Más de 100 años de excelencia.
             </p>
             {/* Social icons */}
             <div className="flex gap-3 mt-6">
@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
               {[
                 { label: "Inicio", path: "/" },
                 { label: "Catálogo", path: "/products" },
-                { label: "Bienvenida", path: "/welcome" },
+                { label: "Perfil", path: "/profile" },
               ].map(({ label, path }) => (
                 <li key={path}>
                   <button
@@ -134,9 +134,7 @@ const Footer: React.FC = () => {
             © {currentYear} Store. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-2 text-stone-600 text-xs">
-            <span className="material-symbols-outlined text-sm">
-              verified
-            </span>
+            <span className="material-symbols-outlined text-sm">verified</span>
             <span className="font-medium">SSL Certificado · Pagos Seguros</span>
           </div>
         </div>

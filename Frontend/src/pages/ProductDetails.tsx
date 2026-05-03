@@ -35,7 +35,7 @@ const SpecRow: React.FC<SpecRowProps> = ({ label, value }) => (
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const isAdmin = user?.isAdmin;
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -392,7 +392,7 @@ const ProductDetail: React.FC = () => {
               <button
                 onClick={async () => {
                   try {
-                    await deleteProduct(id!, token!);
+                    await deleteProduct(id!);
                     navigate("/products");
                   } catch {
                     alert("Error al eliminar el producto");

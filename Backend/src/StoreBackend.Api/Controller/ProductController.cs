@@ -51,7 +51,7 @@ namespace StoreBackend.Api.Controller
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddProduct([FromForm] ProductRequestModel product)
@@ -62,6 +62,27 @@ namespace StoreBackend.Api.Controller
 
                 if (product.ImageFile != null)
                 {
+                    // Validate file size (e.g., max 5MB)
+                    if (product.ImageFile.Length > 50 * 1024 * 1024)
+                    {
+                        return BadRequest("El archivo de imagen no puede superar los 50MB.");
+                    }
+
+                    // Validate file extension
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
+                    var extension = Path.GetExtension(product.ImageFile.FileName).ToLowerInvariant();
+                    if (string.IsNullOrEmpty(extension) || !allowedExtensions.Contains(extension))
+                    {
+                        return BadRequest("Tipo de archivo no permitido. Solo se permiten imágenes (jpg, jpeg, png, webp, gif).");
+                    }
+
+                    // Validate content type
+                    var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/webp", "image/gif" };
+                    if (!allowedContentTypes.Contains(product.ImageFile.ContentType.ToLowerInvariant()))
+                    {
+                        return BadRequest("El Content-Type del archivo no es válido.");
+                    }
+
                     string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads", "products");
                     
                     if (!Directory.Exists(uploadsFolder))
@@ -69,7 +90,8 @@ namespace StoreBackend.Api.Controller
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + product.ImageFile.FileName;
+                    // Generate a safe unique filename, completely discarding original name
+                    string uniqueFileName = Guid.NewGuid().ToString() + extension;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -90,7 +112,7 @@ namespace StoreBackend.Api.Controller
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {

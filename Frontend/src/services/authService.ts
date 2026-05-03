@@ -21,10 +21,9 @@ async function parseErrorMessage(response: Response): Promise<string> {
 }
 
 // ─── Helper: headers con Authorization JWT ───────────────────────────────────
-function authHeaders(token: string): HeadersInit {
+function authHeaders(): HeadersInit {
   return {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
   };
 }
 
@@ -37,6 +36,7 @@ export const loginUser = async (loginData: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -57,6 +57,7 @@ export const registerUser = async (signUpData: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(signUpData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -76,12 +77,12 @@ export const updateUser = async (
     currentPassword?: string;
     newPassword?: string;
   },
-  token: string,
 ): Promise<User> => {
   const response = await fetch(`${BASE_URL}/api/users/${resourceId}`, {
     method: "PUT",
-    headers: authHeaders(token),
+    headers: authHeaders(),
     body: JSON.stringify(updateData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -96,16 +97,24 @@ export const updateUser = async (
 export const deleteUser = async (
   resourceId: string,
   password: string,
-  token: string,
 ): Promise<void> => {
   const response = await fetch(`${BASE_URL}/api/users/${resourceId}`, {
     method: "DELETE",
-    headers: authHeaders(token),
+    headers: authHeaders(),
     body: JSON.stringify({ password }),
+    credentials: "include",
   });
 
   if (!response.ok) {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al eliminar la cuenta");
   }
+};
+
+// ─── Logout ───────────────────────────────────────────────────────────────────
+export const logoutUser = async (): Promise<void> => {
+  await fetch(`${BASE_URL}/api/users/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
 };

@@ -10,16 +10,15 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function addCategory(
-  category: Omit<Category, "categoryId">,
-  token: string
+  category: Omit<Category, "categoryId">
 ): Promise<Category> {
   const response = await fetch(`${BASE_URL}/api/categories`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(category),
+    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to add category");

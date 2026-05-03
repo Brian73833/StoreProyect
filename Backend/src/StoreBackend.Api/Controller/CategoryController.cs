@@ -36,7 +36,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddCategory([FromBody] CategoryDto category)
     {
