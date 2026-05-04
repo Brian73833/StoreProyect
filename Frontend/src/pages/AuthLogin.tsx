@@ -7,8 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { getPasswordStrength } from "../lib/utils";
 import FieldError from "../components/FieldError";
 
-
-// ─── Interfaces ───────────────────────────────────────────────────────────────
+// Interfaces
 interface LoginFormData {
   email: string;
   password: string;
@@ -35,7 +34,7 @@ interface SignUpErrors {
   general?: string;
 }
 
-// ─── Validadores ──────────────────────────────────────────────────────────────
+// Validadores
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
@@ -86,14 +85,13 @@ function validateSignUpForm(data: SignUpFormData): SignUpErrors {
   return errors;
 }
 
-
-// ─── Component ────────────────────────────────────────────────────────────────
+// Componente
 const AuthLogin: React.FC = () => {
   const navigate = useNavigate();
   const { login, isLoggedIn } = useAuth();
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
 
-  // Redirect if already logged in
+  // Redirigir si el usuario ya inició sesión
   React.useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
@@ -104,7 +102,7 @@ const AuthLogin: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
 
-  // Login state
+  // Estado del inicio de sesión
   const [loginData, setLoginData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -112,7 +110,7 @@ const AuthLogin: React.FC = () => {
   const [loginErrors, setLoginErrors] = useState<LoginErrors>({});
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // Register state
+  // Estado del registro
   const [signUpData, setSignUpData] = useState<SignUpFormData>({
     name: "",
     email: "",
@@ -159,7 +157,6 @@ const AuthLogin: React.FC = () => {
       });
       login(data);
       navigate("/");
-
     } catch (error: any) {
       console.error("Error en el login:", error);
       setLoginErrors({
@@ -187,7 +184,6 @@ const AuthLogin: React.FC = () => {
       });
       login(data);
       navigate("/");
-
     } catch (error: any) {
       console.error("Error en el registro:", error);
       setSignUpErrors({
@@ -198,7 +194,7 @@ const AuthLogin: React.FC = () => {
     }
   };
 
-  // ─── Input class helper ──────────────────────────────────────────────────────
+  // Función auxiliar de los inputs
   const inputClass = (hasError: boolean) =>
     `w-full pl-12 pr-4 py-4 bg-stone-50 border-2 rounded-2xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-stone-800 placeholder:text-stone-300 ${
       hasError
@@ -206,7 +202,7 @@ const AuthLogin: React.FC = () => {
         : "border-stone-100 focus:border-[#E2725B] focus:ring-[#E2725B]/5"
     }`;
 
-  const inputClassPr = (hasError: boolean) =>
+  const inputClassPassword = (hasError: boolean) =>
     `w-full pl-12 pr-12 py-4 bg-stone-50 border-2 rounded-2xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-stone-800 placeholder:text-stone-300 ${
       hasError
         ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
@@ -215,7 +211,7 @@ const AuthLogin: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full flex bg-[#FDFCFB]">
-      {/* ── Hero (Desktop) ──────────────────────────────────────────────── */}
+      {/* Sección de presentación visual */}
       <div className="hidden lg:block lg:w-1/2 relative h-screen sticky top-0 overflow-hidden">
         <img
           src={authHero}
@@ -246,10 +242,10 @@ const AuthLogin: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Form Section ────────────────────────────────────────────────── */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white overflow-y-auto min-h-screen">
+      {/* Sección del formulario */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:p-16 bg-white overflow-y-auto min-h-screen">
         <div className="w-full max-w-[480px]">
-          {/* Back Button */}
+          {/* Botón para volver */}
           <button
             onClick={() => navigate("/welcome")}
             className="flex items-center gap-2 text-stone-500 hover:text-[#E2725B] transition-colors mb-8 group"
@@ -257,10 +253,12 @@ const AuthLogin: React.FC = () => {
             <span className="material-symbols-outlined transition-transform group-hover:-translate-x-1">
               arrow_back
             </span>
-            <span className="font-bold text-sm uppercase tracking-widest">Volver</span>
+            <span className="font-bold text-sm uppercase tracking-widest">
+              Volver
+            </span>
           </button>
 
-          {/* Logo Mobile */}
+          {/* Logo en versión móvil */}
           <div className="flex lg:hidden items-center gap-2 mb-12">
             <div className="w-10 h-10 bg-[#E2725B] rounded-xl flex items-center justify-center shadow-lg">
               <span className="material-symbols-outlined text-white">
@@ -272,7 +270,7 @@ const AuthLogin: React.FC = () => {
             </span>
           </div>
 
-          {/* Header */}
+          {/* Encabezado */}
           <div className="mb-10">
             <h2 className="text-3xl font-extrabold text-stone-900 mb-2">
               {activeTab === "login"
@@ -286,7 +284,7 @@ const AuthLogin: React.FC = () => {
             </p>
           </div>
 
-          {/* Tabs */}
+          {/* Tabs de Iniciar sesión / Registrarse */}
           <div className="flex p-1 bg-stone-100 rounded-2xl mb-10 relative">
             <button
               onClick={() => setActiveTab("login")}
@@ -315,10 +313,10 @@ const AuthLogin: React.FC = () => {
             />
           </div>
 
-          {/* ── LOGIN FORM ──────────────────────────────────────────────── */}
+          {/* FORMULARIO DE INICIO DE SESIÓN   */}
           {activeTab === "login" ? (
             <form className="space-y-5" onSubmit={handleLoginSubmit} noValidate>
-              {/* Email */}
+              {/* Correo Electrónico */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">
                   Correo Electrónico
@@ -347,7 +345,7 @@ const AuthLogin: React.FC = () => {
                 <FieldError message={loginErrors.email} />
               </div>
 
-              {/* Password */}
+              {/* Contraseña */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">
                   Contraseña
@@ -368,7 +366,7 @@ const AuthLogin: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     value={loginData.password}
                     onChange={handleLoginChange}
-                    className={inputClassPr(!!loginErrors.password)}
+                    className={inputClassPassword(!!loginErrors.password)}
                     placeholder="••••••••"
                     autoComplete="current-password"
                   />
@@ -385,7 +383,7 @@ const AuthLogin: React.FC = () => {
                 <FieldError message={loginErrors.password} />
               </div>
 
-              {/* General login error */}
+              {/* Error general del inicio de sesión */}
               {loginErrors.general && (
                 <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
                   <span className="material-symbols-outlined text-red-500 text-xl shrink-0">
@@ -415,16 +413,16 @@ const AuthLogin: React.FC = () => {
               </button>
             </form>
           ) : (
-            /* ── REGISTER FORM ─────────────────────────────────────────── */
+            /* FORMULARIO DE REGISTRO */
             <form
               className="space-y-5"
               onSubmit={handleRegisterSubmit}
               noValidate
             >
-              {/* Name */}
+              {/* Nombre */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">
-                  Nombre Completo
+                  Nombre
                 </label>
                 <div className="group relative">
                   <span
@@ -462,7 +460,7 @@ const AuthLogin: React.FC = () => {
                 </div>
               </div>
 
-              {/* Email */}
+              {/* Correo Electrónico */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">
                   Correo Electrónico
@@ -491,7 +489,7 @@ const AuthLogin: React.FC = () => {
                 <FieldError message={signUpErrors.email} />
               </div>
 
-              {/* Password */}
+              {/* Contraseña */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">
                   Contraseña
@@ -512,7 +510,7 @@ const AuthLogin: React.FC = () => {
                     type={showRegisterPassword ? "text" : "password"}
                     value={signUpData.password}
                     onChange={handleSignUpChange}
-                    className={inputClassPr(!!signUpErrors.password)}
+                    className={inputClassPassword(!!signUpErrors.password)}
                     placeholder="••••••••"
                     autoComplete="new-password"
                   />
@@ -529,7 +527,7 @@ const AuthLogin: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Password strength bar */}
+                {/* Barra de seguridad de la contraseña */}
                 {signUpData.password && (
                   <div className="mt-2 space-y-1">
                     <div className="flex gap-1">
@@ -557,7 +555,7 @@ const AuthLogin: React.FC = () => {
 
                 <FieldError message={signUpErrors.password} />
 
-                {/* Password requirements hint */}
+                {/* Sugerencias de requisitos de la contraseña */}
                 {!signUpErrors.password && (
                   <ul className="mt-2 space-y-0.5 ml-1">
                     {[
@@ -586,7 +584,7 @@ const AuthLogin: React.FC = () => {
                 )}
               </div>
 
-              {/* Confirm Password */}
+              {/* Confirmar Contraseña */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">
                   Confirmar Contraseña
@@ -607,7 +605,9 @@ const AuthLogin: React.FC = () => {
                     type={showConfirmPassword ? "text" : "password"}
                     value={signUpData.confirmPassword}
                     onChange={handleSignUpChange}
-                    className={inputClassPr(!!signUpErrors.confirmPassword)}
+                    className={inputClassPassword(
+                      !!signUpErrors.confirmPassword,
+                    )}
                     placeholder="••••••••"
                     autoComplete="new-password"
                   />
@@ -622,7 +622,7 @@ const AuthLogin: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Match indicator */}
+                {/* Indicador de que las contraseñas coinciden */}
                 {signUpData.confirmPassword &&
                   !signUpErrors.confirmPassword && (
                     <p className="flex items-center gap-1 text-green-600 text-xs font-semibold mt-1 ml-1">
@@ -635,7 +635,7 @@ const AuthLogin: React.FC = () => {
                 <FieldError message={signUpErrors.confirmPassword} />
               </div>
 
-              {/* General register error */}
+              {/* Error general del registro */}
               {signUpErrors.general && (
                 <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
                   <span className="material-symbols-outlined text-red-500 text-xl shrink-0">

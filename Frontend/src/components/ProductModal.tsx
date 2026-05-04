@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import type { Category, Product } from "../lib/types";
 import { addProduct } from "../services/productService";
-import { useAuth } from "../context/AuthContext";
 
+// Componente para la ventana emergente de añadir producto
 interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,19 +26,19 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { token } = useAuth();
 
-  // Sync categoryId whenever the categories list changes (e.g. loaded async)
+  // Sincroniza el categoryId cuando cambia la lista de categorías
   useEffect(() => {
     if (categories.length > 0) {
       setFormData((prev) => ({
         ...prev,
-        categoryId: prev.categoryId === 0 ? categories[0].categoryId : prev.categoryId,
+        categoryId:
+          prev.categoryId === 0 ? categories[0].categoryId : prev.categoryId,
       }));
     }
   }, [categories]);
 
-  // Reset form every time the modal opens
+  // Reinicia el formulario cada vez que se abre la ventana emergente
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -89,10 +89,10 @@ const ProductModal: React.FC<ProductModalProps> = ({
         data.append("imageFile", imageFile);
       }
 
-      const newProduct = await addProduct(data, token!);
+      const newProduct = await addProduct(data);
       onProductAdded(newProduct);
       onClose();
-      // Reset form
+      // Reinicia el formulario
       setFormData({
         name: "",
         description: "",
@@ -196,7 +196,9 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">Imagen del Producto</label>
+              <label className="text-xs font-bold text-stone-500 uppercase tracking-widest ml-1">
+                Imagen del Producto
+              </label>
               <div className="relative group">
                 <input
                   type="file"
@@ -205,20 +207,24 @@ const ProductModal: React.FC<ProductModalProps> = ({
                   className="hidden"
                   id="product-image"
                 />
-                
+
                 {imageFile ? (
                   <div className="relative rounded-2xl overflow-hidden border-2 border-primary/20 bg-primary/5 p-4 flex items-center justify-between group">
                     <div className="flex items-center gap-4">
                       <div className="w-16 h-16 bg-white rounded-xl shadow-sm flex items-center justify-center overflow-hidden border border-stone-100">
-                        <img 
-                          src={URL.createObjectURL(imageFile)} 
-                          alt="Preview" 
+                        <img
+                          src={URL.createObjectURL(imageFile)}
+                          alt="Preview"
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-stone-900 truncate max-w-[150px]">{imageFile.name}</p>
-                        <p className="text-xs text-stone-500 font-medium">{(imageFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                        <p className="text-sm font-bold text-stone-900 truncate max-w-[150px]">
+                          {imageFile.name}
+                        </p>
+                        <p className="text-xs text-stone-500 font-medium">
+                          {(imageFile.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
                       </div>
                     </div>
                     <label
@@ -235,11 +241,17 @@ const ProductModal: React.FC<ProductModalProps> = ({
                   >
                     <div className="flex flex-col items-center gap-3">
                       <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                        <span className="material-symbols-outlined text-stone-400 group-hover:text-primary transition-colors text-3xl">add_photo_alternate</span>
+                        <span className="material-symbols-outlined text-stone-400 group-hover:text-primary transition-colors text-3xl">
+                          add_photo_alternate
+                        </span>
                       </div>
                       <div className="text-center">
-                        <p className="text-sm font-bold text-stone-600 group-hover:text-primary transition-colors uppercase tracking-tight">Seleccionar imagen</p>
-                        <p className="text-[10px] text-stone-400 font-medium uppercase tracking-widest mt-1">PNG, JPG hasta 5MB</p>
+                        <p className="text-sm font-bold text-stone-600 group-hover:text-primary transition-colors uppercase tracking-tight">
+                          Seleccionar imagen
+                        </p>
+                        <p className="text-[10px] text-stone-400 font-medium uppercase tracking-widest mt-1">
+                          PNG, JPG hasta 50MB
+                        </p>
                       </div>
                     </div>
                   </label>

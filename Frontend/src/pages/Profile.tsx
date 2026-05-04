@@ -4,19 +4,20 @@ import { useAuth } from "../context/AuthContext";
 import { updateUser, deleteUser } from "../services/authService";
 import { getPasswordStrength } from "../lib/utils";
 
+// Componente de la página de perfil de usuario
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { user, login, logout, token } = useAuth();
+  const { user, login, logout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Edit mode states
+  // Estados para el modo de edición
   const [isEditing, setIsEditing] = useState(false);
   const [shouldChangePassword, setShouldChangePassword] = useState(false);
 
-  // States for delete account
+  // Estados para eliminar la cuenta
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -110,7 +111,7 @@ export default function Profile() {
           ? formData.currentPassword
           : undefined,
         newPassword: shouldChangePassword ? formData.newPassword : undefined,
-      }, token!);
+      });
 
       login(updatedUser);
       setSuccess("Información actualizada correctamente");
@@ -137,7 +138,7 @@ export default function Profile() {
     setDeleteError(null);
 
     try {
-      await deleteUser(user.userResourceId, deletePassword, token!);
+      await deleteUser(user.userResourceId, deletePassword);
       logout();
       navigate("/");
     } catch (err: any) {
@@ -162,7 +163,7 @@ export default function Profile() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      {/* Back to Home */}
+      {/* Botón para volver al inicio */}
       <div className="mb-6">
         <button
           onClick={() => navigate("/")}
@@ -175,26 +176,26 @@ export default function Profile() {
         </button>
       </div>
       <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-stone-200/50 overflow-hidden border border-stone-100">
-        {/* Banner / Header Section */}
+        {/* Sección de encabezado */}
         <div className="bg-gradient-to-br from-[#E2725B] to-[#c95d47] px-8 py-14 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
-          <div className="relative flex flex-col md:flex-row items-center md:items-end gap-6">
+          <div className="relative flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
             <div className="bg-white/20 p-1 rounded-3xl backdrop-blur-md shadow-inner">
-              <div className="w-28 h-28 bg-white rounded-[1.25rem] flex items-center justify-center shadow-lg">
-                <span className="material-symbols-outlined text-[#E2725B] text-6xl font-light">
+              <div className="w-24 h-24 md:w-28 md:h-28 bg-white rounded-[1.25rem] flex items-center justify-center shadow-lg">
+                <span className="material-symbols-outlined text-[#E2725B] text-5xl md:text-6xl font-light">
                   person
                 </span>
               </div>
             </div>
-            <div className="text-center md:text-left pb-2">
-              <h1 className="text-4xl font-black tracking-tight">
+            <div className="pb-2">
+              <h1 className="text-3xl md:text-4xl font-black tracking-tight">
                 {user.name}
               </h1>
               <div className="flex items-center justify-center md:justify-start gap-2 mt-2 opacity-90">
                 <span className="material-symbols-outlined text-lg">mail</span>
-                <p className="font-medium">{user.email}</p>
+                <p className="font-medium text-sm md:text-base">{user.email}</p>
               </div>
               {user.isAdmin && (
                 <div className="inline-flex items-center gap-1.5 mt-4 px-4 py-1.5 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em] backdrop-blur-sm border border-white/30">
@@ -208,11 +209,11 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="p-8 md:p-14 space-y-10">
-          {/* Main Profile Form */}
+        <div className="p-6 sm:p-8 md:p-14 space-y-10">
+          {/* Formulario principal del perfil */}
           <form onSubmit={handleSubmit} className="space-y-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {/* Personal Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+              {/* Información Personal */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-stone-50 rounded-xl flex items-center justify-center border border-stone-100 text-[#E2725B]">
@@ -278,7 +279,7 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* Account Management */}
+              {/* Gestión de la Cuenta */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-stone-50 rounded-xl flex items-center justify-center border border-stone-100 text-[#E2725B]">
@@ -434,7 +435,7 @@ export default function Profile() {
                           />
                         </div>
 
-                        {/* Password strength bar */}
+                        {/* Barra de seguridad de la contraseña */}
                         {formData.newPassword && (
                           <div className="mt-2 space-y-1">
                             <div className="flex gap-1">
@@ -460,7 +461,7 @@ export default function Profile() {
                           </div>
                         )}
 
-                        {/* Password requirements hint */}
+                        {/* Sugerencias de requisitos de contraseña */}
                         {formData.newPassword && (
                           <ul className="mt-2 space-y-0.5 ml-1">
                             {[
@@ -551,7 +552,7 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Notifications */}
+            {/* Notificaciones */}
             {(error || success) && (
               <div className="min-h-[60px] animate-in fade-in slide-in-from-top-2 duration-300">
                 {error && (
@@ -571,8 +572,6 @@ export default function Profile() {
                 )}
               </div>
             )}
-
-            {/* End of Actions */}
           </form>
         </div>
       </div>

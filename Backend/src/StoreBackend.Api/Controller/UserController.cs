@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
 using StoreBackend.Api.Mappers;
 using StoreBackend.Api.Models.Requests;
@@ -22,6 +23,31 @@ namespace StoreBackend.Api.Controller
             _jwtService = jwtService;
         }
 
+        private void SetTokenCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(60)
+            };
+            Response.Cookies.Append("jwt", token, cookieOptions);
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            });
+            return Ok();
+        }
+
+        [EnableRateLimiting("AuthPolicy")]
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequestModel loginRequestModel)
         {
@@ -30,7 +56,9 @@ namespace StoreBackend.Api.Controller
                 var loginDto = UserMapper.ToDto(loginRequestModel);
                 var userDto = await _userFacade.LoginAsync(loginDto);
                 var userModel = UserMapper.ToModel(userDto);
-                userModel.Token = _jwtService.GenerateToken(userDto);
+                var token = _jwtService.GenerateToken(userDto);
+                userModel.Token = token;
+                SetTokenCookie(token);
                 return Ok(userModel);
             }
             catch (BadRequestResponseException ex)
@@ -43,6 +71,7 @@ namespace StoreBackend.Api.Controller
             }
         }
 
+        [EnableRateLimiting("AuthPolicy")]
         [HttpPost("register")]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequestModel createUserRequestModel)
         {
@@ -51,7 +80,9 @@ namespace StoreBackend.Api.Controller
                 var createDto = UserMapper.ToDto(createUserRequestModel);
                 var userDto = await _userFacade.CreateAsync(createDto);
                 var userModel = UserMapper.ToModel(userDto);
-                userModel.Token = _jwtService.GenerateToken(userDto);
+                var token = _jwtService.GenerateToken(userDto);
+                userModel.Token = token;
+                SetTokenCookie(token);
                 return Ok(userModel);
             }
             catch (BadRequestResponseException ex)

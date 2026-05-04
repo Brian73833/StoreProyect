@@ -1,62 +1,68 @@
 import type { User } from "../lib/types";
 import { BASE_URL } from "../lib/config";
 
-// ─── Helper: extrae el mensaje de error correctamente ───────────────────────
-// El backend retorna BadRequest con un string plano o un objeto JSON.
-// Esta función maneja ambos casos.
+// Función auxiliar para extraer el mensaje de error de una respuesta de la API
 async function parseErrorMessage(response: Response): Promise<string> {
   const contentType = response.headers.get("content-type") || "";
   try {
+    // Si la respuesta es JSON, intenta extraer el mensaje
     if (contentType.includes("application/json")) {
       const data = await response.json();
       return typeof data === "string"
         ? data
         : data.message || data.title || JSON.stringify(data);
     } else {
+      // Si no es JSON, devuelve el texto plano
       return await response.text();
     }
   } catch {
+    // Si ocurre un error inesperado al leer la respuesta
     return "Error desconocido del servidor";
   }
 }
 
-// ─── Helper: headers con Authorization JWT ───────────────────────────────────
-function authHeaders(token: string): HeadersInit {
+// Función auxiliar para generar las cabeceras básicas de una petición
+function authHeaders(): HeadersInit {
   return {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
   };
 }
 
-// ─── Login ────────────────────────────────────────────────────────────────────
+// Función para iniciar sesión con email y contraseña
 export const loginUser = async (loginData: {
   email: string;
   password: string;
 }): Promise<User> => {
+  // Hace una petición POST al endpoint de login
   const response = await fetch(`${BASE_URL}/api/users/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
+    credentials: "include",
   });
 
+  // Si la petición falla, extrae y lanza el error
   if (!response.ok) {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al iniciar sesión");
   }
 
+  // Si es exitosa, devuelve los datos del usuario
   return response.json() as Promise<User>;
 };
 
-// ─── Register ─────────────────────────────────────────────────────────────────
+// Función para registrar un nuevo usuario
 export const registerUser = async (signUpData: {
   name: string;
   email: string;
   password: string;
 }): Promise<User> => {
+  // Hace una petición POST al endpoint de registro
   const response = await fetch(`${BASE_URL}/api/users/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(signUpData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -67,7 +73,7 @@ export const registerUser = async (signUpData: {
   return response.json() as Promise<User>;
 };
 
-// ─── Update User ──────────────────────────────────────────────────────────────
+// Función para actualizar los datos de un usuario
 export const updateUser = async (
   resourceId: string,
   updateData: {
@@ -76,12 +82,13 @@ export const updateUser = async (
     currentPassword?: string;
     newPassword?: string;
   },
-  token: string,
 ): Promise<User> => {
+  // Hace una petición PUT al endpoint de actualización
   const response = await fetch(`${BASE_URL}/api/users/${resourceId}`, {
     method: "PUT",
-    headers: authHeaders(token),
+    headers: authHeaders(),
     body: JSON.stringify(updateData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -92,20 +99,30 @@ export const updateUser = async (
   return response.json() as Promise<User>;
 };
 
-// ─── Delete User ──────────────────────────────────────────────────────────────
+// Función para eliminar la cuenta de un usuario
 export const deleteUser = async (
   resourceId: string,
   password: string,
-  token: string,
 ): Promise<void> => {
+  // Hace una petición DELETE para borrar la cuenta
   const response = await fetch(`${BASE_URL}/api/users/${resourceId}`, {
     method: "DELETE",
-    headers: authHeaders(token),
+    headers: authHeaders(),
     body: JSON.stringify({ password }),
+    credentials: "include",
   });
 
   if (!response.ok) {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al eliminar la cuenta");
   }
+};
+
+// Función para cerrar sesión
+export const logoutUser = async (): Promise<void> => {
+  // Hace una petición POST para invalidar la sesión en el servidor
+  await fetch(`${BASE_URL}/api/users/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
 };

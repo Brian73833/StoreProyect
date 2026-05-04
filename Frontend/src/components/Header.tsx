@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { logoutUser } from "../services/authService";
 
+// Componente del encabezado de navegación
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn, logout } = useAuth();
@@ -19,7 +21,12 @@ const Header: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+    } catch (err) {
+      console.error("Error logging out:", err);
+    }
     logout();
     setMenuOpen(false);
     navigate("/welcome");
@@ -29,23 +36,23 @@ const Header: React.FC = () => {
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-stone-200/60 shadow-sm">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-16 sm:h-[72px]">
-          {/* Logo + Store Name */}
+          {/* Logo y Nombre de la tienda */}
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2.5 group cursor-pointer"
+            className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer"
             id="header-logo"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-[#E2725B] to-[#c95d47] rounded-xl flex items-center justify-center shadow-lg shadow-[#E2725B]/20 group-hover:shadow-xl group-hover:shadow-[#E2725B]/30 transition-all duration-300 group-hover:scale-105">
-              <span className="material-symbols-outlined text-white text-xl">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#E2725B] to-[#c95d47] rounded-xl flex items-center justify-center shadow-lg shadow-[#E2725B]/20 group-hover:shadow-xl group-hover:shadow-[#E2725B]/30 transition-all duration-300 group-hover:scale-105">
+              <span className="material-symbols-outlined text-white text-lg sm:text-xl">
                 storefront
               </span>
             </div>
-            <span className="text-lg sm:text-xl font-extrabold tracking-tight uppercase text-stone-800 group-hover:text-[#E2725B] transition-colors duration-300">
+            <span className="text-base sm:text-xl font-extrabold tracking-tight uppercase text-stone-800 group-hover:text-[#E2725B] transition-colors duration-300">
               Store
             </span>
           </button>
 
-          {/* Desktop Navigation */}
+          {/* Navegación para escritorio */}
           {isLoggedIn && (
             <nav className="hidden md:flex items-center gap-1 bg-stone-100/50 p-1.5 rounded-2xl border border-stone-200/50">
               <button
@@ -69,19 +76,19 @@ const Header: React.FC = () => {
             </nav>
           )}
 
-          {/* Right Side */}
+          {/* Lado derecho */}
           {!isLoggedIn ? (
-            /* Login Button */
+            /* Botón de inicio de sesión */
             <button
               onClick={() => navigate("/auth")}
               id="header-login-btn"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#E2725B] to-[#d4634e] text-white font-bold text-sm rounded-xl shadow-lg shadow-[#E2725B]/20 hover:shadow-xl hover:shadow-[#E2725B]/30 hover:scale-105 active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-[#E2725B] to-[#d4634e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-[#E2725B]/20 hover:shadow-xl hover:shadow-[#E2725B]/30 hover:scale-105 active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
             >
-              <span className="material-symbols-outlined text-lg">login</span>
+              <span className="material-symbols-outlined text-base sm:text-lg">login</span>
               <span className="hidden sm:inline">Iniciar Sesión</span>
             </button>
           ) : (
-            /* Hamburger Menu */
+            /* Menú hamburguesa */
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -92,11 +99,11 @@ const Header: React.FC = () => {
                     : "text-stone-600 hover:bg-stone-50 hover:text-stone-800"
                 }`}
               >
-                {/* User avatar circle */}
+                {/* Círculo de avatar del usuario */}
                 <div className="w-8 h-8 bg-gradient-to-br from-[#E2725B] to-[#c95d47] rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
                   {userName.charAt(0).toUpperCase()}
                 </div>
-                {/* Hamburger icon with animation */}
+                {/* Icono de hamburguesa con animación */}
                 <div className="flex flex-col gap-[5px] w-5">
                   <span
                     className={`block h-[2px] bg-current rounded-full transition-all duration-300 origin-center ${
@@ -116,7 +123,7 @@ const Header: React.FC = () => {
                 </div>
               </button>
 
-              {/* Dropdown Menu */}
+              {/* Menú desplegable */}
               <div
                 className={`absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl shadow-stone-900/10 border border-stone-100 overflow-hidden transition-all duration-300 origin-top-right ${
                   menuOpen
@@ -124,7 +131,7 @@ const Header: React.FC = () => {
                     : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
                 }`}
               >
-                {/* User Info Header */}
+                {/* Encabezado con información del usuario */}
                 <div className="px-5 py-4 bg-gradient-to-r from-stone-50 to-stone-100/50 border-b border-stone-100">
                   <p className="text-sm font-bold text-stone-800 truncate">
                     {userName}
@@ -134,7 +141,7 @@ const Header: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Menu Items */}
+                {/* Elementos del menú */}
                 <div className="py-2">
                   <button
                     onClick={() => {

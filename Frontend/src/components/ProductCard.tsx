@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { Product } from "../lib/types";
 import { getImageUrl } from "../services/productService";
 
+// Componente para mostrar la información básica de un producto en formato de tarjeta
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           <span className="font-headline-md text-2xl font-semibold text-primary">
             ₡{product.price}
             <span className="font-label-caps text-xs text-secondary">
-              / {product.stock > 0 ? "unidad" : "agotado"}
+              / {product.stock > 1 ? "unidades" : product.stock === 1 ? "unidad" : "agotado"}
             </span>
           </span>
           <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">

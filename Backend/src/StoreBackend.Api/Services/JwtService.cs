@@ -27,7 +27,7 @@ public class JwtService
             new Claim(JwtRegisteredClaimNames.Sub, user.UserResourceId.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("name", user.Name),
-            new Claim("isAdmin", user.IsAdmin.ToString().ToLower()),
+            new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User"),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

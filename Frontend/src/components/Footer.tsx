@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// Componente del pie de página de la aplicación
 const Footer: React.FC = () => {
   const navigate = useNavigate();
 
@@ -8,10 +9,10 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-stone-900 text-stone-300">
-      {/* Main footer content */}
+      {/* Contenido principal del footer */}
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand Column */}
+          {/* Columna de la marca */}
           <div className="lg:col-span-1">
             <button
               onClick={() => navigate("/")}
@@ -27,10 +28,10 @@ const Footer: React.FC = () => {
               </span>
             </button>
             <p className="text-stone-400 text-sm leading-relaxed max-w-xs">
-              Soluciones cerámicas de alta calidad para proyectos arquitectónicos
-              contemporáneos. Más de 100 años de excelencia.
+              Soluciones cerámicas de alta calidad para proyectos
+              arquitectónicos contemporáneos. Más de 100 años de excelencia.
             </p>
-            {/* Social icons */}
+            {/* Iconos de redes sociales */}
             <div className="flex gap-3 mt-6">
               {["public", "mail", "call"].map((icon) => (
                 <button
@@ -45,7 +46,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Enlaces rápidos */}
           <div>
             <h4 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-6">
               Navegación
@@ -54,7 +55,7 @@ const Footer: React.FC = () => {
               {[
                 { label: "Inicio", path: "/" },
                 { label: "Catálogo", path: "/products" },
-                { label: "Bienvenida", path: "/welcome" },
+                { label: "Perfil", path: "/profile" },
               ].map(({ label, path }) => (
                 <li key={path}>
                   <button
@@ -69,7 +70,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Soporte */}
           <div>
             <h4 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-6">
               Soporte
@@ -94,7 +95,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contacto */}
           <div>
             <h4 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-6">
               Contacto
@@ -127,16 +128,14 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* Barra inferior */}
       <div className="border-t border-stone-800">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-6 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <p className="text-stone-500 text-xs font-medium tracking-wide">
             © {currentYear} Store. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-2 text-stone-600 text-xs">
-            <span className="material-symbols-outlined text-sm">
-              verified
-            </span>
+            <span className="material-symbols-outlined text-sm">verified</span>
             <span className="font-medium">SSL Certificado · Pagos Seguros</span>
           </div>
         </div>

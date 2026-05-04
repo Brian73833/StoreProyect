@@ -1,3 +1,4 @@
+// Define la estructura de un Producto
 export type Product = {
   productResourceId: string;
   name: string;
@@ -9,14 +10,16 @@ export type Product = {
   categoryName?: string;
 };
 
+// Define la estructura de un Usuario
 export type User = {
   userResourceId: string;
   name: string;
   email: string;
   isAdmin: boolean;
-  token: string;
+  token: string; // Token de autenticación JWT
 };
 
+// Define la estructura de una Categoría
 export type Category = {
   categoryId: number;
   name: string;
