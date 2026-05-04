@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { Category, Product } from "../lib/types";
 import { addProduct } from "../services/productService";
 
+// Componente para la ventana emergente de añadir producto
 interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,7 +27,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Sync categoryId whenever the categories list changes (e.g. loaded async)
+  // Sincroniza el categoryId cuando cambia la lista de categorías
   useEffect(() => {
     if (categories.length > 0) {
       setFormData((prev) => ({
@@ -37,7 +38,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     }
   }, [categories]);
 
-  // Reset form every time the modal opens
+  // Reinicia el formulario cada vez que se abre la ventana emergente
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -91,7 +92,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
       const newProduct = await addProduct(data);
       onProductAdded(newProduct);
       onClose();
-      // Reset form
+      // Reinicia el formulario
       setFormData({
         name: "",
         description: "",

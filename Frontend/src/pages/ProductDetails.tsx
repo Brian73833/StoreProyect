@@ -14,8 +14,7 @@ import {
   IMG_DETAIL_THUMBS,
 } from "../lib/constants";
 
-// ── Sub-components ───────────────────────────────────────────────────────────
-
+// Componente para mostrar detalles técnicos en forma de lista
 interface SpecRowProps {
   label: string;
   value: string;
@@ -30,11 +29,12 @@ const SpecRow: React.FC<SpecRowProps> = ({ label, value }) => (
   </div>
 );
 
-// ── Main Component ───────────────────────────────────────────────────────────
-
+// Componente principal de la página de detalles del producto
 const ProductDetail: React.FC = () => {
+  // Obtiene el ID del producto desde la URL
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  // Verifica si el usuario actual es administrador
   const { user } = useAuth();
   const isAdmin = user?.isAdmin;
   const [product, setProduct] = useState<Product | null>(null);
@@ -43,6 +43,7 @@ const ProductDetail: React.FC = () => {
   const [activeImg, setActiveImg] = useState<string>("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // Carga los datos del producto al entrar a la página
   useEffect(() => {
     if (!id) return;
 
@@ -64,6 +65,7 @@ const ProductDetail: React.FC = () => {
     fetchProduct();
   }, [id]);
 
+  // Pantalla de carga
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -77,6 +79,7 @@ const ProductDetail: React.FC = () => {
     );
   }
 
+  // Pantalla de error si el producto no existe o falló la conexión
   if (error || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-6">
@@ -107,7 +110,7 @@ const ProductDetail: React.FC = () => {
 
   return (
     <main className="pt-8 pb-24 px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface animate-fade-in">
-      {/* ── Breadcrumb Navigation ── */}
+      {/* Navegación y botones para volver atrás */}
       <nav className="mb-12 flex items-center justify-between">
         <button
           onClick={() => navigate("/products")}
@@ -133,7 +136,7 @@ const ProductDetail: React.FC = () => {
       </nav>
 
       <div className="grid grid-cols-12 gap-8 lg:gap-16">
-        {/* ── Product Showcase ── */}
+        {/* Galería de imágenes del producto */}
         <div className="col-span-12 lg:col-span-7 animate-slide-up">
           <div className="relative aspect-[4/5] bg-surface-container overflow-hidden group border border-outline-variant">
             <img
@@ -157,7 +160,7 @@ const ProductDetail: React.FC = () => {
             </div>
           </div>
 
-          {/* Dynamic Thumbnail Strip */}
+          {/* Carrusel de miniaturas interactivo */}
           <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
             {[getImageUrl(product.imagePath), ...IMG_DETAIL_THUMBS].map(
               (src, i) => (
@@ -181,7 +184,7 @@ const ProductDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* ── Product Information ── */}
+        {/* Información y características del producto */}
         <div
           className="col-span-12 lg:col-span-5 flex flex-col pt-4 animate-slide-up"
           style={{ animationDelay: "0.1s" }}
@@ -206,7 +209,7 @@ const ProductDetail: React.FC = () => {
             </p>
           </div>
 
-          {/* Pricing & Stock Card */}
+          {/* Caja con precios y disponibilidad de stock */}
           <div className="bg-surface-container-low border border-outline-variant p-8 mb-10 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
 
@@ -240,6 +243,7 @@ const ProductDetail: React.FC = () => {
               </span>
               Add to Specifications
             </button>
+            {/* Si es administrador, muestra el botón para eliminar producto */}
             {isAdmin && (
               <button
                 onClick={() => setShowDeleteModal(true)}
@@ -253,7 +257,7 @@ const ProductDetail: React.FC = () => {
             )}
           </div>
 
-          {/* Technical Data */}
+          {/* Especificaciones técnicas de fábrica */}
           <div className="space-y-8">
             <div>
               <h3 className="font-label-caps text-xs text-on-surface font-bold mb-4 uppercase tracking-[0.2em] flex items-center gap-2">
@@ -285,6 +289,7 @@ const ProductDetail: React.FC = () => {
               </p>
             </div>
 
+            {/* Botones para descargar material técnico */}
             <div className="grid grid-cols-2 gap-4 pt-4">
               <button className="flex items-center justify-center gap-2 border border-outline p-3 font-label-caps text-[10px] uppercase tracking-widest hover:bg-surface-container transition-colors">
                 <span className="material-symbols-outlined text-sm">
@@ -302,7 +307,7 @@ const ProductDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* ── Contextual Section ── */}
+        {/* Sección de contexto o demostración visual del material */}
         <section className="col-span-12 mt-24 border-t border-outline-variant pt-20">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 sm:mb-16 gap-6 sm:gap-8">
             <div className="max-w-2xl">
@@ -366,7 +371,7 @@ const ProductDetail: React.FC = () => {
         </section>
       </div>
 
-      {/* Delete Confirmation Modal */}
+      {/* Ventana de confirmación para eliminar el producto */}
       {showDeleteModal && product && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-slide-up p-8 text-center">

@@ -1,13 +1,11 @@
-//Home page
-
+// Imágenes usadas en la página de inicio
 export const IMG_HOME_CATALOG =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDU_P68Q_nBqEF9vvcPzfSaUBDuXkZJ1nm3AG929mXVx4ptK0qf37dZRYpLsPQxyLuqQn7iVGCg9dM66F7RbdIyrbCirDDxqRcA1HIXnHq91GYqGNzPyAPJW2sNMSWxN4GRwIbRCAaEUgKft70ZMVFScZyLwhgeCEwSpsOiDGKAptXHSL9VX6_CzZNzujjk4Y4hVqH7vbOjUibwAbeMgm1xZItQQh7A2Qqn2VvYLoYiFaPzmaQbdhSnhH2-jYHRIpWdxQO3b9G7ZmW9";
 
 export const IMG_HOME_TERRA =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDTRDBpH0xBvef5MOaXXQmnO-TeA9W656CUd4Ah7nsjAT-N8AO3iO3MIZgl53ncO84LBnwYTYR1mz_IJwZdDIC4F9khynayha0gp7BGYYSqN-OFOLzf4UY8g932jB_qb3MNgOZ6xuwKhp73WL7YxAlyKXh3JnIzmKdjn33MrT_D2NG1gwyq_7PmyK2cwG8LnV7Wk9-gdmiCDVUSSOjJR_Yasbd7CweoFAQRPlqPXXaRgFX-w-KOzfk2bqSS5k3YKwQ3Z7mIhey7yAVk";
 
-//Welcome page
-
+// Imágenes usadas en la pantalla de bienvenida
 export const IMG_WELCOME_HERO =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuBkiWaMStZxDYMt8X2V1y0-Nk6GEPB4_T5BuAsTsR_hYBfPKnmZIZA2X2MikMImbuGw8Eosd758AHLfwL-EMaPYQPE6F0yyovfdkrxAbgkNOoyIwEMqFSa-rJMuJIMA8t9MeEZNlY8rg33ysrZM_1HyQGXkXTm5efUbd9inUnTyQZLUgEPxonlTW84UFdc87l_66On93hcHinISzSylTZut2D184GX9jy_WDGjMKaIFunbQwCuw4QeX6qL535jcnMhRuHWDmSiZe6vz";
 
@@ -17,8 +15,7 @@ export const IMG_WELCOME_TEXTURE =
 export const IMG_WELCOME_INTERIOR =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDXLCbRpW-mNGs-VhqhhrvEMxqbd12OfH8BDBuzePhd0MhBduAgmMlQoSo3315xEdcQddtKnMgNHxwA5NwUjj_hMusEZEE36e72Xhm5Gpxv-aJDmr5ZzoRILTDpEyziCMAsturoeUK0SNZxJN6n5eteV7BaW1JbA4MDVIRKPTHOpfCagjOENYEnrgb71fe2mCO-7G4-uHS7pKyo6cHBV_pzWDvgi7La9pPzL7hIcku0ZrFWApTRPIf7uXQ1U4GuxvNQ8FY369w4eQFe";
 
-//ProductDetails page
-
+// Imágenes usadas en los detalles del producto
 export const IMG_DETAIL_GALLERY_MAIN =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDio5ygLxGadIRov5OGJEutuZuPvTB7woDvegxdAMsrEqrsMU3QjwH3wDjweq5FnYxdKY6DkSgKwHotd38R_MnlTZSYckQxpYQ21EwJIHE41VgMAaBKAwf1siBo5eV4ugaTCSQc38cQDA3VTDuyX72Is-c_mtwG2u5hs7Nk39XcOOIShx3cqanKfEiyELzr8QB1rVCv-3CnBJxnf-uJBDIt4AUiFyYlxLeBRzvVEdSG4hfQz7xU68JXJeO8cDsco0vtTwpPjHW0-SkH";
 

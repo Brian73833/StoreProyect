@@ -4,8 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { ICON_STYLE } from "../lib/utils";
 import { IMG_HOME_CATALOG, IMG_HOME_TERRA } from "../lib/constants";
 
-// ── Sub-components ───────────────────────────────────────────────────────────
-
+// Componente secundario para mostrar estadísticas
 interface StatItemProps {
   label: string;
   value: string;
@@ -23,16 +22,17 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
   </div>
 );
 
-// ── Main Component ───────────────────────────────────────────────────────────
-
+// Componente principal de la página de inicio
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  
+  // Obtiene la información del usuario logueado
   const { user } = useAuth();
-  const userName = user?.name ? user.name.split(" ")[0] : "Invitado";
+  const userName = user?.name;
 
   return (
     <main className="min-h-screen bg-background text-on-background font-body-md">
-      {/* ── Hero / Personal Welcome ── */}
+      {/* Sección de bienvenida */}
       <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20 bg-surface-container-low border-b border-slate-300">
         <div className="max-w-7xl mx-auto">
           <p className="font-label-caps text-xs text-primary mb-3 uppercase tracking-widest">
@@ -47,6 +47,7 @@ const Home: React.FC = () => {
             inventory with precision.
           </p>
           <div className="flex flex-wrap gap-4 sm:gap-6">
+            {/* Botón que redirige al catálogo de productos */}
             <button
               onClick={() => navigate("/products")}
               className="bg-primary text-on-primary px-8 sm:px-12 py-3 font-label-caps text-xs uppercase tracking-widest
@@ -64,7 +65,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Quick Access Bento Grid ── */}
+      {/* Sección de enlaces rápidos */}
       <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20">
         <div className="max-w-7xl mx-auto">
           <h3 className="font-label-caps text-xs text-secondary mb-8 sm:mb-12 uppercase tracking-widest">
@@ -72,7 +73,7 @@ const Home: React.FC = () => {
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            {/* Large Feature: Catalog */}
+            {/* Tarjeta principal del catálogo */}
             <div className="md:col-span-8 bg-stone-100 border border-slate-300 border-b-[4px] border-b-stone-800 p-6 sm:p-10 md:p-12 flex flex-col justify-between min-h-[280px] sm:min-h-[340px] md:min-h-[400px] relative overflow-hidden group">
               <img
                 alt="Premium terracotta bricks"
@@ -112,7 +113,7 @@ const Home: React.FC = () => {
               </Link>
             </div>
 
-            {/* Small Feature: Contact */}
+            {/* Tarjeta de contacto */}
             <div className="md:col-span-4 bg-tertiary-fixed border border-slate-300 border-b-[4px] border-b-tertiary p-6 sm:p-10 md:p-12 flex flex-col justify-between">
               <div>
                 <span
@@ -137,7 +138,7 @@ const Home: React.FC = () => {
               </button>
             </div>
 
-            {/* Small Feature: Recent Specs */}
+            {/* Tarjeta de documentos recientes */}
             <div className="md:col-span-4 bg-surface-container-high border border-slate-300 border-b-[4px] border-b-slate-500 p-6 sm:p-10 md:p-12 flex flex-col justify-between">
               <div>
                 <span
@@ -162,7 +163,7 @@ const Home: React.FC = () => {
               </Link>
             </div>
 
-            {/* Medium Feature: Terra Mater */}
+            {/* Tarjeta destacada */}
             <div className="md:col-span-8 bg-stone-900 text-stone-100 p-6 sm:p-10 md:p-12 border-b-[4px] border-b-orange-800">
               <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
                 <div className="flex-1">
@@ -194,7 +195,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Technical Specs Teaser ── */}
+      {/* Sección de estadísticas */}
       <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20 bg-stone-50 border-t-2 border-slate-200">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8 sm:mb-12">

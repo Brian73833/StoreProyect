@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { Category } from "../lib/types";
 import { addCategory } from "../services/categoryService";
 
+// Componente para la ventana emergente de añadir categoría
 interface CategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
