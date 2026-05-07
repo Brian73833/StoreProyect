@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import type { Category, Product } from "../types";
+import type { Category } from "../models/responses/Category";
+import type { Product } from "../models/responses/Product";
 import { addProduct } from "../services/productService";
 
 // Componente para la ventana emergente de añadir producto

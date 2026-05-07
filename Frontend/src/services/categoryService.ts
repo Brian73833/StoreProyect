@@ -1,4 +1,4 @@
-import type { Category } from "../types";
+import type { Category } from "../models/responses/Category";
 import { config } from "../config";
 
 // Función para obtener la lista de todas las categorías

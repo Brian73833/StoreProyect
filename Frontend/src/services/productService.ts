@@ -1,4 +1,4 @@
-import type { Product } from "../types";
+import type { Product } from "../models/responses/Product";
 import { config } from "../config";
 
 export const getImageUrl = (path: string | null | undefined) => {

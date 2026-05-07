@@ -1,4 +1,4 @@
-import type { User } from "../types";
+import type { User } from "../models/responses/User";
 import { config } from "../config";
 
 // Función auxiliar para extraer el mensaje de error de una respuesta de la API

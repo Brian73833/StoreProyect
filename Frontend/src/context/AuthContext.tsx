@@ -5,7 +5,7 @@ import React, {
   useEffect,
   type ReactNode,
 } from "react";
-import type { User } from "../types";
+import type { User } from "../models/responses/User";
 
 // Define la estructura de los datos de autenticación
 interface AuthContextType {
