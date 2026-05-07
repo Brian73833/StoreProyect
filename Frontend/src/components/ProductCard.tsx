@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { Product } from "../lib/types";
+import type { Product } from "../types";
 import { getImageUrl } from "../services/productService";
 
 // Componente para mostrar la información básica de un producto en formato de tarjeta

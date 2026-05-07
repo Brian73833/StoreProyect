@@ -6,7 +6,7 @@ import {
   deleteProduct,
 } from "../services/productService";
 import { useAuth } from "../context/AuthContext";
-import type { Product } from "../lib/types";
+import type { Product } from "../types";
 import { ICON_STYLE } from "../lib/utils";
 import {
   IMG_DETAIL_GALLERY_MAIN,

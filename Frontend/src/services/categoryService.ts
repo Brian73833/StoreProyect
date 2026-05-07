@@ -1,10 +1,10 @@
-import type { Category } from "../lib/types";
-import { BASE_URL } from "../lib/config";
+import type { Category } from "../types";
+import { config } from "../config";
 
 // Función para obtener la lista de todas las categorías
 export async function getCategories(): Promise<Category[]> {
   // Petición GET para obtener las categorías
-  const response = await fetch(`${BASE_URL}/api/categories`);
+  const response = await fetch(`${config.api.url}/api/categories`);
   if (!response.ok) {
     throw new Error("Failed to fetch categories");
   }
@@ -13,10 +13,10 @@ export async function getCategories(): Promise<Category[]> {
 
 // Función para crear una nueva categoría
 export async function addCategory(
-  category: Omit<Category, "categoryId">
+  category: Omit<Category, "categoryId">,
 ): Promise<Category> {
   // Petición POST enviando los datos de la nueva categoría
-  const response = await fetch(`${BASE_URL}/api/categories`, {
+  const response = await fetch(`${config.api.url}/api/categories`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -24,10 +24,10 @@ export async function addCategory(
     body: JSON.stringify(category),
     credentials: "include", // Incluye las cookies de sesión
   });
-  
+
   if (!response.ok) {
     throw new Error("Failed to add category");
   }
-  
+
   return response.json();
 }

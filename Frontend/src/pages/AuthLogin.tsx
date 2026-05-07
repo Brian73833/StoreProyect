@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authHero from "../assets/auth-hero.png";
 import { loginUser, registerUser } from "../services/authService";
-import type { User } from "../lib/types";
+import type { User } from "../types";
 import { useAuth } from "../context/AuthContext";
 import { getPasswordStrength } from "../lib/utils";
 import FieldError from "../components/FieldError";

@@ -1,5 +1,5 @@
-import type { User } from "../lib/types";
-import { BASE_URL } from "../lib/config";
+import type { User } from "../types";
+import { config } from "../config";
 
 // Función auxiliar para extraer el mensaje de error de una respuesta de la API
 async function parseErrorMessage(response: Response): Promise<string> {
@@ -34,7 +34,7 @@ export const loginUser = async (loginData: {
   password: string;
 }): Promise<User> => {
   // Hace una petición POST al endpoint de login
-  const response = await fetch(`${BASE_URL}/api/users/login`, {
+  const response = await fetch(`${config.api.url}/api/users/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
@@ -58,7 +58,7 @@ export const registerUser = async (signUpData: {
   password: string;
 }): Promise<User> => {
   // Hace una petición POST al endpoint de registro
-  const response = await fetch(`${BASE_URL}/api/users/register`, {
+  const response = await fetch(`${config.api.url}/api/users/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(signUpData),
@@ -84,7 +84,7 @@ export const updateUser = async (
   },
 ): Promise<User> => {
   // Hace una petición PUT al endpoint de actualización
-  const response = await fetch(`${BASE_URL}/api/users/${resourceId}`, {
+  const response = await fetch(`${config.api.url}/api/users/${resourceId}`, {
     method: "PUT",
     headers: authHeaders(),
     body: JSON.stringify(updateData),
@@ -105,7 +105,7 @@ export const deleteUser = async (
   password: string,
 ): Promise<void> => {
   // Hace una petición DELETE para borrar la cuenta
-  const response = await fetch(`${BASE_URL}/api/users/${resourceId}`, {
+  const response = await fetch(`${config.api.url}/api/users/${resourceId}`, {
     method: "DELETE",
     headers: authHeaders(),
     body: JSON.stringify({ password }),
@@ -121,7 +121,7 @@ export const deleteUser = async (
 // Función para cerrar sesión
 export const logoutUser = async (): Promise<void> => {
   // Hace una petición POST para invalidar la sesión en el servidor
-  await fetch(`${BASE_URL}/api/users/logout`, {
+  await fetch(`${config.api.url}/api/users/logout`, {
     method: "POST",
     credentials: "include",
   });
