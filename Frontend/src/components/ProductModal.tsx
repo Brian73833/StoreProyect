@@ -39,20 +39,25 @@ const ProductModal: React.FC<ProductModalProps> = ({
     }
   }, [categories]);
 
+  // Función para reiniciar el formulario a su estado inicial
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      categoryId: categories.length > 0 ? categories[0].categoryId : 0,
+    });
+    setImageFile(null);
+    setError(null);
+  };
+
   // Reinicia el formulario cada vez que se abre la ventana emergente
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        name: "",
-        description: "",
-        price: 0,
-        stock: 0,
-        categoryId: categories.length > 0 ? categories[0].categoryId : 0,
-      });
-      setImageFile(null);
-      setError(null);
+      resetForm();
     }
-  }, [isOpen]);
+  }, [isOpen, categories]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -93,15 +98,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
       const newProduct = await addProduct(data);
       onProductAdded(newProduct);
       onClose();
-      // Reinicia el formulario
-      setFormData({
-        name: "",
-        description: "",
-        price: 0,
-        stock: 0,
-        categoryId: categories.length > 0 ? categories[0].categoryId : 0,
-      });
-      setImageFile(null);
+      resetForm();
     } catch (err) {
       setError("Error al añadir el producto. Verifica los datos.");
       console.error(err);

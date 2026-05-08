@@ -5,7 +5,7 @@ import { getProducts } from "../services/productService";
 import { getCategories } from "../services/categoryService";
 
 // Define la estructura de lo que devolverá este hook personalizado
-  interface UseProductsResult {
+interface UseProductsResult {
   products: Product[];
   categories: Category[];
   loading: boolean;

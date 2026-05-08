@@ -25,7 +25,7 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
 // Componente principal de la página de inicio
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  
+
   // Obtiene la información del usuario logueado
   const { user } = useAuth();
   const userName = user?.name;
@@ -223,7 +223,6 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-
     </main>
   );
 };

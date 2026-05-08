@@ -21,12 +21,6 @@ async function parseErrorMessage(response: Response): Promise<string> {
   }
 }
 
-// Función auxiliar para generar las cabeceras básicas de una petición
-function authHeaders(): HeadersInit {
-  return {
-    "Content-Type": "application/json",
-  };
-}
 
 // Función para iniciar sesión con email y contraseña
 export const loginUser = async (loginData: {
@@ -86,7 +80,7 @@ export const updateUser = async (
   // Hace una petición PUT al endpoint de actualización
   const response = await fetch(`${config.api.url}/api/users/${resourceId}`, {
     method: "PUT",
-    headers: authHeaders(),
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updateData),
     credentials: "include",
   });
@@ -107,7 +101,7 @@ export const deleteUser = async (
   // Hace una petición DELETE para borrar la cuenta
   const response = await fetch(`${config.api.url}/api/users/${resourceId}`, {
     method: "DELETE",
-    headers: authHeaders(),
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ password }),
     credentials: "include",
   });
