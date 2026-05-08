@@ -10,7 +10,6 @@ import type { User } from "../models/responses/User";
 // Define la estructura de los datos de autenticación
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   login: (user: User) => void;
   logout: () => void;
   isLoggedIn: boolean;
@@ -47,8 +46,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // Función para iniciar sesión y guardar al usuario
   const login = (userData: User) => {
     setUser(userData);
-    const { token, ...userWithoutToken } = userData;
-    localStorage.setItem("user", JSON.stringify(userWithoutToken));
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   // Función para cerrar sesión y borrar los datos
@@ -59,12 +57,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // Verifica si el usuario ha iniciado sesión
   const isLoggedIn = !!user;
-  const token = user?.token ?? null;
 
   return (
     // Comparte los datos y funciones con el resto de la aplicación
     <AuthContext.Provider
-      value={{ user, token, login, logout, isLoggedIn, isLoading }}
+      value={{ user, login, logout, isLoggedIn, isLoading }}
     >
       {children}
     </AuthContext.Provider>
