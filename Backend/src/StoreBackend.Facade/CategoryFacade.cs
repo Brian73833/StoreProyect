@@ -1,5 +1,6 @@
 using StoreBackend.DomainService;
 using StoreBackend.Dto;
+using StoreBackend.Facade.Mappers;
 using StoreBackend.Infrastructure;
 
 namespace StoreBackend.Facade;
@@ -17,13 +18,14 @@ public class CategoryFacade : ICategoryFacade
 
     public async Task<List<CategoryDto>> GetAllAsync()
     {
-        return await _categoryService.GetAllAsync();
+        var entities = await _categoryService.GetAllAsync();
+        return CategoryMapper.ToDto(entities);
     }
 
     public async Task<CategoryDto> AddAsync(CategoryDto category)
     {
         var result = await _categoryService.AddAsync(category);
         await _context.SaveChangesAsync();
-        return result;
+        return CategoryMapper.ToDto(result);
     }
 }

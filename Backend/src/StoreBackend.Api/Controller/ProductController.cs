@@ -62,22 +62,22 @@ namespace StoreBackend.Api.Controller
 
                 if (product.ImageFile != null)
                 {
-                    // Validate file size (e.g., max 5MB)
+                    // Validate file size (e.g., max 50MB)
                     if (product.ImageFile.Length > 50 * 1024 * 1024)
                     {
                         return BadRequest("El archivo de imagen no puede superar los 50MB.");
                     }
 
                     // Validate file extension
-                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
+                    var allowedExtensions = new[] { ".jpg", ".png" };
                     var extension = Path.GetExtension(product.ImageFile.FileName).ToLowerInvariant();
                     if (string.IsNullOrEmpty(extension) || !allowedExtensions.Contains(extension))
                     {
-                        return BadRequest("Tipo de archivo no permitido. Solo se permiten imágenes (jpg, jpeg, png, webp, gif).");
+                        return BadRequest("Tipo de archivo no permitido. Solo se permiten imágenes (jpg o png).");
                     }
 
                     // Validate content type
-                    var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/webp", "image/gif" };
+                    var allowedContentTypes = new[] { "image/jpeg", "image/png" };
                     if (!allowedContentTypes.Contains(product.ImageFile.ContentType.ToLowerInvariant()))
                     {
                         return BadRequest("El Content-Type del archivo no es válido.");

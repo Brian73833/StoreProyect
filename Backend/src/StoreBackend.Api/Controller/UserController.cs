@@ -121,6 +121,13 @@ namespace StoreBackend.Api.Controller
             try
             {
                 await _userFacade.DeleteAsync(resourceId, deleteUserRequestModel.Password);
+                
+                Response.Cookies.Delete("jwt", new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None
+                });
                 return Ok();
             }
             catch (BadRequestResponseException ex)

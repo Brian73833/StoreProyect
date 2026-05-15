@@ -24,7 +24,7 @@ public class ProductService : IProductService
             Price = product.Price,
             Stock = product.Stock,
             ImagePath = product.ImagePath,
-            CategoryId = product.CategoryId
+            CategoryId = product.CategoryId,
 
         };
         return _productRepository.AddAsync(productEntity);

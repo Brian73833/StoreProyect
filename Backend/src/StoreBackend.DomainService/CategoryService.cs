@@ -1,3 +1,4 @@
+using StoreBackend.Domain.Entities;
 using StoreBackend.Dto;
 using StoreBackend.Infrastructure.Repositories;
 
@@ -12,27 +13,17 @@ public class CategoryService : ICategoryService
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<List<CategoryDto>> GetAllAsync()
+    public async Task<List<Category>> GetAllAsync()
     {
-        var categories = await _categoryRepository.GetAllAsync();
-        return categories.Select(c => new CategoryDto
-        {
-            CategoryId = c.CategoryId,
-            Name = c.Name
-        }).ToList();
+        return await _categoryRepository.GetAllAsync();
     }
 
-    public async Task<CategoryDto> AddAsync(CategoryDto category)
+    public async Task<Category> AddAsync(CategoryDto category)
     {
-        var categoryEntity = new StoreBackend.Domain.Entities.Category
+        var categoryEntity = new Category
         {
             Name = category.Name
         };
-        var result = await _categoryRepository.AddAsync(categoryEntity);
-        return new CategoryDto
-        {
-            CategoryId = result.CategoryId,
-            Name = result.Name
-        };
+        return await _categoryRepository.AddAsync(categoryEntity);
     }
 }

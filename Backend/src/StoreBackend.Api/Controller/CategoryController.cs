@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using StoreBackend.Api.Mappers;
 using StoreBackend.Api.Models.Responses;
 using StoreBackend.Dto;
 using StoreBackend.Facade;
@@ -23,11 +24,7 @@ public class CategoryController : ControllerBase
         try
         {
             var categories = await _categoryFacade.GetAllAsync();
-            var models = categories.Select(c => new CategoryResponseModel
-            {
-                CategoryId = c.CategoryId,
-                Name = c.Name
-            }).ToList();
+            var models = CategoryMapper.ToModel(categories);
             return Ok(models);
         }
         catch (Exception)
@@ -43,7 +40,8 @@ public class CategoryController : ControllerBase
         try
         {
             var result = await _categoryFacade.AddAsync(category);
-            return CreatedAtAction(nameof(GetCategories), new { id = result.CategoryId }, result);
+            var model = CategoryMapper.ToModel(result);
+            return CreatedAtAction(nameof(GetCategories), new { id = model.CategoryId }, model);
         }
         catch (Exception)
         {
