@@ -15,7 +15,7 @@ public class CategoryMapper
     {
         return new CategoryResponseModel
         {
-            CategoryId = dto.CategoryId,
+            CategoryResourceId = dto.CategoryResourceId,
             Name = dto.Name
         };
     }

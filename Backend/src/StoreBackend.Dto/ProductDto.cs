@@ -18,5 +18,7 @@ public class ProductDto
 
     public int CategoryId { get; set; }
     
+    public Guid CategoryResourceId { get; set; }
+    
     public string? CategoryName { get; set; }
 }

@@ -21,5 +21,5 @@ public class ProductRequestModel
     public IFormFile? ImageFile { get; set; }
 
     [Required]
-    public int CategoryId { get; set; }
+    public Guid CategoryResourceId { get; set; }
 }

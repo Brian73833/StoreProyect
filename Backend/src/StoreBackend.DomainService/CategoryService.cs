@@ -22,6 +22,7 @@ public class CategoryService : ICategoryService
     {
         var categoryEntity = new Category
         {
+            CategoryResourceId = Guid.NewGuid(),
             Name = category.Name
         };
         return await _categoryRepository.AddAsync(categoryEntity);
