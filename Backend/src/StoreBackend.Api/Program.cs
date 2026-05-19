@@ -119,6 +119,9 @@ builder.Services.AddScoped<ICategoryFacade, CategoryFacade>();
 // JWT Service
 builder.Services.AddSingleton<JwtService>();
 
+// Image Service
+builder.Services.AddScoped<IImageService, ImageService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

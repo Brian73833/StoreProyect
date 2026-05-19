@@ -16,9 +16,9 @@ public class ProductService : IProductService
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<Product> AddAsync(ProductDto product)
+    public async Task<Product> AddAsync(ProductDto productDto)
     {
-        var category = await _categoryRepository.GetByResourceIdAsync(product.CategoryResourceId);
+        var category = await _categoryRepository.GetByResourceIdAsync(productDto.CategoryResourceId);
         if (category == null)
         {
             throw new BadRequestResponseException("Category not found");
@@ -26,12 +26,12 @@ public class ProductService : IProductService
 
         var productEntity = new Product
         {
-            ProductResourceId = product.ProductResourceId,
-            Name = product.Name,
-            Description = product.Description,
-            Price = product.Price,
-            Stock = product.Stock,
-            ImagePath = product.ImagePath,
+            ProductResourceId = productDto.ProductResourceId,
+            Name = productDto.Name,
+            Description = productDto.Description,
+            Price = productDto.Price,
+            Stock = productDto.Stock,
+            ImagePath = productDto.ImagePath,
             CategoryId = category.CategoryId,
         };
         return await _productRepository.AddAsync(productEntity);

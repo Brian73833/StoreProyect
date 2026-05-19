@@ -4,6 +4,7 @@ using StoreBackend.Api.Models.Requests;
 using StoreBackend.Exceptions;
 using StoreBackend.Facade;
 using Microsoft.AspNetCore.Authorization;
+using StoreBackend.Api.Services;
 
 namespace StoreBackend.Api.Controller
 {
@@ -12,12 +13,12 @@ namespace StoreBackend.Api.Controller
     public class ProductController : ControllerBase
     {
         private readonly IProductFacade _productFacade;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IImageService _imageService;
 
-        public ProductController(IProductFacade productFacade, IWebHostEnvironment webHostEnvironment)
+        public ProductController(IProductFacade productFacade, IImageService imageService)
         {
             _productFacade = productFacade;
-            _webHostEnvironment = webHostEnvironment;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -54,57 +55,24 @@ namespace StoreBackend.Api.Controller
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddProduct([FromForm] ProductRequestModel product)
+        public async Task<IActionResult> AddProduct([FromForm] ProductRequestModel productRequest)
         {
             try
             {
-                var dto = ProductMapper.ToDto(product);
+                var dto = ProductMapper.ToDto(productRequest);
 
-                if (product.ImageFile != null)
+                if (productRequest.ImageFile != null)
                 {
-                    // Validate file size (e.g., max 5MB)
-                    if (product.ImageFile.Length > 5 * 1024 * 1024)
-                    {
-                        return BadRequest("El archivo de imagen no puede superar los 5MB.");
-                    }
-
-                    // Validate file extension
-                    var allowedExtensions = new[] { ".jpg", ".png" };
-                    var extension = Path.GetExtension(product.ImageFile.FileName).ToLowerInvariant();
-                    if (string.IsNullOrEmpty(extension) || !allowedExtensions.Contains(extension))
-                    {
-                        return BadRequest("Tipo de archivo no permitido. Solo se permiten imágenes (jpg o png).");
-                    }
-
-                    // Validate content type
-                    var allowedContentTypes = new[] { "image/jpeg", "image/png" };
-                    if (!allowedContentTypes.Contains(product.ImageFile.ContentType.ToLowerInvariant()))
-                    {
-                        return BadRequest("El Content-Type del archivo no es válido.");
-                    }
-
-                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "products");
-                    
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    // Generate a safe unique filename, completely discarding original name
-                    string uniqueFileName = Guid.NewGuid().ToString() + extension;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await product.ImageFile.CopyToAsync(fileStream);
-                    }
-
-                    dto.ImagePath = Path.Combine("uploads", "products", uniqueFileName).Replace("\\", "/");
+                    dto.ImagePath = await _imageService.SaveImageAsync(productRequest.ImageFile, "products");
                 }
 
-                var addedProduct = await _productFacade.AddAsync(dto);
-                var model = ProductMapper.ToModel(addedProduct);
+                var addedProductDto = await _productFacade.AddAsync(dto);
+                var model = ProductMapper.ToModel(addedProductDto);
                 return CreatedAtAction(nameof(GetProduct), new { id = model.ProductResourceId }, model);
+            }
+            catch (BadRequestResponseException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -124,11 +92,7 @@ namespace StoreBackend.Api.Controller
 
                 if (!string.IsNullOrEmpty(product.ImagePath))
                 {
-                    string absolutePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImagePath);
-                    if (System.IO.File.Exists(absolutePath))
-                    {
-                        System.IO.File.Delete(absolutePath);
-                    }
+                    _imageService.DeleteImage(product.ImagePath);
                 }
 
                 return Ok();
