@@ -8,14 +8,22 @@ namespace StoreBackend.DomainService;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public ProductService(IProductRepository productRepository)
+    public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
     {
         _productRepository = productRepository;
+        _categoryRepository = categoryRepository;
     }
 
-    public Task<Product> AddAsync(ProductDto product)
+    public async Task<Product> AddAsync(ProductDto product)
     {
+        var category = await _categoryRepository.GetByResourceIdAsync(product.CategoryResourceId);
+        if (category == null)
+        {
+            throw new BadRequestResponseException("Category not found");
+        }
+
         var productEntity = new Product
         {
             ProductResourceId = product.ProductResourceId,
@@ -24,10 +32,9 @@ public class ProductService : IProductService
             Price = product.Price,
             Stock = product.Stock,
             ImagePath = product.ImagePath,
-            CategoryId = product.CategoryId,
-
+            CategoryId = category.CategoryId,
         };
-        return _productRepository.AddAsync(productEntity);
+        return await _productRepository.AddAsync(productEntity);
     }
 
     public async Task DeleteAsync(Guid productId)

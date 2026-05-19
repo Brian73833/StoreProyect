@@ -8,37 +8,37 @@ namespace StoreBackend.Facade;
 
 public class ProductFacade : IProductFacade
 {
-    private readonly IProductService productService;
-    private readonly AppDbContext context;
+    private readonly IProductService _productService;
+    private readonly AppDbContext _context;
 
     public ProductFacade(IProductService productService, AppDbContext context)
     {
-        this.productService = productService;
-        this.context = context;
+        _productService = productService;
+        _context = context;
     }
 
     public async Task<ProductDto> AddAsync(ProductDto product)
     {
-        var entity = await productService.AddAsync(product);
-        await context.SaveChangesAsync();
+        var entity = await _productService.AddAsync(product);
+        await _context.SaveChangesAsync();
         return ProductMapper.ToDto(entity);
     }
 
     public async Task DeleteAsync(Guid productId)
     {
-        await productService.DeleteAsync(productId);
-        await context.SaveChangesAsync();
+        await _productService.DeleteAsync(productId);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<List<ProductDto>> GetAllAsync()
     {
-        var entities = await productService.GetAllAsync();
+        var entities = await _productService.GetAllAsync();
         return ProductMapper.ToDto(entities);
     }
 
     public async Task<ProductDto> GetByIdAsync(Guid productId)
     {
-        var entity = await productService.GetByIdAsync(productId);
+        var entity = await _productService.GetByIdAsync(productId);
         if (entity == null) throw new ResourceNotFoundException();
         return ProductMapper.ToDto(entity);
     }

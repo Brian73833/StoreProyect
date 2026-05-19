@@ -43,7 +43,7 @@ public class CategoryController : ControllerBase
             var dto = CategoryMapper.ToDto(categoryRequest);
             var result = await _categoryFacade.AddAsync(dto);
             var model = CategoryMapper.ToModel(result);
-            return CreatedAtAction(nameof(GetCategories), new { id = model.CategoryId }, model);
+            return CreatedAtAction(nameof(GetCategories), new { id = model.CategoryResourceId }, model);
         }
         catch (Exception)
         {

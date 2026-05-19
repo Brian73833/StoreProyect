@@ -11,13 +11,13 @@ namespace StoreBackend.Api.Controller
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductFacade productFacade;
-        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IProductFacade _productFacade;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ProductController(IProductFacade productFacade, IWebHostEnvironment webHostEnvironment)
         {
-            this.productFacade = productFacade;
-            this.webHostEnvironment = webHostEnvironment;
+            _productFacade = productFacade;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -25,7 +25,7 @@ namespace StoreBackend.Api.Controller
         {
             try
             {
-                var products = await productFacade.GetAllAsync();
+                var products = await _productFacade.GetAllAsync();
                 var models = ProductMapper.ToModel(products);
                 return Ok(models);
             }
@@ -40,7 +40,7 @@ namespace StoreBackend.Api.Controller
         {
             try
             {
-                var product = await productFacade.GetByIdAsync(id);
+                var product = await _productFacade.GetByIdAsync(id);
 
                 var model = ProductMapper.ToModel(product);
                 return Ok(model);
@@ -62,10 +62,10 @@ namespace StoreBackend.Api.Controller
 
                 if (product.ImageFile != null)
                 {
-                    // Validate file size (e.g., max 50MB)
-                    if (product.ImageFile.Length > 50 * 1024 * 1024)
+                    // Validate file size (e.g., max 5MB)
+                    if (product.ImageFile.Length > 5 * 1024 * 1024)
                     {
-                        return BadRequest("El archivo de imagen no puede superar los 50MB.");
+                        return BadRequest("El archivo de imagen no puede superar los 5MB.");
                     }
 
                     // Validate file extension
@@ -83,7 +83,7 @@ namespace StoreBackend.Api.Controller
                         return BadRequest("El Content-Type del archivo no es válido.");
                     }
 
-                    string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads", "products");
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "products");
                     
                     if (!Directory.Exists(uploadsFolder))
                     {
@@ -102,7 +102,7 @@ namespace StoreBackend.Api.Controller
                     dto.ImagePath = Path.Combine("uploads", "products", uniqueFileName).Replace("\\", "/");
                 }
 
-                var addedProduct = await productFacade.AddAsync(dto);
+                var addedProduct = await _productFacade.AddAsync(dto);
                 var model = ProductMapper.ToModel(addedProduct);
                 return CreatedAtAction(nameof(GetProduct), new { id = model.ProductResourceId }, model);
             }
@@ -118,7 +118,19 @@ namespace StoreBackend.Api.Controller
         {
             try
             {
-                await productFacade.DeleteAsync(id);
+                var product = await _productFacade.GetByIdAsync(id);
+
+                await _productFacade.DeleteAsync(id);
+
+                if (!string.IsNullOrEmpty(product.ImagePath))
+                {
+                    string absolutePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImagePath);
+                    if (System.IO.File.Exists(absolutePath))
+                    {
+                        System.IO.File.Delete(absolutePath);
+                    }
+                }
+
                 return Ok();
             }
             catch (ResourceNotFoundException)
