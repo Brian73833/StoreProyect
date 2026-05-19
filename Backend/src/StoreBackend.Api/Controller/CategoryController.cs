@@ -4,6 +4,7 @@ using StoreBackend.Api.Models.Responses;
 using StoreBackend.Dto;
 using StoreBackend.Facade;
 using Microsoft.AspNetCore.Authorization;
+using StoreBackend.Api.Models.Requests;
 
 namespace StoreBackend.Api.Controller;
 
@@ -35,11 +36,12 @@ public class CategoryController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> AddCategory([FromBody] CategoryDto category)
+    public async Task<IActionResult> AddCategory([FromBody] CategoryRequestModel categoryRequest)
     {
         try
         {
-            var result = await _categoryFacade.AddAsync(category);
+            var dto = CategoryMapper.ToDto(categoryRequest);
+            var result = await _categoryFacade.AddAsync(dto);
             var model = CategoryMapper.ToModel(result);
             return CreatedAtAction(nameof(GetCategories), new { id = model.CategoryId }, model);
         }

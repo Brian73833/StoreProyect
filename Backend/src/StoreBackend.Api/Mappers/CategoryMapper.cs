@@ -1,3 +1,4 @@
+using StoreBackend.Api.Models.Requests;
 using StoreBackend.Api.Models.Responses;
 using StoreBackend.Dto;
 
@@ -16,6 +17,14 @@ public class CategoryMapper
         {
             CategoryId = dto.CategoryId,
             Name = dto.Name
+        };
+    }
+
+    public static CategoryDto ToDto(CategoryRequestModel model)
+    {
+        return new CategoryDto
+        {
+            Name = model.Name
         };
     }
 }

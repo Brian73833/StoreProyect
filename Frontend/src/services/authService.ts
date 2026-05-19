@@ -21,7 +21,6 @@ async function parseErrorMessage(response: Response): Promise<string> {
   }
 }
 
-
 // Función para iniciar sesión con email y contraseña
 export const loginUser = async (loginData: {
   email: string;

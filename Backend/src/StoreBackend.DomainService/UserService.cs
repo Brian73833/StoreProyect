@@ -33,7 +33,7 @@ public class UserService : IUserService
             throw new BadRequestResponseException("Email is already taken");
         }
 
-        var entity = new User
+        var userEntity = new User
         {
             UserResourceId = Guid.NewGuid(),
             Name = userDto.Name,
@@ -42,7 +42,7 @@ public class UserService : IUserService
             IsAdmin = false
         };
 
-        return await _userRepository.CreateAsync(entity);
+        return await _userRepository.CreateAsync(userEntity);
     }
 
     public async Task<User> UpdateAsync(Guid resourceId, UpdateUserDto userDto)
