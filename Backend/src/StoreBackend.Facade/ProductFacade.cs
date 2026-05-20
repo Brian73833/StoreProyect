@@ -19,9 +19,9 @@ public class ProductFacade : IProductFacade
 
     public async Task<ProductDto> AddAsync(ProductDto product)
     {
-        var entity = await _productService.AddAsync(product);
+        var addedProduct = await _productService.AddAsync(product);
         await _context.SaveChangesAsync();
-        return ProductMapper.ToDto(entity);
+        return ProductMapper.ToDto(addedProduct);
     }
 
     public async Task DeleteAsync(Guid productResourceId)
@@ -32,14 +32,14 @@ public class ProductFacade : IProductFacade
 
     public async Task<List<ProductDto>> GetAllAsync()
     {
-        var entities = await _productService.GetAllAsync();
-        return ProductMapper.ToDto(entities);
+        var products = await _productService.GetAllAsync();
+        return ProductMapper.ToDto(products);
     }
 
     public async Task<ProductDto> GetByResourceIdAsync(Guid productResourceId)
     {
-        var entity = await _productService.GetByResourceIdAsync(productResourceId);
-        if (entity == null) throw new ResourceNotFoundException("Product not found");
-        return ProductMapper.ToDto(entity);
+        var product = await _productService.GetByResourceIdAsync(productResourceId);
+        if (product == null) throw new ResourceNotFoundException("Product not found");
+        return ProductMapper.ToDto(product);
     }
 }

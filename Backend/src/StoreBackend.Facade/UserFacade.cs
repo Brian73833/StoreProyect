@@ -18,22 +18,22 @@ public class UserFacade : IUserFacade
 
     public async Task<UserDto> LoginAsync(LoginUserDto loginDto)
     {
-        var entity = await _userService.LoginAsync(loginDto);
-        return UserMapper.ToDto(entity);
+        var user = await _userService.LoginAsync(loginDto);
+        return UserMapper.ToDto(user);
     }
 
     public async Task<UserDto> CreateAsync(CreateUserDto userDto)
     {
-        var entity = await _userService.CreateAsync(userDto);
+        var createdUser = await _userService.CreateAsync(userDto);
         await _context.SaveChangesAsync();
-        return UserMapper.ToDto(entity);
+        return UserMapper.ToDto(createdUser);
     }
 
     public async Task<UserDto> UpdateAsync(Guid userResourceId, UpdateUserDto userDto)
     {
-        var entity = await _userService.UpdateAsync(userResourceId, userDto);
+        var updatedUser = await _userService.UpdateAsync(userResourceId, userDto);
         await _context.SaveChangesAsync();
-        return UserMapper.ToDto(entity);
+        return UserMapper.ToDto(updatedUser);
     }
 
     public async Task DeleteAsync(Guid userResourceId, string password)

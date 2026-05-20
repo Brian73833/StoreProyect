@@ -19,21 +19,21 @@ public class CategoryFacade : ICategoryFacade
 
     public async Task<List<CategoryDto>> GetAllAsync()
     {
-        var entities = await _categoryService.GetAllAsync();
-        return CategoryMapper.ToDto(entities);
+        var categories = await _categoryService.GetAllAsync();
+        return CategoryMapper.ToDto(categories);
     }
 
     public async Task<CategoryDto> GetByResourceIdAsync(Guid categoryResourceId)
     {
-        var entity = await _categoryService.GetByResourceIdAsync(categoryResourceId);
-        if (entity == null) throw new ResourceNotFoundException("Category not found");
-        return CategoryMapper.ToDto(entity);
+        var category = await _categoryService.GetByResourceIdAsync(categoryResourceId);
+        if (category == null) throw new ResourceNotFoundException("Category not found");
+        return CategoryMapper.ToDto(category);
     }
 
     public async Task<CategoryDto> AddAsync(CategoryDto category)
     {
-        var result = await _categoryService.AddAsync(category);
+        var addedCategory = await _categoryService.AddAsync(category);
         await _context.SaveChangesAsync();
-        return CategoryMapper.ToDto(result);
+        return CategoryMapper.ToDto(addedCategory);
     }
 }
