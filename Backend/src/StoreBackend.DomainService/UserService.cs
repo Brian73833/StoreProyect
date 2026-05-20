@@ -78,7 +78,7 @@ public class UserService : IUserService
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.NewPassword);
         }
 
-        return user;
+        return await _userRepository.UpdateAsync(user);
     }
 
     public async Task DeleteAsync(Guid resourceId, string password)

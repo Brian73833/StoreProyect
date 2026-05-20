@@ -18,6 +18,11 @@ public class CategoryService : ICategoryService
         return await _categoryRepository.GetAllAsync();
     }
 
+    public async Task<Category?> GetByIdAsync(Guid categoryResourceId)
+    {
+        return await _categoryRepository.GetByResourceIdAsync(categoryResourceId);
+    }
+
     public async Task<Category> AddAsync(CategoryDto categoryDto)
     {
         var categoryEntity = new Category

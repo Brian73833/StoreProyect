@@ -22,6 +22,13 @@ public class CategoryFacade : ICategoryFacade
         return CategoryMapper.ToDto(entities);
     }
 
+    public async Task<CategoryDto?> GetByIdAsync(Guid categoryResourceId)
+    {
+        var entity = await _categoryService.GetByIdAsync(categoryResourceId);
+        if (entity == null) return null;
+        return CategoryMapper.ToDto(entity);
+    }
+
     public async Task<CategoryDto> AddAsync(CategoryDto category)
     {
         var result = await _categoryService.AddAsync(category);

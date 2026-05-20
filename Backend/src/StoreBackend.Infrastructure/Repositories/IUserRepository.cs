@@ -8,5 +8,6 @@ public interface IUserRepository
     Task<bool> HasUserByEmailAsync(string email);
     Task<User?> GetByResourceIdAsync(Guid resourceId);
     Task<User> CreateAsync(User user);
+    Task<User> UpdateAsync(User user);
     Task DeleteAsync(User user);
 }

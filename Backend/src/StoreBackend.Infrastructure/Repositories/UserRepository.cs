@@ -33,6 +33,12 @@ public class UserRepository : IUserRepository
         return Task.FromResult(user);
     }
 
+    public Task<User> UpdateAsync(User user)
+    {
+        _context.Users.Update(user);
+        return Task.FromResult(user);
+    }
+
     public Task DeleteAsync(User user)
     {
         _context.Users.Remove(user);

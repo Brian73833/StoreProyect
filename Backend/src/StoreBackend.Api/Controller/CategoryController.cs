@@ -34,6 +34,22 @@ public class CategoryController : ControllerBase
         }
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetCategory(Guid id)
+    {
+        try
+        {
+            var dto = await _categoryFacade.GetByIdAsync(id);
+            if (dto == null) return NotFound();
+            var model = CategoryMapper.ToModel(dto);
+            return Ok(model);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the category.");
+        }
+    }
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddCategory([FromBody] CategoryRequestModel categoryRequest)
@@ -43,7 +59,7 @@ public class CategoryController : ControllerBase
             var dto = CategoryMapper.ToDto(categoryRequest);
             var addedCategoryDto = await _categoryFacade.AddAsync(dto);
             var model = CategoryMapper.ToModel(addedCategoryDto);
-            return CreatedAtAction(nameof(GetCategories), new { id = model.CategoryResourceId }, model);
+            return CreatedAtAction(nameof(GetCategory), new { id = model.CategoryResourceId }, model);
         }
         catch (Exception)
         {
