@@ -20,7 +20,7 @@ public class CategoryService : ICategoryService
 
     public async Task<Category?> GetByIdAsync(Guid categoryResourceId)
     {
-        return await _categoryRepository.GetByResourceIdAsync(categoryResourceId);
+        return await _categoryRepository.GetByIdAsync(categoryResourceId);
     }
 
     public async Task<Category> AddAsync(CategoryDto categoryDto)

@@ -34,12 +34,12 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCategoryAsync(Guid id)
+    [HttpGet("{categoryResourceId}")]
+    public async Task<IActionResult> GetCategoryAsync(Guid categoryResourceId)
     {
         try
         {
-            var categoryDto = await _categoryFacade.GetByIdAsync(id);
+            var categoryDto = await _categoryFacade.GetByIdAsync(categoryResourceId);
             if (categoryDto == null) return NotFound();
             var categoryModel = CategoryMapper.ToModel(categoryDto);
             return Ok(categoryModel);
@@ -59,7 +59,7 @@ public class CategoryController : ControllerBase
             var categoryDto = CategoryMapper.ToDto(categoryRequest);
             var addedCategoryDto = await _categoryFacade.AddAsync(categoryDto);
             var categoryModel = CategoryMapper.ToModel(addedCategoryDto);
-            return CreatedAtAction(nameof(GetCategoryAsync), new { id = categoryModel.CategoryResourceId }, categoryModel);
+            return CreatedAtAction(nameof(GetCategoryAsync), new { categoryResourceId = categoryModel.CategoryResourceId }, categoryModel);
         }
         catch (Exception)
         {

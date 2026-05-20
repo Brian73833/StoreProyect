@@ -7,6 +7,6 @@ public interface IUserService
 {
     Task<User> LoginAsync(LoginUserDto loginDto);
     Task<User> CreateAsync(CreateUserDto userDto);
-    Task<User> UpdateAsync(Guid resourceId, UpdateUserDto userDto);
-    Task DeleteAsync(Guid resourceId, string password);
+    Task<User> UpdateAsync(Guid userResourceId, UpdateUserDto userDto);
+    Task DeleteAsync(Guid userResourceId, string password);
 }

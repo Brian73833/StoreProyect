@@ -94,13 +94,13 @@ namespace StoreBackend.Api.Controller
         }
 
         [Authorize]
-        [HttpPut("{resourceId}")]
-        public async Task<IActionResult> UpdateUserAsync(Guid resourceId, [FromBody] UpdateUserRequestModel updateUserRequestModel)
+        [HttpPut("{userResourceId}")]
+        public async Task<IActionResult> UpdateUserAsync(Guid userResourceId, [FromBody] UpdateUserRequestModel updateUserRequestModel)
         {
             try
             {
                 var updateUserDto = UserMapper.ToDto(updateUserRequestModel);
-                var userDto = await _userFacade.UpdateAsync(resourceId, updateUserDto);
+                var userDto = await _userFacade.UpdateAsync(userResourceId, updateUserDto);
                 var userModel = UserMapper.ToModel(userDto);
                 return Ok(userModel);
             }
@@ -115,12 +115,12 @@ namespace StoreBackend.Api.Controller
         }
 
         [Authorize]
-        [HttpDelete("{resourceId}")]
-        public async Task<IActionResult> DeleteUserAsync(Guid resourceId, [FromBody] DeleteUserRequestModel deleteUserRequestModel)
+        [HttpDelete("{userResourceId}")]
+        public async Task<IActionResult> DeleteUserAsync(Guid userResourceId, [FromBody] DeleteUserRequestModel deleteUserRequestModel)
         {
             try
             {
-                await _userFacade.DeleteAsync(resourceId, deleteUserRequestModel.Password);
+                await _userFacade.DeleteAsync(userResourceId, deleteUserRequestModel.Password);
                 
                 Response.Cookies.Delete("jwt", new CookieOptions
                 {

@@ -45,9 +45,9 @@ public class UserService : IUserService
         return await _userRepository.CreateAsync(userEntity);
     }
 
-    public async Task<User> UpdateAsync(Guid resourceId, UpdateUserDto userDto)
+    public async Task<User> UpdateAsync(Guid userResourceId, UpdateUserDto userDto)
     {
-        var user = await _userRepository.GetByResourceIdAsync(resourceId);
+        var user = await _userRepository.GetByIdAsync(userResourceId);
         if (user == null)
         {
             throw new BadRequestResponseException("User not found");
@@ -81,9 +81,9 @@ public class UserService : IUserService
         return await _userRepository.UpdateAsync(user);
     }
 
-    public async Task DeleteAsync(Guid resourceId, string password)
+    public async Task DeleteAsync(Guid userResourceId, string password)
     {
-        var user = await _userRepository.GetByResourceIdAsync(resourceId);
+        var user = await _userRepository.GetByIdAsync(userResourceId);
         if (user == null)
         {
             throw new BadRequestResponseException("User not found");

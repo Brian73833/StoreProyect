@@ -5,7 +5,7 @@ namespace StoreBackend.Facade;
 public interface IProductFacade
 {
     Task<List<ProductDto>> GetAllAsync();
-    Task<ProductDto> GetByIdAsync(Guid productId);
+    Task<ProductDto> GetByIdAsync(Guid productResourceId);
     Task<ProductDto> AddAsync(ProductDto product);
-    Task DeleteAsync(Guid productId);
+    Task DeleteAsync(Guid productResourceId);
 }

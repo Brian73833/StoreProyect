@@ -7,8 +7,8 @@ namespace StoreBackend.DomainService;
 public interface IProductService
 {
     Task<List<Product>> GetAllAsync();
-    Task<Product?> GetByIdAsync(Guid productId);
+    Task<Product?> GetByIdAsync(Guid productResourceId);
     Task<Product> AddAsync(ProductDto product);
-    Task DeleteAsync(Guid productId);
+    Task DeleteAsync(Guid productResourceId);
 
 }

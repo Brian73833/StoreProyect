@@ -36,12 +36,12 @@ namespace StoreBackend.Api.Controller
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductAsync(Guid id)
+        [HttpGet("{productResourceId}")]
+        public async Task<IActionResult> GetProductAsync(Guid productResourceId)
         {
             try
             {
-                var productDto = await _productFacade.GetByIdAsync(id);
+                var productDto = await _productFacade.GetByIdAsync(productResourceId);
                 var productModel = ProductMapper.ToModel(productDto);
                 return Ok(productModel);
             }
@@ -65,7 +65,7 @@ namespace StoreBackend.Api.Controller
                 }
                 var addedProductDto = await _productFacade.AddAsync(productDto);
                 var productModel = ProductMapper.ToModel(addedProductDto);
-                return CreatedAtAction(nameof(GetProductAsync), new { id = productModel.ProductResourceId }, productModel);
+                return CreatedAtAction(nameof(GetProductAsync), new { productResourceId = productModel.ProductResourceId }, productModel);
             }
             catch (BadRequestResponseException ex)
             {
@@ -78,13 +78,13 @@ namespace StoreBackend.Api.Controller
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductAsync(Guid id)
+        [HttpDelete("{productResourceId}")]
+        public async Task<IActionResult> DeleteProductAsync(Guid productResourceId)
         {
             try
             {
-                var productDto = await _productFacade.GetByIdAsync(id);
-                await _productFacade.DeleteAsync(id);
+                var productDto = await _productFacade.GetByIdAsync(productResourceId);
+                await _productFacade.DeleteAsync(productResourceId);
                 if (!string.IsNullOrEmpty(productDto.ImagePath))
                 {
                     _imageService.DeleteImage(productDto.ImagePath);

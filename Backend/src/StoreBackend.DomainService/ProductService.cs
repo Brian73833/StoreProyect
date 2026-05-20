@@ -18,7 +18,7 @@ public class ProductService : IProductService
 
     public async Task<Product> AddAsync(ProductDto productDto)
     {
-        var category = await _categoryRepository.GetByResourceIdAsync(productDto.CategoryResourceId);
+        var category = await _categoryRepository.GetByIdAsync(productDto.CategoryResourceId);
         if (category == null)
         {
             throw new BadRequestResponseException("Category not found");
@@ -26,7 +26,7 @@ public class ProductService : IProductService
 
         var productEntity = new Product
         {
-            ProductResourceId = productDto.ProductResourceId,
+            ProductResourceId = Guid.NewGuid(),
             Name = productDto.Name,
             Description = productDto.Description,
             Price = productDto.Price,
@@ -37,9 +37,9 @@ public class ProductService : IProductService
         return await _productRepository.AddAsync(productEntity);
     }
 
-    public async Task DeleteAsync(Guid productId)
+    public async Task DeleteAsync(Guid productResourceId)
     {
-        var product = await _productRepository.GetByIdAsync(productId);
+        var product = await _productRepository.GetByIdAsync(productResourceId);
         if (product == null) throw new ResourceNotFoundException();
         await _productRepository.DeleteAsync(product);
     }
@@ -49,8 +49,8 @@ public class ProductService : IProductService
         return _productRepository.GetAllAsync();
     }
 
-    public Task<Product?> GetByIdAsync(Guid productId)
+    public Task<Product?> GetByIdAsync(Guid productResourceId)
     {
-        return _productRepository.GetByIdAsync(productId);
+        return _productRepository.GetByIdAsync(productResourceId);
     }
 }

@@ -19,11 +19,11 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
-    public async Task<Product?> GetByIdAsync(Guid productId)
+    public async Task<Product?> GetByIdAsync(Guid productResourceId)
     {
         return await _context.Products
             .Include(p => p.Category)
-            .FirstOrDefaultAsync(p => p.ProductResourceId == productId);
+            .FirstOrDefaultAsync(p => p.ProductResourceId == productResourceId);
     }
 
     public async Task<Product> AddAsync(Product product)

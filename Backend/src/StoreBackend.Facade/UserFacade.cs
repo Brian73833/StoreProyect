@@ -29,16 +29,16 @@ public class UserFacade : IUserFacade
         return UserMapper.ToDto(entity);
     }
 
-    public async Task<UserDto> UpdateAsync(Guid resourceId, UpdateUserDto userDto)
+    public async Task<UserDto> UpdateAsync(Guid userResourceId, UpdateUserDto userDto)
     {
-        var entity = await _userService.UpdateAsync(resourceId, userDto);
+        var entity = await _userService.UpdateAsync(userResourceId, userDto);
         await _context.SaveChangesAsync();
         return UserMapper.ToDto(entity);
     }
 
-    public async Task DeleteAsync(Guid resourceId, string password)
+    public async Task DeleteAsync(Guid userResourceId, string password)
     {
-        await _userService.DeleteAsync(resourceId, password);
+        await _userService.DeleteAsync(userResourceId, password);
         await _context.SaveChangesAsync();
     }
 }
