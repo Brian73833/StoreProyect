@@ -22,7 +22,7 @@ public class CategoryRepository : ICategoryRepository
         return await _context.Categories.FindAsync(id);
     }
 
-    public async Task<Category?> GetByIdAsync(Guid categoryResourceId)
+    public async Task<Category?> GetByResourceIdAsync(Guid categoryResourceId)
     {
         return await _context.Categories.FirstOrDefaultAsync(c => c.CategoryResourceId == categoryResourceId);
     }

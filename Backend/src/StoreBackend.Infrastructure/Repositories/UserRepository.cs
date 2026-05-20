@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
         return await _context.Users.AnyAsync(u => u.Email == email);
     }
 
-    public async Task<User?> GetByIdAsync(Guid userResourceId)
+    public async Task<User?> GetByResourceIdAsync(Guid userResourceId)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.UserResourceId == userResourceId);
     }

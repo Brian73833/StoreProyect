@@ -1,5 +1,6 @@
 using StoreBackend.DomainService;
 using StoreBackend.Dto;
+using StoreBackend.Exceptions;
 using StoreBackend.Facade.Mappers;
 using StoreBackend.Infrastructure;
 
@@ -22,10 +23,10 @@ public class CategoryFacade : ICategoryFacade
         return CategoryMapper.ToDto(entities);
     }
 
-    public async Task<CategoryDto?> GetByIdAsync(Guid categoryResourceId)
+    public async Task<CategoryDto> GetByResourceIdAsync(Guid categoryResourceId)
     {
-        var entity = await _categoryService.GetByIdAsync(categoryResourceId);
-        if (entity == null) return null;
+        var entity = await _categoryService.GetByResourceIdAsync(categoryResourceId);
+        if (entity == null) throw new ResourceNotFoundException("Category not found");
         return CategoryMapper.ToDto(entity);
     }
 

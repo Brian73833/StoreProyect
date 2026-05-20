@@ -47,10 +47,10 @@ public class UserService : IUserService
 
     public async Task<User> UpdateAsync(Guid userResourceId, UpdateUserDto userDto)
     {
-        var user = await _userRepository.GetByIdAsync(userResourceId);
+        var user = await _userRepository.GetByResourceIdAsync(userResourceId);
         if (user == null)
         {
-            throw new BadRequestResponseException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         // Check if email is being changed and if the new email is already taken
@@ -83,10 +83,10 @@ public class UserService : IUserService
 
     public async Task DeleteAsync(Guid userResourceId, string password)
     {
-        var user = await _userRepository.GetByIdAsync(userResourceId);
+        var user = await _userRepository.GetByResourceIdAsync(userResourceId);
         if (user == null)
         {
-            throw new BadRequestResponseException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))

@@ -36,10 +36,10 @@ public class ProductFacade : IProductFacade
         return ProductMapper.ToDto(entities);
     }
 
-    public async Task<ProductDto> GetByIdAsync(Guid productResourceId)
+    public async Task<ProductDto> GetByResourceIdAsync(Guid productResourceId)
     {
-        var entity = await _productService.GetByIdAsync(productResourceId);
-        if (entity == null) throw new ResourceNotFoundException();
+        var entity = await _productService.GetByResourceIdAsync(productResourceId);
+        if (entity == null) throw new ResourceNotFoundException("Product not found");
         return ProductMapper.ToDto(entity);
     }
 }

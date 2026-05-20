@@ -18,7 +18,7 @@ public class ProductService : IProductService
 
     public async Task<Product> AddAsync(ProductDto productDto)
     {
-        var category = await _categoryRepository.GetByIdAsync(productDto.CategoryResourceId);
+        var category = await _categoryRepository.GetByResourceIdAsync(productDto.CategoryResourceId);
         if (category == null)
         {
             throw new BadRequestResponseException("Category not found");
@@ -39,7 +39,7 @@ public class ProductService : IProductService
 
     public async Task DeleteAsync(Guid productResourceId)
     {
-        var product = await _productRepository.GetByIdAsync(productResourceId);
+        var product = await _productRepository.GetByResourceIdAsync(productResourceId);
         if (product == null) throw new ResourceNotFoundException();
         await _productRepository.DeleteAsync(product);
     }
@@ -49,8 +49,8 @@ public class ProductService : IProductService
         return _productRepository.GetAllAsync();
     }
 
-    public Task<Product?> GetByIdAsync(Guid productResourceId)
+    public Task<Product?> GetByResourceIdAsync(Guid productResourceId)
     {
-        return _productRepository.GetByIdAsync(productResourceId);
+        return _productRepository.GetByResourceIdAsync(productResourceId);
     }
 }

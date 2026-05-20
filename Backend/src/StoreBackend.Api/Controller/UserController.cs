@@ -104,6 +104,10 @@ namespace StoreBackend.Api.Controller
                 var userModel = UserMapper.ToModel(userDto);
                 return Ok(userModel);
             }
+            catch (ResourceNotFoundException)
+            {
+                return NotFound();
+            }
             catch (BadRequestResponseException ex)
             {
                 return BadRequest(ex.Message);
@@ -129,6 +133,10 @@ namespace StoreBackend.Api.Controller
                     SameSite = SameSiteMode.None
                 });
                 return Ok();
+            }
+            catch (ResourceNotFoundException)
+            {
+                return NotFound();
             }
             catch (BadRequestResponseException ex)
             {

@@ -5,6 +5,7 @@ using StoreBackend.Dto;
 using StoreBackend.Facade;
 using Microsoft.AspNetCore.Authorization;
 using StoreBackend.Api.Models.Requests;
+using StoreBackend.Exceptions;
 
 namespace StoreBackend.Api.Controller;
 
@@ -39,10 +40,13 @@ public class CategoryController : ControllerBase
     {
         try
         {
-            var categoryDto = await _categoryFacade.GetByIdAsync(categoryResourceId);
-            if (categoryDto == null) return NotFound();
+            var categoryDto = await _categoryFacade.GetByResourceIdAsync(categoryResourceId);
             var categoryModel = CategoryMapper.ToModel(categoryDto);
             return Ok(categoryModel);
+        }
+        catch (ResourceNotFoundException)
+        {
+            return NotFound();
         }
         catch (Exception)
         {

@@ -41,7 +41,7 @@ namespace StoreBackend.Api.Controller
         {
             try
             {
-                var productDto = await _productFacade.GetByIdAsync(productResourceId);
+                var productDto = await _productFacade.GetByResourceIdAsync(productResourceId);
                 var productModel = ProductMapper.ToModel(productDto);
                 return Ok(productModel);
             }
@@ -83,7 +83,7 @@ namespace StoreBackend.Api.Controller
         {
             try
             {
-                var productDto = await _productFacade.GetByIdAsync(productResourceId);
+                var productDto = await _productFacade.GetByResourceIdAsync(productResourceId);
                 await _productFacade.DeleteAsync(productResourceId);
                 if (!string.IsNullOrEmpty(productDto.ImagePath))
                 {
