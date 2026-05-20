@@ -9,6 +9,7 @@ using StoreBackend.DomainService;
 using StoreBackend.Facade;
 using StoreBackend.Infrastructure;
 using StoreBackend.Infrastructure.Repositories;
+using StoreBackend.Api.Filters;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -17,7 +18,10 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 });
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<MessageExceptionFilter>();
+});
 
 builder.Services.AddRateLimiter(options =>
 {
