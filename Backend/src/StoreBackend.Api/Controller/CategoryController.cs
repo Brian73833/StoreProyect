@@ -20,13 +20,13 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCategories()
+    public async Task<IActionResult> GetCategoriesAsync()
     {
         try
         {
             var categories = await _categoryFacade.GetAllAsync();
-            var models = CategoryMapper.ToModel(categories);
-            return Ok(models);
+            var categoryModel = CategoryMapper.ToModel(categories);
+            return Ok(categoryModel);
         }
         catch (Exception)
         {
@@ -35,14 +35,14 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetCategory(Guid id)
+    public async Task<IActionResult> GetCategoryAsync(Guid id)
     {
         try
         {
-            var dto = await _categoryFacade.GetByIdAsync(id);
-            if (dto == null) return NotFound();
-            var model = CategoryMapper.ToModel(dto);
-            return Ok(model);
+            var categoryDto = await _categoryFacade.GetByIdAsync(id);
+            if (categoryDto == null) return NotFound();
+            var categoryModel = CategoryMapper.ToModel(categoryDto);
+            return Ok(categoryModel);
         }
         catch (Exception)
         {
@@ -52,14 +52,14 @@ public class CategoryController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> AddCategory([FromBody] CategoryRequestModel categoryRequest)
+    public async Task<IActionResult> AddCategoryAsync([FromBody] CategoryRequestModel categoryRequest)
     {
         try
         {
-            var dto = CategoryMapper.ToDto(categoryRequest);
-            var addedCategoryDto = await _categoryFacade.AddAsync(dto);
-            var model = CategoryMapper.ToModel(addedCategoryDto);
-            return CreatedAtAction(nameof(GetCategory), new { id = model.CategoryResourceId }, model);
+            var categoryDto = CategoryMapper.ToDto(categoryRequest);
+            var addedCategoryDto = await _categoryFacade.AddAsync(categoryDto);
+            var categoryModel = CategoryMapper.ToModel(addedCategoryDto);
+            return CreatedAtAction(nameof(GetCategoryAsync), new { id = categoryModel.CategoryResourceId }, categoryModel);
         }
         catch (Exception)
         {

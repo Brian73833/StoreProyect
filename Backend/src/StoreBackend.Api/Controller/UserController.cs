@@ -76,8 +76,8 @@ namespace StoreBackend.Api.Controller
         {
             try
             {
-                var createDto = UserMapper.ToDto(createUserRequestModel);
-                var userDto = await _userFacade.CreateAsync(createDto);
+                var createUserDto = UserMapper.ToDto(createUserRequestModel);
+                var userDto = await _userFacade.CreateAsync(createUserDto);
                 var userModel = UserMapper.ToModel(userDto);
                 var token = _jwtService.GenerateToken(userDto);
                 SetTokenCookie(token);
@@ -99,8 +99,8 @@ namespace StoreBackend.Api.Controller
         {
             try
             {
-                var updateDto = UserMapper.ToDto(updateUserRequestModel);
-                var userDto = await _userFacade.UpdateAsync(resourceId, updateDto);
+                var updateUserDto = UserMapper.ToDto(updateUserRequestModel);
+                var userDto = await _userFacade.UpdateAsync(resourceId, updateUserDto);
                 var userModel = UserMapper.ToModel(userDto);
                 return Ok(userModel);
             }

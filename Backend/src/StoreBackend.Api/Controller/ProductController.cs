@@ -22,13 +22,13 @@ namespace StoreBackend.Api.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProductsAsync()
         {
             try
             {
                 var products = await _productFacade.GetAllAsync();
-                var models = ProductMapper.ToModel(products);
-                return Ok(models);
+                var productModel = ProductMapper.ToModel(products);
+                return Ok(productModel);
             }
             catch (Exception)
             {
@@ -37,14 +37,13 @@ namespace StoreBackend.Api.Controller
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProduct(Guid id)
+        public async Task<IActionResult> GetProductAsync(Guid id)
         {
             try
             {
-                var product = await _productFacade.GetByIdAsync(id);
-
-                var model = ProductMapper.ToModel(product);
-                return Ok(model);
+                var productDto = await _productFacade.GetByIdAsync(id);
+                var productModel = ProductMapper.ToModel(productDto);
+                return Ok(productModel);
             }
             catch (ResourceNotFoundException)
             {
@@ -55,20 +54,18 @@ namespace StoreBackend.Api.Controller
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddProduct([FromForm] ProductRequestModel productRequest)
+        public async Task<IActionResult> AddProductAsync([FromForm] ProductRequestModel productRequest)
         {
             try
             {
-                var dto = ProductMapper.ToDto(productRequest);
-
+                var productDto = ProductMapper.ToDto(productRequest);
                 if (productRequest.ImageFile != null)
                 {
-                    dto.ImagePath = await _imageService.SaveImageAsync(productRequest.ImageFile, "products");
+                    productDto.ImagePath = await _imageService.SaveImageAsync(productRequest.ImageFile, "products");
                 }
-
-                var addedProductDto = await _productFacade.AddAsync(dto);
-                var model = ProductMapper.ToModel(addedProductDto);
-                return CreatedAtAction(nameof(GetProduct), new { id = model.ProductResourceId }, model);
+                var addedProductDto = await _productFacade.AddAsync(productDto);
+                var productModel = ProductMapper.ToModel(addedProductDto);
+                return CreatedAtAction(nameof(GetProductAsync), new { id = productModel.ProductResourceId }, productModel);
             }
             catch (BadRequestResponseException ex)
             {
@@ -82,17 +79,15 @@ namespace StoreBackend.Api.Controller
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        public async Task<IActionResult> DeleteProductAsync(Guid id)
         {
             try
             {
-                var product = await _productFacade.GetByIdAsync(id);
-
+                var productDto = await _productFacade.GetByIdAsync(id);
                 await _productFacade.DeleteAsync(id);
-
-                if (!string.IsNullOrEmpty(product.ImagePath))
+                if (!string.IsNullOrEmpty(productDto.ImagePath))
                 {
-                    _imageService.DeleteImage(product.ImagePath);
+                    _imageService.DeleteImage(productDto.ImagePath);
                 }
 
                 return Ok();
