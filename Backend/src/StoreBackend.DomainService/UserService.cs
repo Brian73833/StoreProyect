@@ -8,10 +8,12 @@ namespace StoreBackend.DomainService;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
     }
 
     public async Task<User> LoginAsync(LoginUserDto loginDto)
@@ -33,14 +35,25 @@ public class UserService : IUserService
             throw new BadRequestResponseException("Email is already taken");
         }
 
+        var customerRole = await _roleRepository.GetByNameAsync("Customer");
+        if (customerRole == null)
+        {
+            throw new ResourceNotFoundException("Default role 'Customer' not found");
+        }
+
         var userEntity = new User
         {
             UserResourceId = Guid.NewGuid(),
             Name = userDto.Name,
             Email = userDto.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
-            IsAdmin = false
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password)
         };
+
+        userEntity.UserRoles.Add(new UserRole
+        {
+            User = userEntity,
+            Role = customerRole
+        });
 
         return await _userRepository.CreateAsync(userEntity);
     }

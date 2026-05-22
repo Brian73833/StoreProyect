@@ -28,7 +28,11 @@ public class User
     [StringLength(255)]
     public string PasswordHash { get; set; } = string.Empty;
 
-    [Required]
-    [Column("IsAdmin")]
-    public bool IsAdmin { get; set; }
+
+    public List<UserRole> UserRoles { get; set; } = [];
+
+    public void ClearRoles()
+    {
+        UserRoles.Clear();
+    }
 }

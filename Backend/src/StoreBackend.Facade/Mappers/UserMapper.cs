@@ -17,8 +17,7 @@ public class UserMapper
             UserResourceId = user.UserResourceId,
             Name = user.Name,
             Email = user.Email,
-            IsAdmin = user.IsAdmin
-
+            Roles = user.UserRoles.Select(ur => ur.Role.Name).ToList()
         };
     }
 }

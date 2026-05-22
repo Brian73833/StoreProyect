@@ -8,6 +8,5 @@ public class UserDto
 
     public string Email { get; set; } = string.Empty;
 
-    public bool IsAdmin { get; set; }
-
+    public List<string> Roles { get; set; } = new();
 }

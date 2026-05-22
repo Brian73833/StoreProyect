@@ -14,7 +14,10 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<bool> HasUserByEmailAsync(string email)
@@ -24,7 +27,10 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByResourceIdAsync(Guid userResourceId)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.UserResourceId == userResourceId);
+        return await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.UserResourceId == userResourceId);
     }
 
     public Task<User> CreateAsync(User user)
