@@ -16,7 +16,7 @@ public class ProductDto
 
     public string? ImagePath { get; set; }
 
-    public int CategoryId { get; set; }
+    public Guid CategoryResourceId { get; set; }
     
     public string? CategoryName { get; set; }
 }

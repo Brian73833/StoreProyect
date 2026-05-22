@@ -8,10 +8,12 @@ namespace StoreBackend.DomainService;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
     }
 
     public async Task<User> LoginAsync(LoginUserDto loginDto)
@@ -33,24 +35,35 @@ public class UserService : IUserService
             throw new BadRequestResponseException("Email is already taken");
         }
 
-        var entity = new User
+        var customerRole = await _roleRepository.GetByNameAsync(RoleNames.Customer);
+        if (customerRole == null)
+        {
+            throw new ResourceNotFoundException("Default role 'Customer' not found");
+        }
+
+        var userEntity = new User
         {
             UserResourceId = Guid.NewGuid(),
             Name = userDto.Name,
             Email = userDto.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
-            IsAdmin = false
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password)
         };
 
-        return await _userRepository.CreateAsync(entity);
+        userEntity.UserRoles.Add(new UserRole
+        {
+            User = userEntity,
+            Role = customerRole
+        });
+
+        return await _userRepository.CreateAsync(userEntity);
     }
 
-    public async Task<User> UpdateAsync(Guid resourceId, UpdateUserDto userDto)
+    public async Task<User> UpdateAsync(Guid userResourceId, UpdateUserDto userDto)
     {
-        var user = await _userRepository.GetByResourceIdAsync(resourceId);
+        var user = await _userRepository.GetByResourceIdAsync(userResourceId);
         if (user == null)
         {
-            throw new BadRequestResponseException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         // Check if email is being changed and if the new email is already taken
@@ -78,15 +91,15 @@ public class UserService : IUserService
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.NewPassword);
         }
 
-        return user;
+        return await _userRepository.UpdateAsync(user);
     }
 
-    public async Task DeleteAsync(Guid resourceId, string password)
+    public async Task DeleteAsync(Guid userResourceId, string password)
     {
-        var user = await _userRepository.GetByResourceIdAsync(resourceId);
+        var user = await _userRepository.GetByResourceIdAsync(userResourceId);
         if (user == null)
         {
-            throw new BadRequestResponseException("User not found");
+            throw new ResourceNotFoundException("User not found");
         }
 
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))

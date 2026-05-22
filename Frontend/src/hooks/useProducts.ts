@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import type { Product, Category } from "../lib/types";
+import type { Product } from "../models/responses/Product";
+import type { Category } from "../models/responses/Category"; 
 import { getProducts } from "../services/productService";
 import { getCategories } from "../services/categoryService";
 
@@ -11,6 +12,8 @@ interface UseProductsResult {
   error: string | null;
   addProduct: (product: Product) => void;
   addCategory: (category: Category) => void;
+  updateProduct: (product: Product) => void;
+  removeProduct: (productResourceId: string) => void;
 }
 
 // Hook personalizado para manejar la carga de productos y categorías
@@ -54,6 +57,20 @@ export function useProducts(): UseProductsResult {
   const addCategory = (category: Category) =>
     setCategories((prev) => [...prev, category]);
 
+  // Función para actualizar un producto en la lista local
+  const updateProduct = (product: Product) =>
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.productResourceId === product.productResourceId ? product : p
+      )
+    );
+
+  // Función para eliminar un producto de la lista local
+  const removeProduct = (productResourceId: string) =>
+    setProducts((prev) =>
+      prev.filter((p) => p.productResourceId !== productResourceId)
+    );
+
   // Retorna los datos y funciones para que puedan ser usados por los componentes
-  return { products, categories, loading, error, addProduct, addCategory };
+  return { products, categories, loading, error, addProduct, addCategory, updateProduct, removeProduct };
 }

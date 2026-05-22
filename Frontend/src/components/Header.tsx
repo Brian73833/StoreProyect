@@ -21,9 +21,9 @@ const Header: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await logoutUser();
+      logoutUser();
     } catch (err) {
       console.error("Error logging out:", err);
     }
@@ -42,12 +42,12 @@ const Header: React.FC = () => {
             className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer"
             id="header-logo"
           >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#E2725B] to-[#c95d47] rounded-xl flex items-center justify-center shadow-lg shadow-[#E2725B]/20 group-hover:shadow-xl group-hover:shadow-[#E2725B]/30 transition-all duration-300 group-hover:scale-105">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-xl group-hover:shadow-primary/30 transition-all duration-300 group-hover:scale-105">
               <span className="material-symbols-outlined text-white text-lg sm:text-xl">
                 storefront
               </span>
             </div>
-            <span className="text-base sm:text-xl font-extrabold tracking-tight uppercase text-stone-800 group-hover:text-[#E2725B] transition-colors duration-300">
+            <span className="text-base sm:text-xl font-extrabold tracking-tight uppercase text-stone-800 group-hover:text-primary transition-colors duration-300">
               Store
             </span>
           </button>
@@ -57,19 +57,19 @@ const Header: React.FC = () => {
             <nav className="hidden md:flex items-center gap-1 bg-stone-100/50 p-1.5 rounded-2xl border border-stone-200/50">
               <button
                 onClick={() => navigate("/")}
-                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-[#E2725B] hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
+                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-primary hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
               >
                 Home
               </button>
               <button
                 onClick={() => navigate("/products")}
-                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-[#E2725B] hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
+                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-primary hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
               >
                 Catálogo
               </button>
               <button
                 onClick={() => navigate("/profile")}
-                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-[#E2725B] hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
+                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-primary hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
               >
                 Perfil
               </button>
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
             <button
               onClick={() => navigate("/auth")}
               id="header-login-btn"
-              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-[#E2725B] to-[#d4634e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-[#E2725B]/20 hover:shadow-xl hover:shadow-[#E2725B]/30 hover:scale-105 active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-[#E2725B] to-[#d4634e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
             >
               <span className="material-symbols-outlined text-base sm:text-lg">login</span>
               <span className="hidden sm:inline">Iniciar Sesión</span>
@@ -100,7 +100,7 @@ const Header: React.FC = () => {
                 }`}
               >
                 {/* Círculo de avatar del usuario */}
-                <div className="w-8 h-8 bg-gradient-to-br from-[#E2725B] to-[#c95d47] rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
+                <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
                   {userName.charAt(0).toUpperCase()}
                 </div>
                 {/* Icono de hamburguesa con animación */}
@@ -151,7 +151,7 @@ const Header: React.FC = () => {
                     id="header-menu-home"
                     className="w-full flex items-center gap-3 px-5 py-3 text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-all duration-200 group"
                   >
-                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-[#E2725B] transition-colors">
+                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-primary transition-colors">
                       home
                     </span>
                     <span className="text-sm font-semibold">Home</span>
@@ -164,7 +164,7 @@ const Header: React.FC = () => {
                     id="header-menu-perfil"
                     className="w-full flex items-center gap-3 px-5 py-3 text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-all duration-200 group"
                   >
-                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-[#E2725B] transition-colors">
+                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-primary transition-colors">
                       person
                     </span>
                     <span className="text-sm font-semibold">Perfil</span>
@@ -178,7 +178,7 @@ const Header: React.FC = () => {
                     id="header-menu-catalogo"
                     className="w-full flex items-center gap-3 px-5 py-3 text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-all duration-200 group"
                   >
-                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-[#E2725B] transition-colors">
+                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-primary transition-colors">
                       inventory_2
                     </span>
                     <span className="text-sm font-semibold">Catálogo</span>

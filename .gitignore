@@ -44,31 +44,6 @@ Backend/**/*.userosscache
 Backend/**/*.sln.docstates
 Backend/**/*.suo
 
-# Visual Studio files
-.vs/
-[Bb]in/
-[Oo]bj/
-*.user
-*.userosscache
-*.sln.docstates
-*.suo
-
-# Publish folders
-publish/
-*.publish.xml
-
-# User-specific files
-*.rsuser
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# .NET Core
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
 # Database
 *.db
 *.sqlite

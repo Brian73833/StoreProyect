@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { updateUser, deleteUser } from "../services/authService";
 import { getPasswordStrength } from "../lib/utils";
+import ChangePasswordForm from "../components/ChangePasswordForm";
+import DeleteAccountForm from "../components/DeleteAccountForm";
 
 // Componente de la página de perfil de usuario
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { user, login, logout } = useAuth();
+  const { user, login, logout, isAdmin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -197,7 +199,7 @@ export default function Profile() {
                 <span className="material-symbols-outlined text-lg">mail</span>
                 <p className="font-medium text-sm md:text-base">{user.email}</p>
               </div>
-              {user.isAdmin && (
+              {isAdmin && (
                 <div className="inline-flex items-center gap-1.5 mt-4 px-4 py-1.5 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em] backdrop-blur-sm border border-white/30">
                   <span className="material-symbols-outlined text-xs">
                     verified_user
@@ -306,59 +308,16 @@ export default function Profile() {
                         Modificar información
                       </button>
 
-                      {!showDeleteForm ? (
-                        <button
-                          type="button"
-                          onClick={() => setShowDeleteForm(true)}
-                          className="w-full flex justify-center items-center gap-2 px-6 py-4 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-2xl transition-all duration-300 active:scale-[0.98] group"
-                        >
-                          <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">
-                            delete_forever
-                          </span>
-                          Eliminar cuenta
-                        </button>
-                      ) : (
-                        <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-top-4 duration-300 bg-red-50 p-5 rounded-2xl border border-red-100">
-                          <p className="text-xs font-bold text-red-600 uppercase tracking-widest text-center mb-1">
-                            Confirmar eliminación
-                          </p>
-                          <input
-                            type="password"
-                            value={deletePassword}
-                            onChange={(e) => setDeletePassword(e.target.value)}
-                            className="px-4 py-3 bg-white border border-red-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 text-center"
-                            placeholder="Contraseña"
-                          />
-                          <div className="flex gap-2 mt-1">
-                            <button
-                              type="button"
-                              onClick={handleDeleteAccount}
-                              disabled={deleteLoading || !deletePassword}
-                              className="flex-[2] px-4 py-3 bg-red-600 text-white text-sm font-bold rounded-xl hover:bg-red-700 disabled:opacity-50 transition-all"
-                            >
-                              {deleteLoading ? "..." : "Confirmar"}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setShowDeleteForm(false);
-                                setDeletePassword("");
-                                setDeleteError(null);
-                              }}
-                              className="flex-1 flex justify-center items-center px-4 py-3 bg-red-100 text-red-700 text-sm font-bold rounded-xl hover:bg-red-200 transition-colors"
-                            >
-                              <span className="material-symbols-outlined text-lg">
-                                close
-                              </span>
-                            </button>
-                          </div>
-                          {deleteError && (
-                            <p className="text-[10px] text-red-500 font-bold mt-1 text-center">
-                              {deleteError}
-                            </p>
-                          )}
-                        </div>
-                      )}
+                      <DeleteAccountForm
+                        showDeleteForm={showDeleteForm}
+                        setShowDeleteForm={setShowDeleteForm}
+                        deletePassword={deletePassword}
+                        setDeletePassword={setDeletePassword}
+                        handleDeleteAccount={handleDeleteAccount}
+                        deleteLoading={deleteLoading}
+                        deleteError={deleteError}
+                        setDeleteError={setDeleteError}
+                      />
                     </div>
                   )}
 
@@ -397,123 +356,11 @@ export default function Profile() {
                   )}
 
                   {isEditing && shouldChangePassword && (
-                    <div className="space-y-5 animate-in fade-in slide-in-from-top-4 duration-300">
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">
-                          Contraseña Actual
-                        </label>
-                        <div className="relative group">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-stone-400 group-focus-within:text-[#E2725B] transition-colors duration-300">
-                            password
-                          </span>
-                          <input
-                            type="password"
-                            name="currentPassword"
-                            value={formData.currentPassword}
-                            onChange={handleChange}
-                            className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-4 focus:ring-[#E2725B]/5 focus:border-[#E2725B] outline-none transition-all duration-300 font-medium text-stone-700"
-                            placeholder="••••••••"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">
-                          Nueva Contraseña
-                        </label>
-                        <div className="relative group">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-stone-400 group-focus-within:text-[#E2725B] transition-colors duration-300">
-                            lock_reset
-                          </span>
-                          <input
-                            type="password"
-                            name="newPassword"
-                            value={formData.newPassword}
-                            onChange={handleChange}
-                            className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-4 focus:ring-[#E2725B]/5 focus:border-[#E2725B] outline-none transition-all duration-300 font-medium text-stone-700"
-                            placeholder="Mínimo 8 caracteres"
-                          />
-                        </div>
-
-                        {/* Barra de seguridad de la contraseña */}
-                        {formData.newPassword && (
-                          <div className="mt-2 space-y-1">
-                            <div className="flex gap-1">
-                              {[1, 2, 3, 4].map((level) => (
-                                <div
-                                  key={level}
-                                  className="h-1 flex-1 rounded-full transition-all duration-300"
-                                  style={{
-                                    backgroundColor:
-                                      level <= passwordStrength.score
-                                        ? passwordStrength.color
-                                        : "#e7e5e4",
-                                  }}
-                                />
-                              ))}
-                            </div>
-                            <p
-                              className="text-xs font-semibold ml-1"
-                              style={{ color: passwordStrength.color }}
-                            >
-                              {passwordStrength.label}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Sugerencias de requisitos de contraseña */}
-                        {formData.newPassword && (
-                          <ul className="mt-2 space-y-0.5 ml-1">
-                            {[
-                              { regex: /.{8,}/, text: "Mínimo 8 caracteres" },
-                              { regex: /[A-Z]/, text: "Una letra mayúscula" },
-                              { regex: /[a-z]/, text: "Una letra minúscula" },
-                              { regex: /\d/, text: "Un número" },
-                              {
-                                regex: /[\W_]/,
-                                text: "Un carácter especial (!@#$…)",
-                              },
-                            ].map(({ regex, text }) => {
-                              const met = regex.test(formData.newPassword);
-                              return (
-                                <li
-                                  key={text}
-                                  className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
-                                    met ? "text-green-600" : "text-stone-400"
-                                  }`}
-                                >
-                                  <span className="material-symbols-outlined text-sm leading-none">
-                                    {met
-                                      ? "check_circle"
-                                      : "radio_button_unchecked"}
-                                  </span>
-                                  {text}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-stone-400 uppercase tracking-widest ml-1">
-                          Confirmar Nueva Contraseña
-                        </label>
-                        <div className="relative group">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-stone-400 group-focus-within:text-[#E2725B] transition-colors duration-300">
-                            verified
-                          </span>
-                          <input
-                            type="password"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-4 focus:ring-[#E2725B]/5 focus:border-[#E2725B] outline-none transition-all duration-300 font-medium text-stone-700"
-                            placeholder="Repite la nueva contraseña"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <ChangePasswordForm
+                      formData={formData}
+                      handleChange={handleChange}
+                      passwordStrength={passwordStrength}
+                    />
                   )}
 
                   {isEditing && (

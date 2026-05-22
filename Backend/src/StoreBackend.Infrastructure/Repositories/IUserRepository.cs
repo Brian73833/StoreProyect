@@ -6,7 +6,8 @@ public interface IUserRepository
 {
     Task<User?> GetByEmailAsync(string email);
     Task<bool> HasUserByEmailAsync(string email);
-    Task<User?> GetByResourceIdAsync(Guid resourceId);
+    Task<User?> GetByResourceIdAsync(Guid userResourceId);
     Task<User> CreateAsync(User user);
+    Task<User> UpdateAsync(User user);
     Task DeleteAsync(User user);
 }

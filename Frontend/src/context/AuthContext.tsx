@@ -5,15 +5,15 @@ import React, {
   useEffect,
   type ReactNode,
 } from "react";
-import type { User } from "../lib/types";
+import type { User } from "../models/responses/User";
 
 // Define la estructura de los datos de autenticación
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   login: (user: User) => void;
   logout: () => void;
   isLoggedIn: boolean;
+  isAdmin: boolean;
   isLoading: boolean;
 }
 
@@ -59,12 +59,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   // Verifica si el usuario ha iniciado sesión
   const isLoggedIn = !!user;
-  const token = user?.token ?? null;
+
+  // Verifica si el usuario tiene rol de administrador
+  const isAdmin = user?.roles?.includes("Administrator") ?? false;
 
   return (
     // Comparte los datos y funciones con el resto de la aplicación
     <AuthContext.Provider
-      value={{ user, token, login, logout, isLoggedIn, isLoading }}
+      value={{ user, login, logout, isLoggedIn, isAdmin, isLoading }}
     >
       {children}
     </AuthContext.Provider>

@@ -1,9 +1,11 @@
+using StoreBackend.Domain.Entities;
 using StoreBackend.Dto;
 
 namespace StoreBackend.DomainService;
 
 public interface ICategoryService
 {
-    Task<List<CategoryDto>> GetAllAsync();
-    Task<CategoryDto> AddAsync(CategoryDto category);
+    Task<List<Category>> GetAllAsync();
+    Task<Category?> GetByResourceIdAsync(Guid categoryResourceId);
+    Task<Category> AddAsync(CategoryDto category);
 }

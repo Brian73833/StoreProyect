@@ -7,38 +7,32 @@ namespace StoreBackend.Facade;
 
 public class UserFacade : IUserFacade
 {
-    private readonly IUserService userService;
-    private readonly AppDbContext context;
+    private readonly IUserService _userService;
+    private readonly AppDbContext _context;
 
     public UserFacade(IUserService userService, AppDbContext context)
     {
-        this.userService = userService;
-        this.context = context;
-    }
-
-    public async Task<UserDto> LoginAsync(LoginUserDto loginDto)
-    {
-        var entity = await userService.LoginAsync(loginDto);
-        return UserMapper.ToDto(entity);
+        _userService = userService;
+        _context = context;
     }
 
     public async Task<UserDto> CreateAsync(CreateUserDto userDto)
     {
-        var entity = await userService.CreateAsync(userDto);
-        await context.SaveChangesAsync();
-        return UserMapper.ToDto(entity);
+        var createdUser = await _userService.CreateAsync(userDto);
+        await _context.SaveChangesAsync();
+        return UserMapper.ToDto(createdUser);
     }
 
-    public async Task<UserDto> UpdateAsync(Guid resourceId, UpdateUserDto userDto)
+    public async Task<UserDto> UpdateAsync(Guid userResourceId, UpdateUserDto userDto)
     {
-        var entity = await userService.UpdateAsync(resourceId, userDto);
-        await context.SaveChangesAsync();
-        return UserMapper.ToDto(entity);
+        var updatedUser = await _userService.UpdateAsync(userResourceId, userDto);
+        await _context.SaveChangesAsync();
+        return UserMapper.ToDto(updatedUser);
     }
 
-    public async Task DeleteAsync(Guid resourceId, string password)
+    public async Task DeleteAsync(Guid userResourceId, string password)
     {
-        await userService.DeleteAsync(resourceId, password);
-        await context.SaveChangesAsync();
+        await _userService.DeleteAsync(userResourceId, password);
+        await _context.SaveChangesAsync();
     }
 }

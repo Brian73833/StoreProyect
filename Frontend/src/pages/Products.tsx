@@ -1,39 +1,62 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductModal from "../components/ProductModal";
+import EditProductModal from "../components/EditProductModal";
 import CategoryModal from "../components/CategoryModal";
 import ProductCard from "../components/ProductCard";
 import { useAuth } from "../context/AuthContext";
 import { useProducts } from "../hooks/useProducts";
 import { ICON_STYLE } from "../lib/utils";
+import type { Product } from "../models/responses/Product";
 
 // Componente principal de la página de productos
 const Products: React.FC = () => {
-  // Obtiene los datos del usuario logueado
-  const { user } = useAuth();
+  // Verifica si el usuario actual es administrador
+  const { isAdmin } = useAuth();
   const navigate = useNavigate();
-  // Verifica si el usuario tiene rol de administrador
-  const isAdmin = user?.isAdmin || false;
 
   // Usa el hook personalizado para cargar los productos y categorías desde la API
-  const { products, categories, loading, error, addProduct, addCategory } =
-    useProducts();
+  const {
+    products,
+    categories,
+    loading,
+    error,
+    addProduct,
+    addCategory,
+    updateProduct,
+    removeProduct,
+  } = useProducts();
 
   // Estados locales para la búsqueda y los filtros
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(0);
-  
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   // Estados para controlar cuándo se muestran las ventanas emergentes
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+
+  // Estado para el modal de edición
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+
+  // Abre el modal de edición con el producto seleccionado
+  const handleEditProduct = (product: Product) => {
+    setProductToEdit(product);
+    setIsEditModalOpen(true);
+  };
 
   // Filtra la lista de productos según el texto de búsqueda y la categoría seleccionada
   const filtered = products.filter((p) => {
     const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory =
-      selectedCategory === 0 || p.categoryId === selectedCategory;
+      selectedCategory === "" || p.categoryName === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  // Lista de categorías únicas presentes en los productos para el filtro
+  const uniqueCategoryNames = Array.from(
+    new Set(products.map((p) => p.categoryName).filter(Boolean))
+  );
 
   return (
     <main className="pt-8 pb-16 sm:pb-20 px-4 sm:px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface font-body-md">
@@ -49,7 +72,7 @@ const Products: React.FC = () => {
           Volver al inicio
         </button>
       </div>
-      
+
       {/* Si el usuario es administrador, muestra los botones para agregar */}
       {isAdmin && (
         <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
@@ -76,6 +99,17 @@ const Products: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         categories={categories}
         onProductAdded={addProduct}
+      />
+
+      <EditProductModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setProductToEdit(null);
+        }}
+        categories={categories}
+        product={productToEdit}
+        onProductUpdated={updateProduct}
       />
 
       <CategoryModal
@@ -117,12 +151,12 @@ const Products: React.FC = () => {
             <select
               className="w-full bg-surface-container-low border-b-2 border-outline focus:border-primary focus:ring-0 px-4 py-3 font-body-md text-base transition-all outline-none appearance-none cursor-pointer"
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(Number(e.target.value))}
+              onChange={(e) => setSelectedCategory(e.target.value)}
             >
-              <option value={0}>Todos los productos</option>
-              {categories.map((cat) => (
-                <option key={cat.categoryId} value={cat.categoryId}>
-                  {cat.name}
+              <option value="">Todos los productos</option>
+              {uniqueCategoryNames.map((name) => (
+                <option key={name} value={name ?? ""}>
+                  {name}
                 </option>
               ))}
             </select>
@@ -152,7 +186,12 @@ const Products: React.FC = () => {
         // Muestra las tarjetas de los productos
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map((p) => (
-            <ProductCard key={p.productResourceId} product={p} />
+            <ProductCard
+              key={p.productResourceId}
+              product={p}
+              onEdit={isAdmin ? () => handleEditProduct(p) : undefined}
+              onDelete={isAdmin ? () => removeProduct(p.productResourceId) : undefined}
+            />
           ))}
         </div>
       ) : (

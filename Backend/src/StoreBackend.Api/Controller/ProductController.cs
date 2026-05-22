@@ -1,134 +1,93 @@
 using Microsoft.AspNetCore.Mvc;
 using StoreBackend.Api.Mappers;
 using StoreBackend.Api.Models.Requests;
-using StoreBackend.Exceptions;
 using StoreBackend.Facade;
 using Microsoft.AspNetCore.Authorization;
+using StoreBackend.Api.Services;
+using StoreBackend.DomainService;
 
 namespace StoreBackend.Api.Controller
 {
     [Route("api/products")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController(IProductFacade productFacade, IImageService imageService) : ControllerBase
     {
-        private readonly IProductFacade productFacade;
-        private readonly IWebHostEnvironment webHostEnvironment;
-
-        public ProductController(IProductFacade productFacade, IWebHostEnvironment webHostEnvironment)
-        {
-            this.productFacade = productFacade;
-            this.webHostEnvironment = webHostEnvironment;
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProductsAsync()
         {
-            try
-            {
-                var products = await productFacade.GetAllAsync();
-                var models = ProductMapper.ToModel(products);
-                return Ok(models);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving products.");
-            }
+            var products = await productFacade.GetAllAsync();
+            var productModel = ProductMapper.ToModel(products);
+            return Ok(productModel);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProduct(Guid id)
+        [HttpGet("{productResourceId}")]
+        public async Task<IActionResult> GetProductAsync(Guid productResourceId)
         {
-            try
-            {
-                var product = await productFacade.GetByIdAsync(id);
-
-                var model = ProductMapper.ToModel(product);
-                return Ok(model);
-            }
-            catch (ResourceNotFoundException)
-            {
-                return NotFound();
-            }
+            var productDto = await productFacade.GetByResourceIdAsync(productResourceId);
+            var productModel = ProductMapper.ToModel(productDto);
+            return Ok(productModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = RoleNames.Administrator)]
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddProduct([FromForm] ProductRequestModel product)
+        public async Task<IActionResult> AddProductAsync([FromForm] ProductRequestModel productRequest)
         {
-            try
+            var productDto = ProductMapper.ToDto(productRequest);
+            if (productRequest.ImageFile != null)
             {
-                var dto = ProductMapper.ToDto(product);
-
-                if (product.ImageFile != null)
-                {
-                    // Validate file size (e.g., max 5MB)
-                    if (product.ImageFile.Length > 50 * 1024 * 1024)
-                    {
-                        return BadRequest("El archivo de imagen no puede superar los 50MB.");
-                    }
-
-                    // Validate file extension
-                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
-                    var extension = Path.GetExtension(product.ImageFile.FileName).ToLowerInvariant();
-                    if (string.IsNullOrEmpty(extension) || !allowedExtensions.Contains(extension))
-                    {
-                        return BadRequest("Tipo de archivo no permitido. Solo se permiten imágenes (jpg, jpeg, png, webp, gif).");
-                    }
-
-                    // Validate content type
-                    var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/webp", "image/gif" };
-                    if (!allowedContentTypes.Contains(product.ImageFile.ContentType.ToLowerInvariant()))
-                    {
-                        return BadRequest("El Content-Type del archivo no es válido.");
-                    }
-
-                    string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "uploads", "products");
-                    
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    // Generate a safe unique filename, completely discarding original name
-                    string uniqueFileName = Guid.NewGuid().ToString() + extension;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await product.ImageFile.CopyToAsync(fileStream);
-                    }
-
-                    dto.ImagePath = Path.Combine("uploads", "products", uniqueFileName).Replace("\\", "/");
-                }
-
-                var addedProduct = await productFacade.AddAsync(dto);
-                var model = ProductMapper.ToModel(addedProduct);
-                return CreatedAtAction(nameof(GetProduct), new { id = model.ProductResourceId }, model);
+                productDto.ImagePath = await imageService.SaveImageAsync(productRequest.ImageFile, "products");
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the product.");
-            }
+            var addedProductDto = await productFacade.AddAsync(productDto);
+            var productModel = ProductMapper.ToModel(addedProductDto);
+            return CreatedAtAction(nameof(GetProductAsync), new { productResourceId = productModel.ProductResourceId }, productModel);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        [Authorize(Roles = RoleNames.Administrator)]
+        [HttpDelete("{productResourceId}")]
+        public async Task<IActionResult> DeleteProductAsync(Guid productResourceId)
         {
-            try
+            var productDto = await productFacade.GetByResourceIdAsync(productResourceId);
+            await productFacade.DeleteAsync(productResourceId);
+            if (!string.IsNullOrEmpty(productDto.ImagePath))
             {
-                await productFacade.DeleteAsync(id);
-                return Ok();
+                imageService.DeleteImage(productDto.ImagePath);
             }
-            catch (ResourceNotFoundException)
+
+            return Ok();
+        }
+
+        [Authorize(Roles = RoleNames.Administrator)]
+        [HttpPut("{productResourceId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProductAsync(Guid productResourceId, [FromForm] ProductRequestModel productRequest)
+        {
+            var productDto = ProductMapper.ToDto(productRequest);
+
+            if (productRequest.ImageFile != null)
             {
-                return NotFound();
+                // Obtener el producto actual para conocer la imagen existente (solo si se va a reemplazar)
+                var existingProduct = await productFacade.GetByResourceIdAsync(productResourceId);
+
+                // Guardar la nueva imagen
+                productDto.ImagePath = await imageService.SaveImageAsync(productRequest.ImageFile, "products");
+
+                // Borrar la imagen anterior si existía
+                if (!string.IsNullOrEmpty(existingProduct.ImagePath))
+                {
+                    imageService.DeleteImage(existingProduct.ImagePath);
+                }
             }
-            catch (Exception)
+            else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the product.");
+                // Mantener la imagen existente (null significa "no cambiar" en el servicio)
+                productDto.ImagePath = null;
             }
+
+            var updatedProduct = await productFacade.UpdateAsync(productResourceId, productDto);
+            var productModel = ProductMapper.ToModel(updatedProduct);
+            return Ok(productModel);
         }
     }
 }
+

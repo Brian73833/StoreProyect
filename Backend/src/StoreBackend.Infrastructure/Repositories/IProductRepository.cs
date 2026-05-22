@@ -6,7 +6,8 @@ namespace StoreBackend.Infrastructure.Repositories;
 public interface IProductRepository
 {
     Task<List<Product>> GetAllAsync();
-    Task<Product?> GetByIdAsync(Guid productId);
+    Task<Product?> GetByResourceIdAsync(Guid productResourceId);
     Task<Product> AddAsync(Product product);
     Task DeleteAsync(Product product);
+    Task<Product> UpdateAsync(Product product);
 }

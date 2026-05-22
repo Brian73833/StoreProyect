@@ -1,53 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
-using StoreBackend.Api.Models.Responses;
-using StoreBackend.Dto;
+using StoreBackend.Api.Mappers;
 using StoreBackend.Facade;
 using Microsoft.AspNetCore.Authorization;
+using StoreBackend.Api.Models.Requests;
+using StoreBackend.DomainService;
 
 namespace StoreBackend.Api.Controller;
 
 [Route("api/categories")]
 [ApiController]
-public class CategoryController : ControllerBase
+public class CategoryController(ICategoryFacade categoryFacade) : ControllerBase
 {
-    private readonly ICategoryFacade _categoryFacade;
-
-    public CategoryController(ICategoryFacade categoryFacade)
-    {
-        _categoryFacade = categoryFacade;
-    }
-
     [HttpGet]
-    public async Task<IActionResult> GetCategories()
+    public async Task<IActionResult> GetCategoriesAsync()
     {
-        try
-        {
-            var categories = await _categoryFacade.GetAllAsync();
-            var models = categories.Select(c => new CategoryResponseModel
-            {
-                CategoryId = c.CategoryId,
-                Name = c.Name
-            }).ToList();
-            return Ok(models);
-        }
-        catch (Exception)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving categories.");
-        }
+        var categories = await categoryFacade.GetAllAsync();
+        var categoryModel = CategoryMapper.ToModel(categories);
+        return Ok(categoryModel);
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpPost]
-    public async Task<IActionResult> AddCategory([FromBody] CategoryDto category)
+    [HttpGet("{categoryResourceId}")]
+    public async Task<IActionResult> GetCategoryAsync(Guid categoryResourceId)
     {
-        try
-        {
-            var result = await _categoryFacade.AddAsync(category);
-            return CreatedAtAction(nameof(GetCategories), new { id = result.CategoryId }, result);
-        }
-        catch (Exception)
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while adding the category.");
-        }
+        var categoryDto = await categoryFacade.GetByResourceIdAsync(categoryResourceId);
+        var categoryModel = CategoryMapper.ToModel(categoryDto);
+        return Ok(categoryModel);
+    }
+
+    [Authorize(Roles = RoleNames.Administrator)]
+    [HttpPost]
+    public async Task<IActionResult> AddCategoryAsync([FromBody] CategoryRequestModel categoryRequest)
+    {
+        var categoryDto = CategoryMapper.ToDto(categoryRequest);
+        var addedCategoryDto = await categoryFacade.AddAsync(categoryDto);
+        var categoryModel = CategoryMapper.ToModel(addedCategoryDto);
+        return CreatedAtAction(nameof(GetCategoryAsync), new { categoryResourceId = categoryModel.CategoryResourceId }, categoryModel);
     }
 }
+

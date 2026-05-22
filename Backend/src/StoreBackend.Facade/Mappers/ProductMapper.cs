@@ -20,7 +20,7 @@ public class ProductMapper
             Price = product.Price,
             Stock = product.Stock,
             ImagePath = product.ImagePath,
-            CategoryId = product.CategoryId,
+            CategoryResourceId = product.Category?.CategoryResourceId ?? Guid.Empty,
             CategoryName = product.Category?.Name
         };
     }

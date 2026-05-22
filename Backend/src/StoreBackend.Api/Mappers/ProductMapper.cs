@@ -15,7 +15,7 @@ public class ProductMapper
             Description = model.Description,
             Price = model.Price,
             Stock = model.Stock,
-            CategoryId = model.CategoryId
+            CategoryResourceId = model.CategoryResourceId
         };
     }
 
@@ -34,7 +34,6 @@ public class ProductMapper
             Price = product.Price,
             Stock = product.Stock,
             ImagePath = product.ImagePath,
-            CategoryId = product.CategoryId,
             CategoryName = product.CategoryName
         };
     }
