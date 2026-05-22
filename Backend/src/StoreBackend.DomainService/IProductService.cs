@@ -10,5 +10,6 @@ public interface IProductService
     Task<Product?> GetByResourceIdAsync(Guid productResourceId);
     Task<Product> AddAsync(ProductDto product);
     Task DeleteAsync(Guid productResourceId);
+    Task<Product> UpdateAsync(Guid productResourceId, ProductDto productDto);
 
 }

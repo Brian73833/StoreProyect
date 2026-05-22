@@ -22,7 +22,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     description: "",
     price: 0,
     stock: 0,
-    categoryId: categories.length > 0 ? categories[0].categoryId : 0,
+    categoryResourceId: categories.length > 0 ? categories[0].categoryResourceId : "",
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,8 +33,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
     if (categories.length > 0) {
       setFormData((prev) => ({
         ...prev,
-        categoryId:
-          prev.categoryId === 0 ? categories[0].categoryId : prev.categoryId,
+        categoryResourceId:
+          prev.categoryResourceId === "" ? categories[0].categoryResourceId : prev.categoryResourceId,
       }));
     }
   }, [categories]);
@@ -46,7 +46,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
       description: "",
       price: 0,
       stock: 0,
-      categoryId: categories.length > 0 ? categories[0].categoryId : 0,
+      categoryResourceId: categories.length > 0 ? categories[0].categoryResourceId : "",
     });
     setImageFile(null);
     setError(null);
@@ -68,7 +68,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "price" || name === "stock" || name === "categoryId"
+        name === "price" || name === "stock"
           ? Number(value)
           : value,
     }));
@@ -90,7 +90,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
       data.append("description", formData.description);
       data.append("price", formData.price.toString());
       data.append("stock", formData.stock.toString());
-      data.append("categoryId", formData.categoryId.toString());
+      data.append("categoryResourceId", formData.categoryResourceId);
       if (imageFile) {
         data.append("imageFile", imageFile);
       }
@@ -263,13 +263,13 @@ const ProductModal: React.FC<ProductModalProps> = ({
               </label>
               <select
                 required
-                name="categoryId"
-                value={formData.categoryId}
+                name="categoryResourceId"
+                value={formData.categoryResourceId}
                 onChange={handleChange}
                 className="w-full px-4 py-3 bg-stone-50 border-2 border-stone-100 rounded-xl focus:bg-white focus:border-primary outline-none transition-all"
               >
                 {categories.map((cat) => (
-                  <option key={cat.categoryId} value={cat.categoryId}>
+                  <option key={cat.categoryResourceId} value={cat.categoryResourceId}>
                     {cat.name}
                   </option>
                 ))}

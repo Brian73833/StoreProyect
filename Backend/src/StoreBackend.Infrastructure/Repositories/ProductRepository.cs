@@ -37,5 +37,10 @@ public class ProductRepository : IProductRepository
         _context.Products.Remove(product);
     }
 
+    public Task<Product> UpdateAsync(Product product)
+    {
+        _context.Products.Update(product);
+        return Task.FromResult(product);
+    }
 
 }

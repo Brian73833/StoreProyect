@@ -56,6 +56,38 @@ namespace StoreBackend.Api.Controller
 
             return Ok();
         }
+
+        [Authorize(Roles = RoleNames.Administrator)]
+        [HttpPut("{productResourceId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UpdateProductAsync(Guid productResourceId, [FromForm] ProductRequestModel productRequest)
+        {
+            var productDto = ProductMapper.ToDto(productRequest);
+
+            if (productRequest.ImageFile != null)
+            {
+                // Obtener el producto actual para conocer la imagen existente (solo si se va a reemplazar)
+                var existingProduct = await productFacade.GetByResourceIdAsync(productResourceId);
+
+                // Guardar la nueva imagen
+                productDto.ImagePath = await imageService.SaveImageAsync(productRequest.ImageFile, "products");
+
+                // Borrar la imagen anterior si existía
+                if (!string.IsNullOrEmpty(existingProduct.ImagePath))
+                {
+                    imageService.DeleteImage(existingProduct.ImagePath);
+                }
+            }
+            else
+            {
+                // Mantener la imagen existente (null significa "no cambiar" en el servicio)
+                productDto.ImagePath = null;
+            }
+
+            var updatedProduct = await productFacade.UpdateAsync(productResourceId, productDto);
+            var productModel = ProductMapper.ToModel(updatedProduct);
+            return Ok(productModel);
+        }
     }
 }
 

@@ -53,4 +53,27 @@ public class ProductService : IProductService
     {
         return _productRepository.GetByResourceIdAsync(productResourceId);
     }
+
+    public async Task<Product> UpdateAsync(Guid productResourceId, ProductDto productDto)
+    {
+        var product = await _productRepository.GetByResourceIdAsync(productResourceId);
+        if (product == null) throw new ResourceNotFoundException("Product not found");
+
+        var category = await _categoryRepository.GetByResourceIdAsync(productDto.CategoryResourceId);
+        if (category == null) throw new BadRequestResponseException("Category not found");
+
+        product.Name = productDto.Name;
+        product.Description = productDto.Description;
+        product.Price = productDto.Price;
+        product.Stock = productDto.Stock;
+        product.CategoryId = category.CategoryId;
+
+        // ImagePath se actualiza sólo si viene un nuevo valor desde la capa superior
+        if (productDto.ImagePath != null)
+        {
+            product.ImagePath = productDto.ImagePath;
+        }
+
+        return await _productRepository.UpdateAsync(product);
+    }
 }

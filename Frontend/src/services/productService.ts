@@ -58,3 +58,17 @@ export async function deleteProduct(id: string): Promise<void> {
     throw new Error("Failed to delete product");
   }
 }
+
+// Función para actualizar un producto existente usando FormData
+export async function updateProduct(id: string, product: FormData): Promise<Product> {
+  // Petición PUT para actualizar un producto
+  const response = await fetch(`${config.api.url}/api/products/${id}`, {
+    method: "PUT",
+    headers: { ...getAuthHeader() },
+    body: product,
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update product");
+  }
+  return response.json();
+}

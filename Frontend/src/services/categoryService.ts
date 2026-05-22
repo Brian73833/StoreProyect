@@ -14,7 +14,7 @@ export async function getCategories(): Promise<Category[]> {
 
 // Función para crear una nueva categoría
 export async function addCategory(
-  category: Omit<Category, "categoryId">,
+  category: Omit<Category, "categoryResourceId">,
 ): Promise<Category> {
   // Petición POST enviando los datos de la nueva categoría
   const response = await fetch(`${config.api.url}/api/categories`, {

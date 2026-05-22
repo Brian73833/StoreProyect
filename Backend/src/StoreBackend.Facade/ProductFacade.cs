@@ -42,4 +42,11 @@ public class ProductFacade : IProductFacade
         if (product == null) throw new ResourceNotFoundException("Product not found");
         return ProductMapper.ToDto(product);
     }
+
+    public async Task<ProductDto> UpdateAsync(Guid productResourceId, ProductDto product)
+    {
+        var updatedProduct = await _productService.UpdateAsync(productResourceId, product);
+        await _context.SaveChangesAsync();
+        return ProductMapper.ToDto(updatedProduct);
+    }
 }

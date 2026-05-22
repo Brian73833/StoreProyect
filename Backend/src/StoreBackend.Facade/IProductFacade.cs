@@ -8,4 +8,5 @@ public interface IProductFacade
     Task<ProductDto> GetByResourceIdAsync(Guid productResourceId);
     Task<ProductDto> AddAsync(ProductDto product);
     Task DeleteAsync(Guid productResourceId);
+    Task<ProductDto> UpdateAsync(Guid productResourceId, ProductDto product);
 }

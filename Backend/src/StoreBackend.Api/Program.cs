@@ -21,6 +21,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<MessageExceptionFilter>();
+    options.SuppressAsyncSuffixInActionNames = false;
 });
 
 builder.Services.AddRateLimiter(options =>

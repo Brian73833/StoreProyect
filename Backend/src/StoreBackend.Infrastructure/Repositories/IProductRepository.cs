@@ -9,4 +9,5 @@ public interface IProductRepository
     Task<Product?> GetByResourceIdAsync(Guid productResourceId);
     Task<Product> AddAsync(Product product);
     Task DeleteAsync(Product product);
+    Task<Product> UpdateAsync(Product product);
 }

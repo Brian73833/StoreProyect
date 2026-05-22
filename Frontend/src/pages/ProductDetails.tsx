@@ -3,9 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   getProductById,
   getImageUrl,
-  deleteProduct,
 } from "../services/productService";
-import { useAuth } from "../context/AuthContext";
 import type { Product } from "../models/responses/Product";
 import { ICON_STYLE } from "../lib/utils";
 import {
@@ -34,13 +32,10 @@ const ProductDetail: React.FC = () => {
   // Obtiene el ID del producto desde la URL
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  // Verifica si el usuario actual es administrador
-  const { isAdmin } = useAuth();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeImg, setActiveImg] = useState<string>("");
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Carga los datos del producto al entrar a la página
   useEffect(() => {
@@ -166,11 +161,10 @@ const ProductDetail: React.FC = () => {
                 <button
                   key={i}
                   onClick={() => setActiveImg(src)}
-                  className={`relative flex-shrink-0 w-24 aspect-square border-2 transition-all ${
-                    activeImg === src
-                      ? "border-primary scale-105 shadow-lg"
-                      : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
+                  className={`relative flex-shrink-0 w-24 aspect-square border-2 transition-all ${activeImg === src
+                    ? "border-primary scale-105 shadow-lg"
+                    : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
                 >
                   <img
                     alt={`Detail ${i + 1}`}
@@ -242,18 +236,7 @@ const ProductDetail: React.FC = () => {
               </span>
               Add to Specifications
             </button>
-            {/* Si es administrador, muestra el botón para eliminar producto */}
-            {isAdmin && (
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className="w-full mt-3 bg-red-600 text-white py-4 font-label-caps text-xs uppercase tracking-[0.2em] hover:bg-red-700 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
-              >
-                <span className="material-symbols-outlined text-sm">
-                  delete
-                </span>
-                Delete Product
-              </button>
-            )}
+
           </div>
 
           {/* Especificaciones técnicas de fábrica */}
@@ -370,47 +353,7 @@ const ProductDetail: React.FC = () => {
         </section>
       </div>
 
-      {/* Ventana de confirmación para eliminar el producto */}
-      {showDeleteModal && product && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-slide-up p-8 text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="material-symbols-outlined text-red-600 text-3xl">
-                warning
-              </span>
-            </div>
-            <h2 className="text-2xl font-bold text-stone-900 mb-2 uppercase tracking-tight">
-              Eliminar Producto
-            </h2>
-            <p className="text-stone-500 mb-8 font-body-sm">
-              ¿Estás seguro que deseas eliminar "{product.name}"? Esta acción no
-              se puede deshacer.
-            </p>
-            <div className="flex gap-4">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="flex-1 py-3 px-4 bg-stone-100 text-stone-700 font-bold rounded-xl hover:bg-stone-200 transition-colors uppercase tracking-widest text-xs"
-              >
-                Volver
-              </button>
-              <button
-                onClick={async () => {
-                  try {
-                    await deleteProduct(id!);
-                    navigate("/products");
-                  } catch {
-                    alert("Error al eliminar el producto");
-                    setShowDeleteModal(false);
-                  }
-                }}
-                className="flex-1 py-3 px-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors uppercase tracking-widest text-xs"
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
     </main>
   );
 };

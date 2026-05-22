@@ -1,4 +1,4 @@
 export type Category = {
-  categoryId: number;
+  categoryResourceId: string;
   name: string;
 };
