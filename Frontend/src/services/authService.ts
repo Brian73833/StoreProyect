@@ -28,15 +28,18 @@ function mapAuthResponse(data: AuthApiResponse): User {
 async function parseErrorMessage(response: Response): Promise<string> {
   const contentType = response.headers.get("content-type") || "";
   try {
+    // Si la respuesta es JSON, intenta extraer el mensaje
     if (contentType.includes("application/json")) {
       const data = await response.json();
       return typeof data === "string"
         ? data
         : data.message || data.title || JSON.stringify(data);
     } else {
+      // Si no es JSON, devuelve el texto plano
       return await response.text();
     }
   } catch {
+    // Si ocurre un error inesperado al leer la respuesta
     return "Error desconocido del servidor";
   }
 }
@@ -62,8 +65,10 @@ export const loginUser = async (loginData: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
+    credentials: "include",
   });
 
+  // Si la petición falla, extrae y lanza el error
   if (!response.ok) {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al iniciar sesión");
@@ -83,6 +88,7 @@ export const registerUser = async (signUpData: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(signUpData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -111,6 +117,7 @@ export const updateUser = async (
       ...getAuthHeader(),
     },
     body: JSON.stringify(updateData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -145,6 +152,7 @@ export const deleteUser = async (
       ...getAuthHeader(),
     },
     body: JSON.stringify({ password }),
+    credentials: "include",
   });
 
   if (!response.ok) {

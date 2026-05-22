@@ -24,6 +24,7 @@ export async function addCategory(
       ...getAuthHeader(),
     },
     body: JSON.stringify(category),
+    credentials: "include", // Incluye las cookies de sesión
   });
 
   if (!response.ok) {

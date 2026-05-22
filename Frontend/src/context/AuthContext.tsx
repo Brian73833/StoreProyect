@@ -47,7 +47,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // Función para iniciar sesión y guardar al usuario
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    const { token, ...userWithoutToken } = userData;
+    localStorage.setItem("user", JSON.stringify(userWithoutToken));
   };
 
   // Función para cerrar sesión y borrar los datos

@@ -40,6 +40,7 @@ export async function addProduct(product: FormData): Promise<Product> {
     method: "POST",
     headers: { ...getAuthHeader() },
     body: product,
+    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to add product");
