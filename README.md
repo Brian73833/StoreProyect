@@ -1,53 +1,61 @@
-## 🛠️ Guía de Instalación y Ejecución Paso a Paso
+# 🚀 Guía de Instalación y Ejecución
 
-Sigue las siguientes instrucciones detalladas para levantar la aplicación completa:
+## Requisitos previos
 
-### 🗄️ Paso 1: Configurar la Base de Datos
+Asegúrate de contar con una herramienta de gestión de bases de datos, el SDK de .NET y Node.js instalados antes de comenzar.
 
-# Abre tu herramienta de gestión de bases de datos 
+---
 
-# Abre y ejecuta el script ubicado en la raíz del proyecto llamado `database.sql` para crear la base de  datos `StoreDB` y sus tablas
+## Paso 1 — Configurar la Base de Datos 🗄️
 
+1. Abre tu herramienta de gestión de bases de datos.
+2. Ejecuta el script `database.sql` ubicado en la raíz del proyecto para crear la base de datos `StoreDB` y sus tablas.
 
-# 💻 Paso 2: Configurar y Correr el Backend 
+---
 
-# Navega a la carpeta principal de la API del Backend:
+## Paso 2 — Backend (ASP.NET) 💻
 
-    cd Backend/src/StoreBackend.Api
+```bash
+cd Backend/src/StoreBackend.Api
+```
 
-# Crea tu archivo de configuración para desarrollo local duplicando `appsettings.Example.json` y renombrándolo a `appsettings.Development.json`:
+1. **Crea el archivo de configuración** duplicando `appsettings.Example.json` y renombrándolo a `appsettings.Development.json`.
 
-# Abre el archivo `appsettings.Development.json` y actualiza los datos necesarios.
+2. **Actualiza** los valores necesarios dentro de `appsettings.Development.json`.
 
-# Restaura los paquetes y compila la solución para asegurarte de que todo esté en orden:
+3. **Compila** la solución para verificar que todo esté en orden:
+```bash
+   dotnet build
+```
 
-    dotnet build
+4. **Inicia** el servidor en modo desarrollo:
+```bash
+   dotnet run
+```
 
-# Inicia el servidor backend en modo de desarrollo:
-    dotnet run
+---
 
+## Paso 3 — Frontend (React + Vite) 🌐
 
+En una **nueva terminal**, ejecuta:
 
-# 🌐 Paso 3: Configurar y Correr el Frontend (React + Vite)
+```bash
+cd Frontend
+npm install
+npm run dev
+```
 
-# En una nueva consola de comandos, navega a la carpeta del Frontend:
+---
 
-    cd Frontend
+## Soporte Móvil (Capacitor) 📱
 
-# Instala las dependencias necesarias de Node:
-
-    npm install
-
-# Inicia el servidor de desarrollo local de Vite:
-    npm run dev
-
-## 📱 Soporte Móvil (Capacitor)
-
-# Compilar el frontend de React para producción
+```bash
+# 1. Compilar el frontend para producción
 npm run build
 
-# Sincronizar los archivos del build con la plataforma nativa
+# 2. Sincronizar el build con la plataforma nativa
 npx cap sync
 
-# Abrir el proyecto en Android Studio
+# 3. Abrir el proyecto en Android Studio
 npx cap open android
+```
