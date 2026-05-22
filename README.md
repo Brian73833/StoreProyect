@@ -9,7 +9,7 @@ Asegúrate de contar con una herramienta de gestión de bases de datos, el SDK d
 ## Paso 1 — Configurar la Base de Datos 🗄️
 
 1. Abre tu herramienta de gestión de bases de datos.
-2. Ejecuta el script `database.sql` ubicado en la raíz del proyecto para crear la base de datos `StoreDB` y sus tablas.
+2. Ejecuta el script `database.sql` ubicado en la raíz del proyecto en tu herramienta de gestion de base de datos, para crear la base de datos `StoreDB` y sus tablas.
 
 ---
 
@@ -23,7 +23,9 @@ cd Backend/src/StoreBackend.Api
 
 2. **Actualiza** los valores necesarios dentro de `appsettings.Development.json`.
 
-3. **Compila** la solución para verificar que todo esté en orden:
+3. **Inicia el contenedor Docker** para establecer la conexión con la base de datos.
+
+4. **Compila** la solución para verificar que todo esté en orden:
 ```bash
    dotnet build
 ```
