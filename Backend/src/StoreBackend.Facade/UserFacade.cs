@@ -16,12 +16,6 @@ public class UserFacade : IUserFacade
         _context = context;
     }
 
-    public async Task<UserDto> LoginAsync(LoginUserDto loginDto)
-    {
-        var user = await _userService.LoginAsync(loginDto);
-        return UserMapper.ToDto(user);
-    }
-
     public async Task<UserDto> CreateAsync(CreateUserDto userDto)
     {
         var createdUser = await _userService.CreateAsync(userDto);

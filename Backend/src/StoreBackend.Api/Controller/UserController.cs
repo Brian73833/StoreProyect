@@ -11,9 +11,20 @@ namespace StoreBackend.Api.Controller
     [ApiController]
     public class UserController(IUserFacade userFacade) : ControllerBase
     {
+        private bool IsCurrentUser(Guid userResourceId)
+        {
+            var currentUserId = User.FindFirst("externalId")?.Value;
+            return currentUserId == userResourceId.ToString();
+        }
+
         [HttpPut("{userResourceId}")]
         public async Task<IActionResult> UpdateUserAsync(Guid userResourceId, [FromBody] UpdateUserRequestModel updateUserRequestModel)
         {
+            if (!IsCurrentUser(userResourceId))
+            {
+                return Forbid();
+            }
+
             var updateUserDto = UserMapper.ToDto(updateUserRequestModel);
             var userDto = await userFacade.UpdateAsync(userResourceId, updateUserDto);
             var userModel = UserMapper.ToModel(userDto);
@@ -23,16 +34,15 @@ namespace StoreBackend.Api.Controller
         [HttpDelete("{userResourceId}")]
         public async Task<IActionResult> DeleteUserAsync(Guid userResourceId, [FromBody] DeleteUserRequestModel deleteUserRequestModel)
         {
+            if (!IsCurrentUser(userResourceId))
+            {
+                return Forbid();
+            }
+
             await userFacade.DeleteAsync(userResourceId, deleteUserRequestModel.Password);
 
-            Response.Cookies.Delete("jwt", new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None
-            });
             return Ok();
         }
     }
 }
-
+

@@ -3,6 +3,7 @@ using StoreBackend.Api.Mappers;
 using StoreBackend.Facade;
 using Microsoft.AspNetCore.Authorization;
 using StoreBackend.Api.Models.Requests;
+using StoreBackend.DomainService;
 
 namespace StoreBackend.Api.Controller;
 
@@ -26,7 +27,7 @@ public class CategoryController(ICategoryFacade categoryFacade) : ControllerBase
         return Ok(categoryModel);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = RoleNames.Administrator)]
     [HttpPost]
     public async Task<IActionResult> AddCategoryAsync([FromBody] CategoryRequestModel categoryRequest)
     {

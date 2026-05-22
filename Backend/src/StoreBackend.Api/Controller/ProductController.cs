@@ -4,6 +4,7 @@ using StoreBackend.Api.Models.Requests;
 using StoreBackend.Facade;
 using Microsoft.AspNetCore.Authorization;
 using StoreBackend.Api.Services;
+using StoreBackend.DomainService;
 
 namespace StoreBackend.Api.Controller
 {
@@ -27,7 +28,7 @@ namespace StoreBackend.Api.Controller
             return Ok(productModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = RoleNames.Administrator)]
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddProductAsync([FromForm] ProductRequestModel productRequest)
@@ -42,7 +43,7 @@ namespace StoreBackend.Api.Controller
             return CreatedAtAction(nameof(GetProductAsync), new { productResourceId = productModel.ProductResourceId }, productModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = RoleNames.Administrator)]
         [HttpDelete("{productResourceId}")]
         public async Task<IActionResult> DeleteProductAsync(Guid productResourceId)
         {

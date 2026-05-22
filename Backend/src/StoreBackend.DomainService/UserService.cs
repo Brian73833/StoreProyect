@@ -35,7 +35,7 @@ public class UserService : IUserService
             throw new BadRequestResponseException("Email is already taken");
         }
 
-        var customerRole = await _roleRepository.GetByNameAsync("Customer");
+        var customerRole = await _roleRepository.GetByNameAsync(RoleNames.Customer);
         if (customerRole == null)
         {
             throw new ResourceNotFoundException("Default role 'Customer' not found");
