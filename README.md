@@ -19,7 +19,7 @@ Asegúrate de contar con una herramienta de gestión de bases de datos, el SDK d
 cd Backend/src/StoreBackend.Api
 ```
 
-1. **Crea el archivo de configuración** duplicando `appsettings.Example.json` y renombrándolo a `appsettings.Development.json`.
+1. **Busca el archivo de configuración** duplicando `appsettings.Example.json` y renombrándolo a `appsettings.Development.json`.
 
 2. **Actualiza** los valores necesarios dentro de `appsettings.Development.json`.
 
