@@ -1,23 +1,55 @@
 import type { User } from "../models/responses/User";
 import { config } from "../config";
 
+// Tipo que representa la respuesta cruda del backend al hacer login o registro
+interface AuthApiResponse {
+  bearerToken: string;
+  expiresIn: string;
+  user: {
+    userResourceId: string;
+    name: string;
+    email: string;
+    roles: string[];
+  };
+}
+
+// Convierte la respuesta del backend al tipo User del frontend
+function mapAuthResponse(data: AuthApiResponse): User {
+  return {
+    userResourceId: data.user.userResourceId,
+    name: data.user.name,
+    email: data.user.email,
+    roles: data.user.roles,
+    token: data.bearerToken,
+  };
+}
+
 // Función auxiliar para extraer el mensaje de error de una respuesta de la API
 async function parseErrorMessage(response: Response): Promise<string> {
   const contentType = response.headers.get("content-type") || "";
   try {
-    // Si la respuesta es JSON, intenta extraer el mensaje
     if (contentType.includes("application/json")) {
       const data = await response.json();
       return typeof data === "string"
         ? data
         : data.message || data.title || JSON.stringify(data);
     } else {
-      // Si no es JSON, devuelve el texto plano
       return await response.text();
     }
   } catch {
-    // Si ocurre un error inesperado al leer la respuesta
     return "Error desconocido del servidor";
+  }
+}
+
+// Devuelve la cabecera de autorización con el token JWT almacenado
+export function getAuthHeader(): Record<string, string> {
+  const user = localStorage.getItem("user");
+  if (!user) return {};
+  try {
+    const parsed: User = JSON.parse(user);
+    return parsed.token ? { Authorization: `Bearer ${parsed.token}` } : {};
+  } catch {
+    return {};
   }
 }
 
@@ -26,22 +58,19 @@ export const loginUser = async (loginData: {
   email: string;
   password: string;
 }): Promise<User> => {
-  // Hace una petición POST al endpoint de login
-  const response = await fetch(`${config.api.url}/api/users/login`, {
+  const response = await fetch(`${config.api.url}/api/authorization/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
-    credentials: "include",
   });
 
-  // Si la petición falla, extrae y lanza el error
   if (!response.ok) {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al iniciar sesión");
   }
 
-  // Si es exitosa, devuelve los datos del usuario
-  return response.json() as Promise<User>;
+  const data: AuthApiResponse = await response.json();
+  return mapAuthResponse(data);
 };
 
 // Función para registrar un nuevo usuario
@@ -50,12 +79,10 @@ export const registerUser = async (signUpData: {
   email: string;
   password: string;
 }): Promise<User> => {
-  // Hace una petición POST al endpoint de registro
-  const response = await fetch(`${config.api.url}/api/users/register`, {
+  const response = await fetch(`${config.api.url}/api/authorization/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(signUpData),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -63,7 +90,8 @@ export const registerUser = async (signUpData: {
     throw new Error(message || "Error al registrarse");
   }
 
-  return response.json() as Promise<User>;
+  const data: AuthApiResponse = await response.json();
+  return mapAuthResponse(data);
 };
 
 // Función para actualizar los datos de un usuario
@@ -76,12 +104,13 @@ export const updateUser = async (
     newPassword?: string;
   },
 ): Promise<User> => {
-  // Hace una petición PUT al endpoint de actualización
   const response = await fetch(`${config.api.url}/api/users/${resourceId}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
+    },
     body: JSON.stringify(updateData),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -89,7 +118,19 @@ export const updateUser = async (
     throw new Error(message || "Error al actualizar la información");
   }
 
-  return response.json() as Promise<User>;
+  const updatedUser = await response.json();
+
+  // Conserva el token actual del usuario en el resultado actualizado
+  const currentUser = localStorage.getItem("user");
+  const token = currentUser ? JSON.parse(currentUser).token : "";
+
+  return {
+    userResourceId: updatedUser.userResourceId,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    roles: updatedUser.roles ?? [],
+    token,
+  };
 };
 
 // Función para eliminar la cuenta de un usuario
@@ -97,12 +138,13 @@ export const deleteUser = async (
   resourceId: string,
   password: string,
 ): Promise<void> => {
-  // Hace una petición DELETE para borrar la cuenta
   const response = await fetch(`${config.api.url}/api/users/${resourceId}`, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
+    },
     body: JSON.stringify({ password }),
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -111,11 +153,7 @@ export const deleteUser = async (
   }
 };
 
-// Función para cerrar sesión
-export const logoutUser = async (): Promise<void> => {
-  // Hace una petición POST para invalidar la sesión en el servidor
-  await fetch(`${config.api.url}/api/users/logout`, {
-    method: "POST",
-    credentials: "include",
-  });
+// Cierra sesión localmente (el token JWT es stateless; no hay endpoint de logout en el backend)
+export const logoutUser = (): void => {
+  localStorage.removeItem("user");
 };

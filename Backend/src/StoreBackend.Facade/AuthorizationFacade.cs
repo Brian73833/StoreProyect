@@ -41,7 +41,7 @@ public class AuthorizationFacade : IAuthorizationFacade
         {
             BearerToken = token,
             ExpiresIn = DateTime.UtcNow.AddMinutes(expirationMinutes),
-            UserDto = UserMapper.ToDto(user)
+            User = UserMapper.ToDto(user)
         };
     }
 

@@ -10,7 +10,7 @@ import DeleteAccountForm from "../components/DeleteAccountForm";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { user, login, logout } = useAuth();
+  const { user, login, logout, isAdmin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -199,7 +199,7 @@ export default function Profile() {
                 <span className="material-symbols-outlined text-lg">mail</span>
                 <p className="font-medium text-sm md:text-base">{user.email}</p>
               </div>
-              {user.isAdmin && (
+              {isAdmin && (
                 <div className="inline-flex items-center gap-1.5 mt-4 px-4 py-1.5 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em] backdrop-blur-sm border border-white/30">
                   <span className="material-symbols-outlined text-xs">
                     verified_user

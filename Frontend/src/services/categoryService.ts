@@ -1,5 +1,6 @@
 import type { Category } from "../models/responses/Category";
 import { config } from "../config";
+import { getAuthHeader } from "./authService";
 
 // Función para obtener la lista de todas las categorías
 export async function getCategories(): Promise<Category[]> {
@@ -20,9 +21,9 @@ export async function addCategory(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getAuthHeader(),
     },
     body: JSON.stringify(category),
-    credentials: "include", // Incluye las cookies de sesión
   });
 
   if (!response.ok) {

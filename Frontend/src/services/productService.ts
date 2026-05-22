@@ -1,5 +1,6 @@
 import type { Product } from "../models/responses/Product";
 import { config } from "../config";
+import { getAuthHeader } from "./authService";
 
 export const getImageUrl = (path: string | null | undefined) => {
   // Si no hay imagen, devuelve una por defecto
@@ -37,8 +38,8 @@ export async function addProduct(product: FormData): Promise<Product> {
   // Petición POST para crear un producto
   const response = await fetch(`${config.api.url}/api/products`, {
     method: "POST",
+    headers: { ...getAuthHeader() },
     body: product,
-    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to add product");
@@ -51,7 +52,7 @@ export async function deleteProduct(id: string): Promise<void> {
   // Petición DELETE para borrar el producto
   const response = await fetch(`${config.api.url}/api/products/${id}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: { ...getAuthHeader() },
   });
   if (!response.ok) {
     throw new Error("Failed to delete product");

@@ -9,11 +9,9 @@ import { ICON_STYLE } from "../lib/utils";
 
 // Componente principal de la página de productos
 const Products: React.FC = () => {
-  // Obtiene los datos del usuario logueado
-  const { user } = useAuth();
+  // Verifica si el usuario actual es administrador
+  const { isAdmin } = useAuth();
   const navigate = useNavigate();
-  // Verifica si el usuario tiene rol de administrador
-  const isAdmin = user?.isAdmin || false;
 
   // Usa el hook personalizado para cargar los productos y categorías desde la API
   const { products, categories, loading, error, addProduct, addCategory } =

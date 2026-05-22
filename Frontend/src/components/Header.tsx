@@ -21,9 +21,9 @@ const Header: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await logoutUser();
+      logoutUser();
     } catch (err) {
       console.error("Error logging out:", err);
     }

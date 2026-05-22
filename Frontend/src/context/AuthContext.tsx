@@ -13,6 +13,7 @@ interface AuthContextType {
   login: (user: User) => void;
   logout: () => void;
   isLoggedIn: boolean;
+  isAdmin: boolean;
   isLoading: boolean;
 }
 
@@ -58,10 +59,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // Verifica si el usuario ha iniciado sesión
   const isLoggedIn = !!user;
 
+  // Verifica si el usuario tiene rol de administrador
+  const isAdmin = user?.roles?.includes("Administrator") ?? false;
+
   return (
     // Comparte los datos y funciones con el resto de la aplicación
     <AuthContext.Provider
-      value={{ user, login, logout, isLoggedIn, isLoading }}
+      value={{ user, login, logout, isLoggedIn, isAdmin, isLoading }}
     >
       {children}
     </AuthContext.Provider>

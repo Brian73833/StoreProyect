@@ -35,8 +35,7 @@ const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   // Verifica si el usuario actual es administrador
-  const { user } = useAuth();
-  const isAdmin = user?.isAdmin;
+  const { isAdmin } = useAuth();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
