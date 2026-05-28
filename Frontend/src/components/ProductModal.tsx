@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import type { Category } from "../models/responses/Category";
 import type { Product } from "../models/responses/Product";
-import { addProduct } from "../services/productService";interface ProductModalProps {
+import { addProduct } from "../services/productService";
+
+interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   categories: Category[];
@@ -19,29 +21,36 @@ const ProductModal: React.FC<ProductModalProps> = ({
     description: "",
     price: 0,
     stock: 0,
-    categoryResourceId: categories.length > 0 ? categories[0].categoryResourceId : "",
+    categoryResourceId:
+      categories.length > 0 ? categories[0].categoryResourceId : "",
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);  useEffect(() => {
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
     if (categories.length > 0) {
       setFormData((prev) => ({
         ...prev,
         categoryResourceId:
-          prev.categoryResourceId === "" ? categories[0].categoryResourceId : prev.categoryResourceId,
+          prev.categoryResourceId === ""
+            ? categories[0].categoryResourceId
+            : prev.categoryResourceId,
       }));
     }
-  }, [categories]);  const resetForm = () => {
+  }, [categories]);
+  const resetForm = () => {
     setFormData({
       name: "",
       description: "",
       price: 0,
       stock: 0,
-      categoryResourceId: categories.length > 0 ? categories[0].categoryResourceId : "",
+      categoryResourceId:
+        categories.length > 0 ? categories[0].categoryResourceId : "",
     });
     setImageFile(null);
     setError(null);
-  };  useEffect(() => {
+  };
+  useEffect(() => {
     if (isOpen) {
       resetForm();
     }
@@ -55,10 +64,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        name === "price" || name === "stock"
-          ? Number(value)
-          : value,
+      [name]: name === "price" || name === "stock" ? Number(value) : value,
     }));
   };
 
@@ -257,7 +263,10 @@ const ProductModal: React.FC<ProductModalProps> = ({
                 className="w-full px-4 py-3 bg-stone-50 border-2 border-stone-100 rounded-xl focus:bg-white focus:border-primary outline-none transition-all"
               >
                 {categories.map((cat) => (
-                  <option key={cat.categoryResourceId} value={cat.categoryResourceId}>
+                  <option
+                    key={cat.categoryResourceId}
+                    value={cat.categoryResourceId}
+                  >
                     {cat.name}
                   </option>
                 ))}

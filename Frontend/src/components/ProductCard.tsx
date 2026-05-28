@@ -9,7 +9,11 @@ interface ProductCardProps {
   onEdit?: () => void;
   onDelete?: () => void;
 }
-const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onEdit,
+  onDelete,
+}) => {
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
 
@@ -71,7 +75,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
                   progress_activity
                 </span>
               ) : (
-                <span className="material-symbols-outlined text-base">delete</span>
+                <span className="material-symbols-outlined text-base">
+                  delete
+                </span>
               )}
               {deleting ? "..." : "Eliminar"}
             </button>

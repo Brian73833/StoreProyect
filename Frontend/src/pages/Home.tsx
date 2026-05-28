@@ -2,7 +2,9 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ICON_STYLE } from "../lib/utils";
-import { IMG_HOME_CATALOG, IMG_HOME_TERRA } from "../lib/constants";interface StatItemProps {
+import { IMG_HOME_CATALOG, IMG_HOME_TERRA } from "../lib/constants";
+
+interface StatItemProps {
   label: string;
   value: string;
   last?: boolean;
@@ -17,12 +19,15 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
     </p>
     <p className="font-headline-md text-2xl font-semibold">{value}</p>
   </div>
-);const Home: React.FC = () => {
-  const navigate = useNavigate();  const { user } = useAuth();
+);
+const Home: React.FC = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const userName = user?.name;
 
   return (
-    <main className="min-h-screen bg-background text-on-background font-body-md">      <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20 bg-surface-container-low border-b border-slate-300">
+    <main className="min-h-screen bg-background text-on-background font-body-md">
+      <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20 bg-surface-container-low border-b border-slate-300">
         <div className="max-w-7xl mx-auto">
           <p className="font-label-caps text-xs text-primary mb-3 uppercase tracking-widest">
             CLIENT PORTAL
@@ -35,7 +40,8 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
             ongoing projects, browse technical specifications, and manage your
             inventory with precision.
           </p>
-          <div className="flex flex-wrap gap-4 sm:gap-6">            <button
+          <div className="flex flex-wrap gap-4 sm:gap-6">
+            <button
               onClick={() => navigate("/products")}
               className="bg-primary text-on-primary px-8 sm:px-12 py-3 font-label-caps text-xs uppercase tracking-widest
                          active:translate-y-0.5 transition-transform"
@@ -50,13 +56,15 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
             </button>
           </div>
         </div>
-      </section>      <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20">
+      </section>
+      <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20">
         <div className="max-w-7xl mx-auto">
           <h3 className="font-label-caps text-xs text-secondary mb-8 sm:mb-12 uppercase tracking-widest">
             QUICK NAVIGATION
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">            <div className="md:col-span-8 bg-stone-100 border border-slate-300 border-b-[4px] border-b-stone-800 p-6 sm:p-10 md:p-12 flex flex-col justify-between min-h-[280px] sm:min-h-[340px] md:min-h-[400px] relative overflow-hidden group">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div className="md:col-span-8 bg-stone-100 border border-slate-300 border-b-[4px] border-b-stone-800 p-6 sm:p-10 md:p-12 flex flex-col justify-between min-h-[280px] sm:min-h-[340px] md:min-h-[400px] relative overflow-hidden group">
               <img
                 alt="Premium terracotta bricks"
                 className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity"
@@ -93,7 +101,8 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
                   arrow_forward
                 </span>
               </Link>
-            </div>            <div className="md:col-span-4 bg-tertiary-fixed border border-slate-300 border-b-[4px] border-b-tertiary p-6 sm:p-10 md:p-12 flex flex-col justify-between">
+            </div>
+            <div className="md:col-span-4 bg-tertiary-fixed border border-slate-300 border-b-[4px] border-b-tertiary p-6 sm:p-10 md:p-12 flex flex-col justify-between">
               <div>
                 <span
                   className="material-symbols-outlined text-4xl text-tertiary mb-2 block"
@@ -115,7 +124,8 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
               >
                 Request Call
               </button>
-            </div>            <div className="md:col-span-4 bg-surface-container-high border border-slate-300 border-b-[4px] border-b-slate-500 p-6 sm:p-10 md:p-12 flex flex-col justify-between">
+            </div>
+            <div className="md:col-span-4 bg-surface-container-high border border-slate-300 border-b-[4px] border-b-slate-500 p-6 sm:p-10 md:p-12 flex flex-col justify-between">
               <div>
                 <span
                   className="material-symbols-outlined text-4xl text-secondary mb-2 block"
@@ -137,7 +147,8 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
               >
                 OPEN PROFILE
               </Link>
-            </div>            <div className="md:col-span-8 bg-stone-900 text-stone-100 p-6 sm:p-10 md:p-12 border-b-[4px] border-b-orange-800">
+            </div>
+            <div className="md:col-span-8 bg-stone-900 text-stone-100 p-6 sm:p-10 md:p-12 border-b-[4px] border-b-orange-800">
               <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
                 <div className="flex-1">
                   <h4 className="font-headline-lg text-xl sm:text-2xl md:text-3xl font-semibold mb-3">
@@ -166,7 +177,8 @@ const StatItem: React.FC<StatItemProps> = ({ label, value, last = false }) => (
             </div>
           </div>
         </div>
-      </section>      <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20 bg-stone-50 border-t-2 border-slate-200">
+      </section>
+      <section className="px-4 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20 bg-stone-50 border-t-2 border-slate-200">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8 sm:mb-12">
             <div>

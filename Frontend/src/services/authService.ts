@@ -1,5 +1,7 @@
 import type { User } from "../models/responses/User";
-import { config } from "../config";interface AuthApiResponse {
+import { config } from "../config";
+
+interface AuthApiResponse {
   bearerToken: string;
   expiresIn: string;
   user: {
@@ -8,7 +10,9 @@ import { config } from "../config";interface AuthApiResponse {
     email: string;
     roles: string[];
   };
-}function mapAuthResponse(data: AuthApiResponse): User {
+}
+
+function mapAuthResponse(data: AuthApiResponse): User {
   return {
     userResourceId: data.user.userResourceId,
     name: data.user.name,
@@ -16,18 +20,25 @@ import { config } from "../config";interface AuthApiResponse {
     roles: data.user.roles,
     token: data.bearerToken,
   };
-}async function parseErrorMessage(response: Response): Promise<string> {
+}
+
+async function parseErrorMessage(response: Response): Promise<string> {
   const contentType = response.headers.get("content-type") || "";
-  try {    if (contentType.includes("application/json")) {
+  try {
+    if (contentType.includes("application/json")) {
       const data = await response.json();
       return typeof data === "string"
         ? data
         : data.message || data.title || JSON.stringify(data);
-    } else {      return await response.text();
+    } else {
+      return await response.text();
     }
-  } catch {    return "Error desconocido del servidor";
+  } catch {
+    return "Error desconocido del servidor";
   }
-}export function getAuthHeader(): Record<string, string> {
+}
+
+export function getAuthHeader(): Record<string, string> {
   const user = localStorage.getItem("user");
   if (!user) return {};
   try {
@@ -36,7 +47,9 @@ import { config } from "../config";interface AuthApiResponse {
   } catch {
     return {};
   }
-}export const loginUser = async (loginData: {
+}
+
+export const loginUser = async (loginData: {
   email: string;
   password: string;
 }): Promise<User> => {
@@ -45,14 +58,17 @@ import { config } from "../config";interface AuthApiResponse {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
     credentials: "include",
-  });  if (!response.ok) {
+  });
+  if (!response.ok) {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al iniciar sesión");
   }
 
   const data: AuthApiResponse = await response.json();
   return mapAuthResponse(data);
-};export const registerUser = async (signUpData: {
+};
+
+export const registerUser = async (signUpData: {
   name: string;
   email: string;
   password: string;
@@ -71,7 +87,9 @@ import { config } from "../config";interface AuthApiResponse {
 
   const data: AuthApiResponse = await response.json();
   return mapAuthResponse(data);
-};export const updateUser = async (
+};
+
+export const updateUser = async (
   resourceId: string,
   updateData: {
     name: string;
@@ -95,7 +113,8 @@ import { config } from "../config";interface AuthApiResponse {
     throw new Error(message || "Error al actualizar la información");
   }
 
-  const updatedUser = await response.json();  const currentUser = localStorage.getItem("user");
+  const updatedUser = await response.json();
+  const currentUser = localStorage.getItem("user");
   const token = currentUser ? JSON.parse(currentUser).token : "";
 
   return {
@@ -105,7 +124,9 @@ import { config } from "../config";interface AuthApiResponse {
     roles: updatedUser.roles ?? [],
     token,
   };
-};export const deleteUser = async (
+};
+
+export const deleteUser = async (
   resourceId: string,
   password: string,
 ): Promise<void> => {
@@ -123,6 +144,7 @@ import { config } from "../config";interface AuthApiResponse {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al eliminar la cuenta");
   }
-};export const logoutUser = (): void => {
+};
+export const logoutUser = (): void => {
   localStorage.removeItem("user");
 };

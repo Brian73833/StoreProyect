@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import type { Product } from "../models/responses/Product";
-import type { Category } from "../models/responses/Category"; 
+import type { Category } from "../models/responses/Category";
 import { getProducts } from "../services/productService";
-import { getCategories } from "../services/categoryService";interface UseProductsResult {
+import { getCategories } from "../services/categoryService";
+
+interface UseProductsResult {
   products: Product[];
   categories: Category[];
   loading: boolean;
@@ -11,17 +13,22 @@ import { getCategories } from "../services/categoryService";interface UseProduc
   addCategory: (category: Category) => void;
   updateProduct: (product: Product) => void;
   removeProduct: (productResourceId: string) => void;
-}export function useProducts(): UseProductsResult {
+}
+
+export function useProducts(): UseProductsResult {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);  useEffect(() => {
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);        const [productsData, categoriesData] = await Promise.all([
+        setLoading(true);
+        const [productsData, categoriesData] = await Promise.all([
           getProducts(),
           getCategories(),
-        ]);        setProducts(productsData);
+        ]);
+        setProducts(productsData);
         setCategories(categoriesData);
         setError(null);
       } catch (err) {
@@ -33,15 +40,32 @@ import { getCategories } from "../services/categoryService";interface UseProduc
     };
 
     fetchData();
-  }, []);  const addProduct = (product: Product) =>
-    setProducts((prev) => [product, ...prev]);  const addCategory = (category: Category) =>
-    setCategories((prev) => [...prev, category]);  const updateProduct = (product: Product) =>
+  }, []);
+
+  const addProduct = (product: Product) =>
+    setProducts((prev) => [product, ...prev]);
+  const addCategory = (category: Category) =>
+    setCategories((prev) => [...prev, category]);
+  const updateProduct = (product: Product) =>
     setProducts((prev) =>
       prev.map((p) =>
-        p.productResourceId === product.productResourceId ? product : p
-      )
-    );  const removeProduct = (productResourceId: string) =>
+        p.productResourceId === product.productResourceId ? product : p,
+      ),
+    );
+
+  const removeProduct = (productResourceId: string) =>
     setProducts((prev) =>
-      prev.filter((p) => p.productResourceId !== productResourceId)
-    );  return { products, categories, loading, error, addProduct, addCategory, updateProduct, removeProduct };
+      prev.filter((p) => p.productResourceId !== productResourceId),
+    );
+
+  return {
+    products,
+    categories,
+    loading,
+    error,
+    addProduct,
+    addCategory,
+    updateProduct,
+    removeProduct,
+  };
 }

@@ -6,6 +6,7 @@ import React, {
   type ReactNode,
 } from "react";
 import type { User } from "../models/responses/User";
+
 interface AuthContextType {
   user: User | null;
   login: (user: User) => void;
@@ -14,7 +15,9 @@ interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
 }
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -32,14 +35,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
     setIsLoading(false);
   }, []);
+
   const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
   };
+
   const isLoggedIn = !!user;
   const isAdmin = user?.roles?.includes("Administrator") ?? false;
 
@@ -51,6 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     </AuthContext.Provider>
   );
 };
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
