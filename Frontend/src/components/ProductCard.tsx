@@ -9,17 +9,13 @@ interface ProductCardProps {
   onEdit?: () => void;
   onDelete?: () => void;
 }
-
-// Componente para mostrar la información básica de un producto en formato de tarjeta
 const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) => {
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
 
   const isAdmin = !!onEdit;
-
-  // Maneja el borrado del producto: llama a la API y luego actualiza la lista local
   const handleDelete = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // evita navegar al detalle
+    e.stopPropagation();
     try {
       setDeleting(true);
       await deleteProduct(product.productResourceId);
@@ -32,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
   };
 
   const handleEdit = (e: React.MouseEvent) => {
-    e.stopPropagation(); // evita navegar al detalle
+    e.stopPropagation();
     onEdit?.();
   };
 
@@ -54,8 +50,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
         >
           {product.stock > 0 ? "Stock" : "Sin Stock"}
         </div>
-
-        {/* Botones de admin — aparecen al hacer hover sobre la card */}
         {isAdmin && (
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-end justify-center pb-4 gap-2 opacity-0 group-hover:opacity-100">
             <button

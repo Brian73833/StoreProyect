@@ -16,10 +16,7 @@ public class AuthorizationController(IUserFacade userFacade, IAuthorizationFacad
     [HttpPost("login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginRequestModel loginRequestModel)
     {
-        var loginDto = UserMapper.ToDto(loginRequestModel);
-        
-        // This will validate the user and generate a JWT token directly
-        var result = await authorizationFacade.AuthorizeAsync(loginDto).ConfigureAwait(false);
+        var loginDto = UserMapper.ToDto(loginRequestModel);        var result = await authorizationFacade.AuthorizeAsync(loginDto).ConfigureAwait(false);
 
         return Ok(new AuthorizationResponse
         {
@@ -34,10 +31,7 @@ public class AuthorizationController(IUserFacade userFacade, IAuthorizationFacad
     public async Task<IActionResult> RegisterAsync([FromBody] CreateUserRequestModel createUserRequestModel)
     {
         var createUserDto = UserMapper.ToDto(createUserRequestModel);
-        var userDto = await userFacade.CreateAsync(createUserDto);
-
-        // Generate token and authorize the new user immediately
-        var loginDto = new LoginUserDto
+        var userDto = await userFacade.CreateAsync(createUserDto);        var loginDto = new LoginUserDto
         {
             Email = userDto.Email,
             Password = createUserRequestModel.Password

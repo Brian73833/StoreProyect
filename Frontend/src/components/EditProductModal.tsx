@@ -3,7 +3,6 @@ import type { Category } from "../models/responses/Category";
 import type { Product } from "../models/responses/Product";
 import { updateProduct, getImageUrl } from "../services/productService";
 
-// Componente para la ventana emergente de edición de producto
 interface EditProductModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -30,10 +29,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Precarga los datos del producto cuando el modal se abre
   useEffect(() => {
     if (isOpen && product) {
-      // Busca la categoría que coincide con el nombre del producto para obtener su resourceId
       const matchedCategory = categories.find(
         (cat) => cat.name === product.categoryName
       );
@@ -86,7 +83,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
       data.append("stock", formData.stock.toString());
       data.append("categoryResourceId", formData.categoryResourceId);
       if (imageFile) {
-        // Si hay nueva imagen, el backend borrará la anterior y guardará ésta
         data.append("imageFile", imageFile);
       }
 

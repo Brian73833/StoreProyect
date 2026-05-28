@@ -131,10 +131,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             <p className="text-xs font-semibold ml-1" style={{ color: passwordStrength.color }}>{passwordStrength.label}</p>
           </div>
         )}
-        <FieldError message={errors.password} />
-
-        {/* Sugerencias de requisitos de la contraseña */}
-        {!errors.password && (
+        <FieldError message={errors.password} />        {!errors.password && (
           <ul className="mt-2 space-y-0.5 ml-1">
             {[
               { regex: /.{8,}/, text: "Mínimo 8 caracteres" },

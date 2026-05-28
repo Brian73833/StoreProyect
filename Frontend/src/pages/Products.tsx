@@ -7,16 +7,8 @@ import ProductCard from "../components/ProductCard";
 import { useAuth } from "../context/AuthContext";
 import { useProducts } from "../hooks/useProducts";
 import { ICON_STYLE } from "../lib/utils";
-import type { Product } from "../models/responses/Product";
-
-// Componente principal de la página de productos
-const Products: React.FC = () => {
-  // Verifica si el usuario actual es administrador
-  const { isAdmin } = useAuth();
-  const navigate = useNavigate();
-
-  // Usa el hook personalizado para cargar los productos y categorías desde la API
-  const {
+import type { Product } from "../models/responses/Product";const Products: React.FC = () => {  const { isAdmin } = useAuth();
+  const navigate = useNavigate();  const {
     products,
     categories,
     loading,
@@ -25,43 +17,23 @@ const Products: React.FC = () => {
     addCategory,
     updateProduct,
     removeProduct,
-  } = useProducts();
-
-  // Estados locales para la búsqueda y los filtros
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-
-  // Estados para controlar cuándo se muestran las ventanas emergentes
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-
-  // Estado para el modal de edición
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
-
-  // Abre el modal de edición con el producto seleccionado
-  const handleEditProduct = (product: Product) => {
+  } = useProducts();  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null);  const handleEditProduct = (product: Product) => {
     setProductToEdit(product);
     setIsEditModalOpen(true);
-  };
-
-  // Filtra la lista de productos según el texto de búsqueda y la categoría seleccionada
-  const filtered = products.filter((p) => {
+  };  const filtered = products.filter((p) => {
     const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory =
       selectedCategory === "" || p.categoryName === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
-
-  // Lista de categorías únicas presentes en los productos para el filtro
-  const uniqueCategoryNames = Array.from(
+  });  const uniqueCategoryNames = Array.from(
     new Set(products.map((p) => p.categoryName).filter(Boolean))
   );
 
   return (
-    <main className="pt-8 pb-16 sm:pb-20 px-4 sm:px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface font-body-md">
-      {/* Botón para regresar a la página de inicio */}
-      <div className="mb-6">
+    <main className="pt-8 pb-16 sm:pb-20 px-4 sm:px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface font-body-md">      <div className="mb-6">
         <button
           onClick={() => navigate("/")}
           className="inline-flex items-center gap-2 text-secondary hover:text-primary font-semibold transition-colors duration-200 group"
@@ -71,10 +43,7 @@ const Products: React.FC = () => {
           </span>
           Volver al inicio
         </button>
-      </div>
-
-      {/* Si el usuario es administrador, muestra los botones para agregar */}
-      {isAdmin && (
+      </div>      {isAdmin && (
         <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
           <button
             onClick={() => setIsCategoryModalOpen(true)}
@@ -91,10 +60,7 @@ const Products: React.FC = () => {
             Añadir Producto
           </button>
         </div>
-      )}
-
-      {/* Modales para agregar información */}
-      <ProductModal
+      )}      <ProductModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         categories={categories}
@@ -116,13 +82,8 @@ const Products: React.FC = () => {
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}
         onCategoryAdded={addCategory}
-      />
-
-      {/* Sección de búsqueda y filtros */}
-      <section className="mb-12 space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-          {/* Campo de búsqueda por texto */}
-          <div className="w-full md:w-1/2 space-y-3">
+      />      <section className="mb-12 space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-end gap-6">          <div className="w-full md:w-1/2 space-y-3">
             <label className="font-label-caps text-xs text-secondary block uppercase tracking-widest">
               Buscar producto
             </label>
@@ -141,10 +102,7 @@ const Products: React.FC = () => {
                 search
               </span>
             </div>
-          </div>
-
-          {/* Selector de categoría */}
-          <div className="w-full md:w-64 space-y-3">
+          </div>          <div className="w-full md:w-64 space-y-3">
             <label className="font-label-caps text-xs text-secondary block uppercase tracking-widest">
               Categoría
             </label>
@@ -161,30 +119,18 @@ const Products: React.FC = () => {
               ))}
             </select>
           </div>
-        </div>
-
-        {/* Muestra cuántos resultados se encontraron */}
-        <p className="font-body-md text-sm text-secondary">
+        </div>        <p className="font-body-md text-sm text-secondary">
           {filtered.length === products.length
             ? `${products.length} productos`
             : `${filtered.length} de ${products.length} productos`}
         </p>
-      </section>
-
-      {/* Cuadrícula donde se muestran los productos */}
-      {loading ? (
-        // Estado de carga
-        <div className="py-20 text-center text-primary font-body-md text-lg animate-pulse">
+      </section>      {loading ? (        <div className="py-20 text-center text-primary font-body-md text-lg animate-pulse">
           Cargando productos...
         </div>
-      ) : error ? (
-        // Estado de error
-        <div className="py-20 text-center text-error font-body-md text-lg">
+      ) : error ? (        <div className="py-20 text-center text-error font-body-md text-lg">
           {error}
         </div>
-      ) : filtered.length > 0 ? (
-        // Muestra las tarjetas de los productos
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      ) : filtered.length > 0 ? (        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map((p) => (
             <ProductCard
               key={p.productResourceId}
@@ -194,15 +140,10 @@ const Products: React.FC = () => {
             />
           ))}
         </div>
-      ) : (
-        // Mensaje si no hay resultados
-        <div className="py-20 text-center text-secondary font-body-md text-lg">
+      ) : (        <div className="py-20 text-center text-secondary font-body-md text-lg">
           No se encontraron productos.
         </div>
-      )}
-
-      {/* Sección informativa al final de la página */}
-      <section className="mt-16 sm:mt-20 pt-10 sm:pt-12 border-t-2 border-slate-400">
+      )}      <section className="mt-16 sm:mt-20 pt-10 sm:pt-12 border-t-2 border-slate-400">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div className="space-y-4 sm:space-y-6">
             <span className="font-label-caps text-xs text-primary uppercase tracking-widest block">

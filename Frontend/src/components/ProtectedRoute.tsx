@@ -1,8 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-
-// Componente para proteger rutas que requieren autenticación
-const ProtectedRoute = () => {
+import { useAuth } from "../context/AuthContext";const ProtectedRoute = () => {
   const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {

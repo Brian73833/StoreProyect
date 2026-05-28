@@ -1,8 +1,5 @@
 import type { User } from "../models/responses/User";
-import { config } from "../config";
-
-// Tipo que representa la respuesta cruda del backend al hacer login o registro
-interface AuthApiResponse {
+import { config } from "../config";interface AuthApiResponse {
   bearerToken: string;
   expiresIn: string;
   user: {
@@ -11,10 +8,7 @@ interface AuthApiResponse {
     email: string;
     roles: string[];
   };
-}
-
-// Convierte la respuesta del backend al tipo User del frontend
-function mapAuthResponse(data: AuthApiResponse): User {
+}function mapAuthResponse(data: AuthApiResponse): User {
   return {
     userResourceId: data.user.userResourceId,
     name: data.user.name,
@@ -22,30 +16,18 @@ function mapAuthResponse(data: AuthApiResponse): User {
     roles: data.user.roles,
     token: data.bearerToken,
   };
-}
-
-// Función auxiliar para extraer el mensaje de error de una respuesta de la API
-async function parseErrorMessage(response: Response): Promise<string> {
+}async function parseErrorMessage(response: Response): Promise<string> {
   const contentType = response.headers.get("content-type") || "";
-  try {
-    // Si la respuesta es JSON, intenta extraer el mensaje
-    if (contentType.includes("application/json")) {
+  try {    if (contentType.includes("application/json")) {
       const data = await response.json();
       return typeof data === "string"
         ? data
         : data.message || data.title || JSON.stringify(data);
-    } else {
-      // Si no es JSON, devuelve el texto plano
-      return await response.text();
+    } else {      return await response.text();
     }
-  } catch {
-    // Si ocurre un error inesperado al leer la respuesta
-    return "Error desconocido del servidor";
+  } catch {    return "Error desconocido del servidor";
   }
-}
-
-// Devuelve la cabecera de autorización con el token JWT almacenado
-export function getAuthHeader(): Record<string, string> {
+}export function getAuthHeader(): Record<string, string> {
   const user = localStorage.getItem("user");
   if (!user) return {};
   try {
@@ -54,10 +36,7 @@ export function getAuthHeader(): Record<string, string> {
   } catch {
     return {};
   }
-}
-
-// Función para iniciar sesión con email y contraseña
-export const loginUser = async (loginData: {
+}export const loginUser = async (loginData: {
   email: string;
   password: string;
 }): Promise<User> => {
@@ -66,20 +45,14 @@ export const loginUser = async (loginData: {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(loginData),
     credentials: "include",
-  });
-
-  // Si la petición falla, extrae y lanza el error
-  if (!response.ok) {
+  });  if (!response.ok) {
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al iniciar sesión");
   }
 
   const data: AuthApiResponse = await response.json();
   return mapAuthResponse(data);
-};
-
-// Función para registrar un nuevo usuario
-export const registerUser = async (signUpData: {
+};export const registerUser = async (signUpData: {
   name: string;
   email: string;
   password: string;
@@ -98,10 +71,7 @@ export const registerUser = async (signUpData: {
 
   const data: AuthApiResponse = await response.json();
   return mapAuthResponse(data);
-};
-
-// Función para actualizar los datos de un usuario
-export const updateUser = async (
+};export const updateUser = async (
   resourceId: string,
   updateData: {
     name: string;
@@ -125,10 +95,7 @@ export const updateUser = async (
     throw new Error(message || "Error al actualizar la información");
   }
 
-  const updatedUser = await response.json();
-
-  // Conserva el token actual del usuario en el resultado actualizado
-  const currentUser = localStorage.getItem("user");
+  const updatedUser = await response.json();  const currentUser = localStorage.getItem("user");
   const token = currentUser ? JSON.parse(currentUser).token : "";
 
   return {
@@ -138,10 +105,7 @@ export const updateUser = async (
     roles: updatedUser.roles ?? [],
     token,
   };
-};
-
-// Función para eliminar la cuenta de un usuario
-export const deleteUser = async (
+};export const deleteUser = async (
   resourceId: string,
   password: string,
 ): Promise<void> => {
@@ -159,9 +123,6 @@ export const deleteUser = async (
     const message = await parseErrorMessage(response);
     throw new Error(message || "Error al eliminar la cuenta");
   }
-};
-
-// Cierra sesión localmente (el token JWT es stateless; no hay endpoint de logout en el backend)
-export const logoutUser = (): void => {
+};export const logoutUser = (): void => {
   localStorage.removeItem("user");
 };

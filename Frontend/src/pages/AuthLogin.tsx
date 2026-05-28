@@ -21,9 +21,7 @@ const AuthLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-[#FDFCFB]">
-      {/* Sección de presentación visual */}
-      <div className="hidden lg:block lg:w-1/2 relative h-screen sticky top-0 overflow-hidden">
+    <div className="min-h-screen w-full flex bg-[#FDFCFB]">      <div className="hidden lg:block lg:w-1/2 relative h-screen sticky top-0 overflow-hidden">
         <img
           src={authHero}
           alt="Auth Hero"
@@ -51,13 +49,8 @@ const AuthLogin: React.FC = () => {
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Sección del formulario */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:p-16 bg-white overflow-y-auto min-h-screen">
-        <div className="w-full max-w-[480px]">
-          {/* Botón para volver */}
-          <button
+      </div>      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:p-16 bg-white overflow-y-auto min-h-screen">
+        <div className="w-full max-w-[480px]">          <button
             onClick={() => navigate("/welcome")}
             className="flex items-center gap-2 text-stone-500 hover:text-[#E2725B] transition-colors mb-8 group"
           >
@@ -67,10 +60,7 @@ const AuthLogin: React.FC = () => {
             <span className="font-bold text-sm uppercase tracking-widest">
               Volver
             </span>
-          </button>
-
-          {/* Logo en versión móvil */}
-          <div className="flex lg:hidden items-center gap-2 mb-12">
+          </button>          <div className="flex lg:hidden items-center gap-2 mb-12">
             <div className="w-10 h-10 bg-[#E2725B] rounded-xl flex items-center justify-center shadow-lg">
               <span className="material-symbols-outlined text-white">
                 storefront
@@ -79,10 +69,7 @@ const AuthLogin: React.FC = () => {
             <span className="text-xl font-extrabold tracking-tight uppercase text-stone-800">
               Store
             </span>
-          </div>
-
-          {/* Encabezado */}
-          <div className="mb-10">
+          </div>          <div className="mb-10">
             <h2 className="text-3xl font-extrabold text-stone-900 mb-2">
               {activeTab === "login"
                 ? "¡Bienvenido de nuevo!"
@@ -93,10 +80,7 @@ const AuthLogin: React.FC = () => {
                 ? "Ingresa tus credenciales para acceder a tu cuenta."
                 : "Regístrate para comenzar tu experiencia premium."}
             </p>
-          </div>
-
-          {/* Tabs de Iniciar sesión / Registrarse */}
-          <div className="flex p-1 bg-stone-100 rounded-2xl mb-10 relative">
+          </div>          <div className="flex p-1 bg-stone-100 rounded-2xl mb-10 relative">
             <button
               onClick={() => setActiveTab("login")}
               className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 relative z-10 ${

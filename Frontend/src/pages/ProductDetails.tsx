@@ -10,10 +10,7 @@ import {
   IMG_DETAIL_GALLERY_MAIN,
   IMG_DETAIL_GALLERY_THUMB,
   IMG_DETAIL_THUMBS,
-} from "../lib/constants";
-
-// Componente para mostrar detalles técnicos en forma de lista
-interface SpecRowProps {
+} from "../lib/constants";interface SpecRowProps {
   label: string;
   value: string;
 }
@@ -25,20 +22,12 @@ const SpecRow: React.FC<SpecRowProps> = ({ label, value }) => (
     </span>
     <span className="font-body-sm text-on-surface font-medium">{value}</span>
   </div>
-);
-
-// Componente principal de la página de detalles del producto
-const ProductDetail: React.FC = () => {
-  // Obtiene el ID del producto desde la URL
-  const { id } = useParams<{ id: string }>();
+);const ProductDetail: React.FC = () => {  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeImg, setActiveImg] = useState<string>("");
-
-  // Carga los datos del producto al entrar a la página
-  useEffect(() => {
+  const [activeImg, setActiveImg] = useState<string>("");  useEffect(() => {
     if (!id) return;
 
     const fetchProduct = async () => {
@@ -57,10 +46,7 @@ const ProductDetail: React.FC = () => {
     };
 
     fetchProduct();
-  }, [id]);
-
-  // Pantalla de carga
-  if (loading) {
+  }, [id]);  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
@@ -71,10 +57,7 @@ const ProductDetail: React.FC = () => {
         </div>
       </div>
     );
-  }
-
-  // Pantalla de error si el producto no existe o falló la conexión
-  if (error || !product) {
+  }  if (error || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-6">
         <div className="text-center max-w-md">
@@ -103,9 +86,7 @@ const ProductDetail: React.FC = () => {
   }
 
   return (
-    <main className="pt-8 pb-24 px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface animate-fade-in">
-      {/* Navegación y botones para volver atrás */}
-      <nav className="mb-12 flex items-center justify-between">
+    <main className="pt-8 pb-24 px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface animate-fade-in">      <nav className="mb-12 flex items-center justify-between">
         <button
           onClick={() => navigate("/products")}
           className="flex items-center gap-2 group transition-all"
@@ -129,9 +110,7 @@ const ProductDetail: React.FC = () => {
         </div>
       </nav>
 
-      <div className="grid grid-cols-12 gap-8 lg:gap-16">
-        {/* Galería de imágenes del producto */}
-        <div className="col-span-12 lg:col-span-7 animate-slide-up">
+      <div className="grid grid-cols-12 gap-8 lg:gap-16">        <div className="col-span-12 lg:col-span-7 animate-slide-up">
           <div className="relative aspect-[4/5] bg-surface-container overflow-hidden group border border-outline-variant">
             <img
               alt={product.name}
@@ -152,10 +131,7 @@ const ProductDetail: React.FC = () => {
                 zoom_in
               </span>
             </div>
-          </div>
-
-          {/* Carrusel de miniaturas interactivo */}
-          <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
+          </div>          <div className="mt-6 flex gap-4 overflow-x-auto pb-2">
             {[getImageUrl(product.imagePath), ...IMG_DETAIL_THUMBS].map(
               (src, i) => (
                 <button
@@ -175,10 +151,7 @@ const ProductDetail: React.FC = () => {
               ),
             )}
           </div>
-        </div>
-
-        {/* Información y características del producto */}
-        <div
+        </div>        <div
           className="col-span-12 lg:col-span-5 flex flex-col pt-4 animate-slide-up"
           style={{ animationDelay: "0.1s" }}
         >
@@ -200,10 +173,7 @@ const ProductDetail: React.FC = () => {
               Exclusive architectural material designed for high-performance
               facades and modern structures.
             </p>
-          </div>
-
-          {/* Caja con precios y disponibilidad de stock */}
-          <div className="bg-surface-container-low border border-outline-variant p-8 mb-10 relative overflow-hidden">
+          </div>          <div className="bg-surface-container-low border border-outline-variant p-8 mb-10 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
 
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
@@ -237,10 +207,7 @@ const ProductDetail: React.FC = () => {
               Add to Specifications
             </button>
 
-          </div>
-
-          {/* Especificaciones técnicas de fábrica */}
-          <div className="space-y-8">
+          </div>          <div className="space-y-8">
             <div>
               <h3 className="font-label-caps text-xs text-on-surface font-bold mb-4 uppercase tracking-[0.2em] flex items-center gap-2">
                 <span className="w-8 h-px bg-on-surface"></span>
@@ -269,10 +236,7 @@ const ProductDetail: React.FC = () => {
                 {product.description ||
                   "No description available for this unique architectural element. Please contact our sales team for detailed material specifications and environmental impact reports."}
               </p>
-            </div>
-
-            {/* Botones para descargar material técnico */}
-            <div className="grid grid-cols-2 gap-4 pt-4">
+            </div>            <div className="grid grid-cols-2 gap-4 pt-4">
               <button className="flex items-center justify-center gap-2 border border-outline p-3 font-label-caps text-[10px] uppercase tracking-widest hover:bg-surface-container transition-colors">
                 <span className="material-symbols-outlined text-sm">
                   download
@@ -287,10 +251,7 @@ const ProductDetail: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
-
-        {/* Sección de contexto o demostración visual del material */}
-        <section className="col-span-12 mt-24 border-t border-outline-variant pt-20">
+        </div>        <section className="col-span-12 mt-24 border-t border-outline-variant pt-20">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 sm:mb-16 gap-6 sm:gap-8">
             <div className="max-w-2xl">
               <h2 className="font-headline-lg text-2xl sm:text-4xl font-bold text-on-surface uppercase tracking-tight mb-4 leading-tight">

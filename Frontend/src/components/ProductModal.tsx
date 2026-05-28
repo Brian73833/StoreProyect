@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import type { Category } from "../models/responses/Category";
 import type { Product } from "../models/responses/Product";
-import { addProduct } from "../services/productService";
-
-// Componente para la ventana emergente de añadir producto
-interface ProductModalProps {
+import { addProduct } from "../services/productService";interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   categories: Category[];
@@ -26,10 +23,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // Sincroniza el categoryId cuando cambia la lista de categorías
-  useEffect(() => {
+  const [error, setError] = useState<string | null>(null);  useEffect(() => {
     if (categories.length > 0) {
       setFormData((prev) => ({
         ...prev,
@@ -37,10 +31,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
           prev.categoryResourceId === "" ? categories[0].categoryResourceId : prev.categoryResourceId,
       }));
     }
-  }, [categories]);
-
-  // Función para reiniciar el formulario a su estado inicial
-  const resetForm = () => {
+  }, [categories]);  const resetForm = () => {
     setFormData({
       name: "",
       description: "",
@@ -50,10 +41,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     });
     setImageFile(null);
     setError(null);
-  };
-
-  // Reinicia el formulario cada vez que se abre la ventana emergente
-  useEffect(() => {
+  };  useEffect(() => {
     if (isOpen) {
       resetForm();
     }

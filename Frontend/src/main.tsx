@@ -5,9 +5,7 @@ import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>
-    {/* AuthProvider comparte el estado del usuario logueado */}
-    <AuthProvider>
+  <BrowserRouter>    <AuthProvider>
       <App />
     </AuthProvider>
   </BrowserRouter>,

@@ -2,10 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { ICON_STYLE } from "../lib/utils";
-import { IMG_WELCOME_HERO, IMG_WELCOME_TEXTURE, IMG_WELCOME_INTERIOR } from "../lib/constants";
-
-// Componente para mostrar una estadística con icono
-interface StatBadgeProps {
+import { IMG_WELCOME_HERO, IMG_WELCOME_TEXTURE, IMG_WELCOME_INTERIOR } from "../lib/constants";interface StatBadgeProps {
   icon: string;
   label: string;
   value: string;
@@ -26,10 +23,7 @@ const StatBadge: React.FC<StatBadgeProps> = ({ icon, label, value }) => (
       <div className="font-headline-md text-stone-900">{value}</div>
     </div>
   </div>
-);
-
-// Componente para mostrar un detalle técnico
-interface SpecRowProps {
+);interface SpecRowProps {
   label: string;
   value: string;
 }
@@ -41,25 +35,15 @@ const SpecRow: React.FC<SpecRowProps> = ({ label, value }) => (
     </span>
     <span className="font-sans font-bold">{value}</span>
   </div>
-);
-
-// Página principal de bienvenida para usuarios no logueados
-const Welcome: React.FC = () => {
-  const navigate = useNavigate();
-  // Obtiene el estado de autenticación
-  const { isLoggedIn } = useAuth();
-
-  // Si el usuario ya inició sesión, lo redirige a la página principal automáticamente
-  useEffect(() => {
+);const Welcome: React.FC = () => {
+  const navigate = useNavigate();  const { isLoggedIn } = useAuth();  useEffect(() => {
     if (isLoggedIn) {
       navigate("/");
     }
   }, [isLoggedIn, navigate]);
 
   return (
-    <main className="flex-grow bg-background font-body-md text-on-background">
-      {/* Sección principal con imagen de fondo */}
-      <section className="relative w-full min-h-[420px] sm:min-h-[560px] md:h-[751px] overflow-hidden">
+    <main className="flex-grow bg-background font-body-md text-on-background">      <section className="relative w-full min-h-[420px] sm:min-h-[560px] md:h-[751px] overflow-hidden">
         <div className="absolute inset-0 bg-stone-900/40 z-10" />
         <img
           alt="Architectural Brickwork"
@@ -79,9 +63,7 @@ const Welcome: React.FC = () => {
               architectural landmarks. Our bricks are engineered for endurance,
               precision, and the raw honesty of natural clay.
             </p>
-            <div className="flex gap-4 sm:gap-6">
-              {/* Botón que lleva a la página de login/registro */}
-              <button 
+            <div className="flex gap-4 sm:gap-6">              <button 
                 onClick={() => navigate('/auth')}
                 className="bg-primary text-on-primary font-label-caps text-xs uppercase tracking-widest px-6 sm:px-12 py-4 sm:py-6 hover:bg-primary-container transition-all active:translate-y-0.5 border-b-4 border-stone-900">
                 ENTER STORE
@@ -89,13 +71,8 @@ const Welcome: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Sección con detalles y estadísticas de la empresa */}
-      <section className="py-10 sm:py-16 md:py-20 px-4 sm:px-8 md:px-16 max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {/* Tarjeta de texturas */}
-          <div className="md:col-span-8 bg-stone-100 border border-slate-300 p-6 sm:p-10 md:p-12 flex flex-col justify-between min-h-[280px] sm:min-h-[340px] md:min-h-[400px]">
+      </section>      <section className="py-10 sm:py-16 md:py-20 px-4 sm:px-8 md:px-16 max-w-[1440px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">          <div className="md:col-span-8 bg-stone-100 border border-slate-300 p-6 sm:p-10 md:p-12 flex flex-col justify-between min-h-[280px] sm:min-h-[340px] md:min-h-[400px]">
             <div>
               <span
                 className="material-symbols-outlined text-primary mb-3 block"
@@ -118,10 +95,7 @@ const Welcome: React.FC = () => {
                 src={IMG_WELCOME_TEXTURE}
               />
             </div>
-          </div>
-
-          {/* Tarjeta de precisión */}
-          <div className="md:col-span-4 bg-stone-900 text-stone-100 border border-slate-700 p-8 sm:p-12 flex flex-col justify-center items-center text-center">
+          </div>          <div className="md:col-span-4 bg-stone-900 text-stone-100 border border-slate-700 p-8 sm:p-12 flex flex-col justify-center items-center text-center">
             <span
               className="material-symbols-outlined text-primary mb-6 block"
               style={{ fontSize: 64, ...ICON_STYLE }}
@@ -139,10 +113,7 @@ const Welcome: React.FC = () => {
             <div className="font-label-caps text-xs uppercase tracking-widest">
               CERTIFIED ASTM C216
             </div>
-          </div>
-
-          {/* Fila de estadísticas clave */}
-          <div className="col-span-1 md:col-span-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-2 sm:mt-6">
+          </div>          <div className="col-span-1 md:col-span-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-2 sm:mt-6">
             <StatBadge icon="history" label="LEGACY" value="100+ Years" />
             <StatBadge icon="eco" label="SUSTAINABLE" value="100% Recyclable" />
             <StatBadge
@@ -152,10 +123,7 @@ const Welcome: React.FC = () => {
             />
           </div>
         </div>
-      </section>
-
-      {/* Sección final con especificaciones del material */}
-      <section className="bg-stone-50 py-10 sm:py-16 md:py-20 px-4 sm:px-8 md:px-16 border-y border-slate-200">
+      </section>      <section className="bg-stone-50 py-10 sm:py-16 md:py-20 px-4 sm:px-8 md:px-16 border-y border-slate-200">
         <div className="flex flex-col md:flex-row items-center gap-8 sm:gap-12 md:gap-20">
           <div className="w-full md:w-1/2">
             <img
@@ -172,9 +140,7 @@ const Welcome: React.FC = () => {
               We believe in the inherent beauty of the material. Our ceramic
               units are not just building blocks; they are the skin and soul of
               the structure.
-            </p>
-            {/* Lista de especificaciones */}
-            <div className="space-y-3">
+            </p>            <div className="space-y-3">
               <SpecRow label="COMPRESSIVE STRENGTH" value="12,000 PSI" />
               <SpecRow label="WATER ABSORPTION" value="< 3.0%" />
               <SpecRow label="DENSITY" value="135 LB/FT³" />

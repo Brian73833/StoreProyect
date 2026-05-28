@@ -4,23 +4,14 @@ import { useAuth } from "../context/AuthContext";
 import { updateUser, deleteUser } from "../services/authService";
 import { getPasswordStrength } from "../lib/utils";
 import ChangePasswordForm from "../components/ChangePasswordForm";
-import DeleteAccountForm from "../components/DeleteAccountForm";
-
-// Componente de la página de perfil de usuario
-
+import DeleteAccountForm from "../components/DeleteAccountForm";
 export default function Profile() {
   const navigate = useNavigate();
   const { user, login, logout, isAdmin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  // Estados para el modo de edición
-  const [isEditing, setIsEditing] = useState(false);
-  const [shouldChangePassword, setShouldChangePassword] = useState(false);
-
-  // Estados para eliminar la cuenta
-  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);  const [isEditing, setIsEditing] = useState(false);
+  const [shouldChangePassword, setShouldChangePassword] = useState(false);  const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -56,9 +47,7 @@ export default function Profile() {
   };
 
   const handleEditToggle = () => {
-    if (isEditing) {
-      // If we were editing and click back/cancel, reset to user data
-      if (user) {
+    if (isEditing) {      if (user) {
         setFormData((prev) => ({
           ...prev,
           name: user.name,
@@ -164,9 +153,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      {/* Botón para volver al inicio */}
-      <div className="mb-6">
+    <div className="max-w-4xl mx-auto px-4 py-12">      <div className="mb-6">
         <button
           onClick={() => navigate("/")}
           className="inline-flex items-center gap-2 text-stone-500 hover:text-[#E2725B] font-semibold transition-colors duration-200 group"
@@ -177,9 +164,7 @@ export default function Profile() {
           Volver al inicio
         </button>
       </div>
-      <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-stone-200/50 overflow-hidden border border-stone-100">
-        {/* Sección de encabezado */}
-        <div className="bg-gradient-to-br from-[#E2725B] to-[#c95d47] px-8 py-14 text-white relative overflow-hidden">
+      <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-stone-200/50 overflow-hidden border border-stone-100">        <div className="bg-gradient-to-br from-[#E2725B] to-[#c95d47] px-8 py-14 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
@@ -211,12 +196,8 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="p-6 sm:p-8 md:p-14 space-y-10">
-          {/* Formulario principal del perfil */}
-          <form onSubmit={handleSubmit} className="space-y-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-              {/* Información Personal */}
-              <div className="space-y-6">
+        <div className="p-6 sm:p-8 md:p-14 space-y-10">          <form onSubmit={handleSubmit} className="space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">              <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-stone-50 rounded-xl flex items-center justify-center border border-stone-100 text-[#E2725B]">
                     <span className="material-symbols-outlined font-light">
@@ -279,10 +260,7 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Gestión de la Cuenta */}
-              <div className="space-y-6">
+              </div>              <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-stone-50 rounded-xl flex items-center justify-center border border-stone-100 text-[#E2725B]">
                     <span className="material-symbols-outlined font-light">
@@ -397,10 +375,7 @@ export default function Profile() {
                   )}
                 </div>
               </div>
-            </div>
-
-            {/* Notificaciones */}
-            {(error || success) && (
+            </div>            {(error || success) && (
               <div className="min-h-[60px] animate-in fade-in slide-in-from-top-2 duration-300">
                 {error && (
                   <div className="flex items-center gap-4 p-5 bg-red-50 border border-red-100 text-red-600 rounded-[1.5rem]">

@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import type { Product } from "../models/responses/Product";
 import type { Category } from "../models/responses/Category"; 
 import { getProducts } from "../services/productService";
-import { getCategories } from "../services/categoryService";
-
-// Define la estructura de lo que devolverá este hook personalizado
-interface UseProductsResult {
+import { getCategories } from "../services/categoryService";interface UseProductsResult {
   products: Product[];
   categories: Category[];
   loading: boolean;
@@ -14,28 +11,17 @@ interface UseProductsResult {
   addCategory: (category: Category) => void;
   updateProduct: (product: Product) => void;
   removeProduct: (productResourceId: string) => void;
-}
-
-// Hook personalizado para manejar la carga de productos y categorías
-export function useProducts(): UseProductsResult {
+}export function useProducts(): UseProductsResult {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Se ejecuta al montar el componente para obtener los datos de la API
-  useEffect(() => {
+  const [error, setError] = useState<string | null>(null);  useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        // Obtiene productos y categorías al mismo tiempo
-        const [productsData, categoriesData] = await Promise.all([
+        setLoading(true);        const [productsData, categoriesData] = await Promise.all([
           getProducts(),
           getCategories(),
-        ]);
-        
-        // Guarda los datos obtenidos en el estado
-        setProducts(productsData);
+        ]);        setProducts(productsData);
         setCategories(categoriesData);
         setError(null);
       } catch (err) {
@@ -47,30 +33,15 @@ export function useProducts(): UseProductsResult {
     };
 
     fetchData();
-  }, []);
-
-  // Función para agregar un producto a la lista local
-  const addProduct = (product: Product) =>
-    setProducts((prev) => [product, ...prev]);
-
-  // Función para agregar una categoría a la lista local
-  const addCategory = (category: Category) =>
-    setCategories((prev) => [...prev, category]);
-
-  // Función para actualizar un producto en la lista local
-  const updateProduct = (product: Product) =>
+  }, []);  const addProduct = (product: Product) =>
+    setProducts((prev) => [product, ...prev]);  const addCategory = (category: Category) =>
+    setCategories((prev) => [...prev, category]);  const updateProduct = (product: Product) =>
     setProducts((prev) =>
       prev.map((p) =>
         p.productResourceId === product.productResourceId ? product : p
       )
-    );
-
-  // Función para eliminar un producto de la lista local
-  const removeProduct = (productResourceId: string) =>
+    );  const removeProduct = (productResourceId: string) =>
     setProducts((prev) =>
       prev.filter((p) => p.productResourceId !== productResourceId)
-    );
-
-  // Retorna los datos y funciones para que puedan ser usados por los componentes
-  return { products, categories, loading, error, addProduct, addCategory, updateProduct, removeProduct };
+    );  return { products, categories, loading, error, addProduct, addCategory, updateProduct, removeProduct };
 }

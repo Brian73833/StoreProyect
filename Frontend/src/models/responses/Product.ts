@@ -1,4 +1,3 @@
-// Define la estructura de un Producto
 export type Product = {
   productResourceId: string;
   name: string;

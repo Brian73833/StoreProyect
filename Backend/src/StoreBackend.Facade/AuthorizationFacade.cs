@@ -23,9 +23,7 @@ public class AuthorizationFacade : IAuthorizationFacade
     }
 
     public async Task<AuthorizationResponseDto> AuthorizeAsync(LoginUserDto requestDto)
-    {
-        // We use the existing LoginAsync from IUserService since it validates the user
-        var user = await userService.LoginAsync(requestDto).ConfigureAwait(false);
+    {        var user = await userService.LoginAsync(requestDto).ConfigureAwait(false);
 
         if (user == null)
         {

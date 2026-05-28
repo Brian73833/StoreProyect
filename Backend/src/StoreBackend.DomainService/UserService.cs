@@ -64,19 +64,13 @@ public class UserService : IUserService
         if (user == null)
         {
             throw new ResourceNotFoundException("User not found");
-        }
-
-        // Check if email is being changed and if the new email is already taken
-        if (user.Email != userDto.Email && await _userRepository.HasUserByEmailAsync(userDto.Email))
+        }        if (user.Email != userDto.Email && await _userRepository.HasUserByEmailAsync(userDto.Email))
         {
             throw new BadRequestResponseException("Email is already taken");
         }
 
         user.Name = userDto.Name;
-        user.Email = userDto.Email;
-
-        // Handle password update if provided
-        if (!string.IsNullOrEmpty(userDto.NewPassword))
+        user.Email = userDto.Email;        if (!string.IsNullOrEmpty(userDto.NewPassword))
         {
             if (string.IsNullOrEmpty(userDto.CurrentPassword))
             {

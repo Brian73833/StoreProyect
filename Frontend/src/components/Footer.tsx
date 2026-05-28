@@ -1,19 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-
-// Componente del pie de página de la aplicación
-const Footer: React.FC = () => {
+import { useNavigate } from "react-router-dom";const Footer: React.FC = () => {
   const navigate = useNavigate();
 
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-stone-900 text-stone-300">
-      {/* Contenido principal del footer */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Columna de la marca */}
-          <div className="lg:col-span-1">
+    <footer className="bg-stone-900 text-stone-300">      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">          <div className="lg:col-span-1">
             <button
               onClick={() => navigate("/")}
               className="flex items-center gap-2.5 group cursor-pointer mb-6"
@@ -30,9 +23,7 @@ const Footer: React.FC = () => {
             <p className="text-stone-400 text-sm leading-relaxed max-w-xs">
               Soluciones cerámicas de alta calidad para proyectos
               arquitectónicos contemporáneos. Más de 100 años de excelencia.
-            </p>
-            {/* Iconos de redes sociales */}
-            <div className="flex gap-3 mt-6">
+            </p>            <div className="flex gap-3 mt-6">
               {["public", "mail", "call"].map((icon) => (
                 <button
                   key={icon}
@@ -44,10 +35,7 @@ const Footer: React.FC = () => {
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Enlaces rápidos */}
-          <div>
+          </div>          <div>
             <h4 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-6">
               Navegación
             </h4>
@@ -68,10 +56,7 @@ const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Soporte */}
-          <div>
+          </div>          <div>
             <h4 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-6">
               Soporte
             </h4>
@@ -93,10 +78,7 @@ const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Contacto */}
-          <div>
+          </div>          <div>
             <h4 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-6">
               Contacto
             </h4>
@@ -126,10 +108,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Barra inferior */}
-      <div className="border-t border-stone-800">
+      </div>      <div className="border-t border-stone-800">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-6 sm:py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <p className="text-stone-500 text-xs font-medium tracking-wide">
             © {currentYear} Store. Todos los derechos reservados.
