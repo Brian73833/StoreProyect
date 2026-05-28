@@ -52,7 +52,8 @@ public class UserService : IUserService
         userEntity.UserRoles.Add(new UserRole
         {
             User = userEntity,
-            Role = customerRole
+            Role = customerRole,
+            UserRoleResourceId = Guid.NewGuid()
         });
 
         return await _userRepository.CreateAsync(userEntity);
@@ -64,13 +65,15 @@ public class UserService : IUserService
         if (user == null)
         {
             throw new ResourceNotFoundException("User not found");
-        }        if (user.Email != userDto.Email && await _userRepository.HasUserByEmailAsync(userDto.Email))
+        }
+        if (user.Email != userDto.Email && await _userRepository.HasUserByEmailAsync(userDto.Email))
         {
             throw new BadRequestResponseException("Email is already taken");
         }
 
         user.Name = userDto.Name;
-        user.Email = userDto.Email;        if (!string.IsNullOrEmpty(userDto.NewPassword))
+        user.Email = userDto.Email;
+        if (!string.IsNullOrEmpty(userDto.NewPassword))
         {
             if (string.IsNullOrEmpty(userDto.CurrentPassword))
             {

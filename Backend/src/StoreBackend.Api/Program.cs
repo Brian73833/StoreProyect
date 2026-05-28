@@ -15,40 +15,11 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args,
     WebRootPath = "Images"
-});builder.Services.AddControllers(options =>
+});
+builder.Services.AddControllers(options =>
 {
     options.Filters.Add<MessageExceptionFilter>();
     options.SuppressAsyncSuffixInActionNames = false;
-});
-
-builder.Services.AddRateLimiter(options =>
-{
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.AddPolicy("AuthPolicy", context =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? context.Request.Headers.Host.ToString(),
-            factory: partition => new FixedWindowRateLimiterOptions
-            {
-                AutoReplenishment = true,
-                PermitLimit = 5,
-                QueueLimit = 0,
-                Window = TimeSpan.FromMinutes(1)
-            }));
-});
-
-builder.Services.AddRateLimiter(options =>
-{
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.AddPolicy("AuthPolicy", context =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? context.Request.Headers.Host.ToString(),
-            factory: partition => new FixedWindowRateLimiterOptions
-            {
-                AutoReplenishment = true,
-                PermitLimit = 5,
-                QueueLimit = 0,
-                Window = TimeSpan.FromMinutes(1)
-            }));
 });
 
 builder.Services.AddCors(options =>
@@ -60,7 +31,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("SecurePolicy", policy =>
     {
         if (allowedOrigins.Length == 0)
-        {            policy.SetIsOriginAllowed(_ => false);
+        {
+            policy.SetIsOriginAllowed(_ => false);
         }
         else
         {
@@ -71,7 +43,24 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
         }
     });
-});var jwtSettings = builder.Configuration.GetSection("Jwt");
+});
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("AuthPolicy", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? context.Request.Headers.Host.ToString(),
+            factory: partition => new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 5,
+                QueueLimit = 0,
+                Window = TimeSpan.FromMinutes(1)
+            }));
+});
+
+var jwtSettings = builder.Configuration.GetSection("Jwt");
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
@@ -101,23 +90,29 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
-builder.Services.AddAuthorization();builder.Services.AddOpenApi();
+builder.Services.AddAuthorization();
+builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
-);builder.Services.AddScoped<IProductRepository, ProductRepository>();
+);
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();builder.Services.AddScoped<IProductFacade, ProductFacade>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductFacade, ProductFacade>();
 builder.Services.AddScoped<IUserFacade, UserFacade>();
 builder.Services.AddScoped<ICategoryFacade, CategoryFacade>();
-builder.Services.AddScoped<IAuthorizationFacade, AuthorizationFacade>();builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IAuthorizationFacade, AuthorizationFacade>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
-var app = builder.Build();if (app.Environment.IsDevelopment())
+var app = builder.Build();
+if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
