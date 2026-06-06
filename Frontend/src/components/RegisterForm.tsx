@@ -120,6 +120,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             person
           </span>
           <input
+            data-cy="register-name"
             name="name"
             type="text"
             value={formData.name}
@@ -142,6 +143,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             mail
           </span>
           <input
+            data-cy="register-email"
             name="email"
             type="email"
             value={formData.email}
@@ -164,6 +166,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             lock
           </span>
           <input
+            data-cy="register-password"
             name="password"
             type={showPassword ? "text" : "password"}
             value={formData.password}
@@ -246,6 +249,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             lock
           </span>
           <input
+            data-cy="register-confirm-password"
             name="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
             value={formData.confirmPassword}
@@ -276,6 +280,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
       )}
 
       <button
+        data-cy="register-submit"
         type="submit"
         disabled={loading}
         className="w-full py-4 bg-[#E2725B] hover:bg-[#c95d47] disabled:opacity-60 text-white font-extrabold rounded-2xl shadow-xl transition-all active:scale-[0.98] uppercase tracking-widest text-sm flex items-center justify-center gap-2"

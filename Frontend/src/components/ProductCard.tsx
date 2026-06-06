@@ -38,6 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <div
+      data-cy="product-card"
       onClick={() => navigate(`/product/${product.productResourceId}`)}
       className={`relative bg-surface-container-lowest border border-slate-300 flex flex-col group overflow-hidden cursor-pointer
         ${product.stock > 0 ? "border-b-[4px] border-b-primary" : "border-b-[4px] border-b-secondary"}`}
@@ -57,6 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {isAdmin && (
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-end justify-center pb-4 gap-2 opacity-0 group-hover:opacity-100">
             <button
+              data-cy="edit-product-btn"
               onClick={handleEdit}
               title="Editar producto"
               className="flex items-center gap-1 px-3 py-2 bg-white text-primary text-xs font-bold uppercase tracking-wider rounded-xl shadow-lg hover:bg-primary hover:text-white transition-all"
@@ -65,6 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               Editar
             </button>
             <button
+              data-cy="delete-product-btn"
               onClick={handleDelete}
               disabled={deleting}
               title="Eliminar producto"
@@ -86,7 +89,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       <div className="p-6 space-y-1 flex-grow">
-        <span className="font-label-caps text-xs text-primary uppercase tracking-widest block">
+        <span data-cy="product-category-label" className="font-label-caps text-xs text-primary uppercase tracking-widest block">
           {product.categoryName || "General"}
         </span>
         <h3 className="font-headline-md text-2xl font-semibold text-on-surface">

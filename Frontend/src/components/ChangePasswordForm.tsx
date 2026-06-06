@@ -23,6 +23,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
             password
           </span>
           <input
+            data-cy="profile-current-password"
             type="password"
             name="currentPassword"
             value={formData.currentPassword}
@@ -42,6 +43,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
             lock_reset
           </span>
           <input
+            data-cy="profile-new-password"
             type="password"
             name="newPassword"
             value={formData.newPassword}
@@ -95,6 +97,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
             verified
           </span>
           <input
+            data-cy="profile-confirm-password"
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}

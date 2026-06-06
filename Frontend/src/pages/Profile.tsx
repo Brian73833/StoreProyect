@@ -4,14 +4,17 @@ import { useAuth } from "../context/AuthContext";
 import { updateUser, deleteUser } from "../services/authService";
 import { getPasswordStrength } from "../lib/utils";
 import ChangePasswordForm from "../components/ChangePasswordForm";
-import DeleteAccountForm from "../components/DeleteAccountForm";
+import DeleteAccountForm from "../components/DeleteAccountForm";
+
 export default function Profile() {
   const navigate = useNavigate();
   const { user, login, logout, isAdmin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);  const [isEditing, setIsEditing] = useState(false);
-  const [shouldChangePassword, setShouldChangePassword] = useState(false);  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [shouldChangePassword, setShouldChangePassword] = useState(false);
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -47,7 +50,8 @@ export default function Profile() {
   };
 
   const handleEditToggle = () => {
-    if (isEditing) {      if (user) {
+    if (isEditing) {
+      if (user) {
         setFormData((prev) => ({
           ...prev,
           name: user.name,
@@ -121,8 +125,7 @@ export default function Profile() {
     }
   };
 
-  const handleDeleteAccount = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleDeleteAccount = async () => {
     if (!user || !deletePassword) return;
 
     setDeleteLoading(true);
@@ -153,7 +156,8 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">      <div className="mb-6">
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="mb-6">
         <button
           onClick={() => navigate("/")}
           className="inline-flex items-center gap-2 text-stone-500 hover:text-[#E2725B] font-semibold transition-colors duration-200 group"
@@ -164,7 +168,8 @@ export default function Profile() {
           Volver al inicio
         </button>
       </div>
-      <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-stone-200/50 overflow-hidden border border-stone-100">        <div className="bg-gradient-to-br from-[#E2725B] to-[#c95d47] px-8 py-14 text-white relative overflow-hidden">
+      <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-stone-200/50 overflow-hidden border border-stone-100">
+        <div className="bg-gradient-to-br from-[#E2725B] to-[#c95d47] px-8 py-14 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl"></div>
 
@@ -196,8 +201,10 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="p-6 sm:p-8 md:p-14 space-y-10">          <form onSubmit={handleSubmit} className="space-y-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">              <div className="space-y-6">
+        <div className="p-6 sm:p-8 md:p-14 space-y-10">
+          <form onSubmit={handleSubmit} className="space-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+              <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-stone-50 rounded-xl flex items-center justify-center border border-stone-100 text-[#E2725B]">
                     <span className="material-symbols-outlined font-light">
@@ -219,16 +226,16 @@ export default function Profile() {
                         person
                       </span>
                       <input
+                        data-cy="profile-name"
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         disabled={!isEditing}
-                        className={`w-full pl-12 pr-4 py-4 border rounded-2xl outline-none transition-all duration-300 font-medium ${
-                          isEditing
-                            ? "bg-stone-50 border-stone-200 focus:ring-4 focus:ring-[#E2725B]/5 focus:border-[#E2725B] text-stone-700"
-                            : "bg-stone-100/50 border-transparent text-stone-500 cursor-not-allowed"
-                        }`}
+                        className={`w-full pl-12 pr-4 py-4 border rounded-2xl outline-none transition-all duration-300 font-medium ${isEditing
+                          ? "bg-stone-50 border-stone-200 focus:ring-4 focus:ring-[#E2725B]/5 focus:border-[#E2725B] text-stone-700"
+                          : "bg-stone-100/50 border-transparent text-stone-500 cursor-not-allowed"
+                          }`}
                         placeholder="Tu nombre"
                         required
                       />
@@ -244,23 +251,24 @@ export default function Profile() {
                         mail
                       </span>
                       <input
+                        data-cy="profile-email"
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                         disabled={!isEditing}
-                        className={`w-full pl-12 pr-4 py-4 border rounded-2xl outline-none transition-all duration-300 font-medium ${
-                          isEditing
-                            ? "bg-stone-50 border-stone-200 focus:ring-4 focus:ring-[#E2725B]/5 focus:border-[#E2725B] text-stone-700"
-                            : "bg-stone-100/50 border-transparent text-stone-500 cursor-not-allowed"
-                        }`}
+                        className={`w-full pl-12 pr-4 py-4 border rounded-2xl outline-none transition-all duration-300 font-medium ${isEditing
+                          ? "bg-stone-50 border-stone-200 focus:ring-4 focus:ring-[#E2725B]/5 focus:border-[#E2725B] text-stone-700"
+                          : "bg-stone-100/50 border-transparent text-stone-500 cursor-not-allowed"
+                          }`}
                         placeholder="tu@email.com"
                         required
                       />
                     </div>
                   </div>
                 </div>
-              </div>              <div className="space-y-6">
+              </div>
+              <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 bg-stone-50 rounded-xl flex items-center justify-center border border-stone-100 text-[#E2725B]">
                     <span className="material-symbols-outlined font-light">
@@ -276,6 +284,7 @@ export default function Profile() {
                   {!isEditing && (
                     <div className="flex flex-col gap-4 animate-in fade-in duration-300 h-full justify-center">
                       <button
+                        data-cy="profile-edit-btn"
                         type="submit"
                         disabled={loading}
                         className="w-full group relative flex items-center justify-center gap-3 px-10 py-4 font-bold rounded-2xl active:scale-[0.98] disabled:opacity-50 transition-all duration-300 shadow-xl bg-[#E2725B] text-white hover:bg-[#c95d47] shadow-[#E2725B]/20"
@@ -319,6 +328,7 @@ export default function Profile() {
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer group">
                           <input
+                            data-cy="profile-change-password-yes"
                             type="radio"
                             name="changePassword"
                             checked={shouldChangePassword}
@@ -351,6 +361,7 @@ export default function Profile() {
                         Volver
                       </button>
                       <button
+                        data-cy="profile-save-btn"
                         type="submit"
                         disabled={loading}
                         className="flex-[2] group relative flex items-center justify-center gap-3 px-8 py-4 font-bold rounded-2xl active:scale-[0.98] disabled:opacity-50 transition-all duration-300 shadow-xl bg-stone-900 text-white hover:bg-stone-800 shadow-stone-900/10"
@@ -375,17 +386,18 @@ export default function Profile() {
                   )}
                 </div>
               </div>
-            </div>            {(error || success) && (
+            </div>
+            {(error || success) && (
               <div className="min-h-[60px] animate-in fade-in slide-in-from-top-2 duration-300">
                 {error && (
-                  <div className="flex items-center gap-4 p-5 bg-red-50 border border-red-100 text-red-600 rounded-[1.5rem]">
+                  <div data-cy="profile-error-message" className="flex items-center gap-4 p-5 bg-red-50 border border-red-100 text-red-600 rounded-[1.5rem]">
                     <span className="material-symbols-outlined">error</span>
                     <p className="text-sm font-bold">{error}</p>
                   </div>
                 )}
 
                 {success && (
-                  <div className="flex items-center gap-4 p-5 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-[1.5rem]">
+                  <div data-cy="profile-success-message" className="flex items-center gap-4 p-5 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-[1.5rem]">
                     <span className="material-symbols-outlined">
                       check_circle
                     </span>

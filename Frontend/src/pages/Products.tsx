@@ -58,6 +58,7 @@ const Products: React.FC = () => {
       {isAdmin && (
         <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
           <button
+            data-cy="add-category-btn"
             onClick={() => setIsCategoryModalOpen(true)}
             className="flex items-center justify-center gap-2 bg-secondary text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold shadow-xl shadow-secondary/20 hover:shadow-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs sm:text-sm"
           >
@@ -65,6 +66,7 @@ const Products: React.FC = () => {
             Añadir Categoría
           </button>
           <button
+            data-cy="add-product-btn"
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center gap-2 bg-primary text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs sm:text-sm"
           >
@@ -104,6 +106,7 @@ const Products: React.FC = () => {
             </label>
             <div className="relative">
               <input
+                data-cy="search-input"
                 className="w-full bg-surface-container-low border-b-2 border-outline focus:border-primary focus:ring-0 px-4 py-3 font-body-md text-base transition-all outline-none"
                 placeholder="Escribe el nombre del producto..."
                 type="text"
@@ -123,6 +126,7 @@ const Products: React.FC = () => {
               Categoría
             </label>
             <select
+              data-cy="category-select"
               className="w-full bg-surface-container-low border-b-2 border-outline focus:border-primary focus:ring-0 px-4 py-3 font-body-md text-base transition-all outline-none appearance-none cursor-pointer"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -151,7 +155,7 @@ const Products: React.FC = () => {
           {error}
         </div>
       ) : filtered.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div data-cy="products-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map((p) => (
             <ProductCard
               key={p.productResourceId}
@@ -164,7 +168,7 @@ const Products: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="py-20 text-center text-secondary font-body-md text-lg">
+        <div data-cy="no-results-message" className="py-20 text-center text-secondary font-body-md text-lg">
           No se encontraron productos.
         </div>
       )}

@@ -5,7 +5,7 @@ interface DeleteAccountFormProps {
   setShowDeleteForm: (show: boolean) => void;
   deletePassword: string;
   setDeletePassword: (password: string) => void;
-  handleDeleteAccount: (e: React.FormEvent) => void;
+  handleDeleteAccount: () => void;
   deleteLoading: boolean;
   deleteError: string | null;
   setDeleteError: (error: string | null) => void;
@@ -24,6 +24,7 @@ const DeleteAccountForm: React.FC<DeleteAccountFormProps> = ({
   if (!showDeleteForm) {
     return (
       <button
+        data-cy="profile-delete-trigger-btn"
         type="button"
         onClick={() => setShowDeleteForm(true)}
         className="w-full flex justify-center items-center gap-2 px-6 py-4 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-2xl transition-all duration-300 active:scale-[0.98] group"
@@ -42,6 +43,7 @@ const DeleteAccountForm: React.FC<DeleteAccountFormProps> = ({
         Confirmar eliminación
       </p>
       <input
+        data-cy="profile-delete-password"
         type="password"
         value={deletePassword}
         onChange={(e) => setDeletePassword(e.target.value)}
@@ -50,14 +52,16 @@ const DeleteAccountForm: React.FC<DeleteAccountFormProps> = ({
       />
       <div className="flex gap-2 mt-1">
         <button
+          data-cy="profile-delete-confirm-btn"
           type="button"
-          onClick={handleDeleteAccount}
+          onClick={() => handleDeleteAccount()}
           disabled={deleteLoading || !deletePassword}
           className="flex-[2] px-4 py-3 bg-red-600 text-white text-sm font-bold rounded-xl hover:bg-red-700 disabled:opacity-50 transition-all"
         >
           {deleteLoading ? "..." : "Confirmar"}
         </button>
         <button
+          data-cy="profile-delete-cancel-btn"
           type="button"
           onClick={() => {
             setShowDeleteForm(false);

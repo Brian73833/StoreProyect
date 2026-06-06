@@ -65,7 +65,7 @@ const ProductDetail: React.FC = () => {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-6">
+      <div data-cy="product-not-found" className="min-h-screen flex items-center justify-center bg-background px-6">
         <div className="text-center max-w-md">
           <span
             className="material-symbols-outlined text-error text-6xl mb-4"
@@ -146,11 +146,10 @@ const ProductDetail: React.FC = () => {
                 <button
                   key={i}
                   onClick={() => setActiveImg(src)}
-                  className={`relative flex-shrink-0 w-24 aspect-square border-2 transition-all ${
-                    activeImg === src
+                  className={`relative flex-shrink-0 w-24 aspect-square border-2 transition-all ${activeImg === src
                       ? "border-primary scale-105 shadow-lg"
                       : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
+                    }`}
                 >
                   <img
                     alt={`Detail ${i + 1}`}
@@ -176,7 +175,7 @@ const ProductDetail: React.FC = () => {
               </span>
             </div>
 
-            <h1 className="font-headline-xl text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tighter text-on-surface uppercase mb-6 break-words">
+            <h1 data-cy="product-detail-name" className="font-headline-xl text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tighter text-on-surface uppercase mb-6 break-words">
               {product.name}
             </h1>
 
@@ -193,7 +192,7 @@ const ProductDetail: React.FC = () => {
                 <p className="font-label-caps text-[10px] text-outline uppercase tracking-widest mb-1">
                   MSRP (Unit Price)
                 </p>
-                <p className="font-headline-md text-3xl sm:text-4xl font-bold text-on-surface">
+                <p data-cy="product-detail-price" className="font-headline-md text-3xl sm:text-4xl font-bold text-on-surface">
                   ₡{product.price}
                 </p>
               </div>
@@ -205,7 +204,7 @@ const ProductDetail: React.FC = () => {
                   <span
                     className={`w-2 h-2 rounded-full ${product.stock > 10 ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`}
                   />
-                  <span className="font-body-sm font-bold text-on-surface">
+                  <span data-cy="product-detail-stock" className="font-body-sm font-bold text-on-surface">
                     {product.stock} UNITS
                   </span>
                 </div>
@@ -244,7 +243,7 @@ const ProductDetail: React.FC = () => {
                 <span className="w-8 h-px bg-on-surface"></span>
                 Description
               </h3>
-              <p className="font-body-md text-base text-on-surface-variant leading-relaxed">
+              <p data-cy="product-detail-description" className="font-body-md text-base text-on-surface-variant leading-relaxed">
                 {product.description ||
                   "No description available for this unique architectural element. Please contact our sales team for detailed material specifications and environmental impact reports."}
               </p>

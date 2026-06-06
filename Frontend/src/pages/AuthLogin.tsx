@@ -82,6 +82,7 @@ const AuthLogin: React.FC = () => {
             </p>
           </div>          <div className="flex p-1 bg-stone-100 rounded-2xl mb-10 relative">
             <button
+              data-cy="tab-login"
               onClick={() => setActiveTab("login")}
               className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 relative z-10 ${
                 activeTab === "login"
@@ -92,6 +93,7 @@ const AuthLogin: React.FC = () => {
               Iniciar Sesión
             </button>
             <button
+              data-cy="tab-register"
               onClick={() => setActiveTab("register")}
               className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all duration-300 relative z-10 ${
                 activeTab === "register"

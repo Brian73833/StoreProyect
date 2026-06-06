@@ -1,7 +1,9 @@
--- 1. Creación de la base de datos si no existe
+-- =========================================================================
+-- 1. CREACIÓN DE LA BASE DE DATOS
+-- =========================================================================
+
 CREATE DATABASE StoreDB;
 
--- Seleccionar la base de datos activa para las siguientes operaciones
 USE StoreDB;
 
 -- =========================================================================
@@ -9,7 +11,6 @@ USE StoreDB;
 -- =========================================================================
 
 -- Tabla: Category 
-
 CREATE TABLE Category (
     CategoryId             INT              NOT NULL IDENTITY(1,1),
     CategoryResourceId     UNIQUEIDENTIFIER NOT NULL,
@@ -80,13 +81,13 @@ INSERT INTO Role (RoleResourceId, Name)
     (NEWID(), 'Administrator'),
     (NEWID(), 'Customer');
 
--- Agregar Usuario Admin
+-- Agregar Usuario Admin (admin@gmail.com / Admin123*)
 INSERT INTO [User] (UserResourceId, Name, Email, PasswordHash)
     VALUES (
     NEWID(),
     'Administrator',
     'admin@gmail.com',
-    '$2a$12$ZRKMr5nXHnl6/guG.CzgJuCMyU3cth24YaJH88kFuIdQQBQ96Jd3C'
+    '$2a$12$94ZORv5mLgdZ/XdyIy2g9uAfQZnGHgxmS7JEwbbNLKLz4QxMTFVc.'
     );
 
 -- Asociar el usuario Administrador con el Rol de 'Administrator'
@@ -95,4 +96,62 @@ INSERT INTO UserRole (UserId, RoleId, UserRoleResourceId)
     (SELECT UserId FROM [User] WHERE Email = 'admin@gmail.com'),
     (SELECT Id FROM Role WHERE Name = 'Administrator'),
     NEWID()
+    );
+
+-- Agregar Usuario Customer (customer@gmail.com / Customer123*)
+INSERT INTO [User] (UserResourceId, Name, Email, PasswordHash)
+    VALUES (
+    NEWID(),
+    'Customer',
+    'customer@gmail.com',
+    '$2a$12$2uh.3sPY2Vw9K0QS.yn4nuui8zg2Wy5vf25Hn333errrvsJsgEAxG'
+    );
+
+-- Asociar el usuario Customer con el Rol de 'Customer'
+INSERT INTO UserRole (UserId, RoleId, UserRoleResourceId)
+    VALUES (
+    (SELECT UserId FROM [User] WHERE Email = 'customer@gmail.com'),
+    (SELECT Id FROM Role WHERE Name = 'Customer'),
+    NEWID()
+    );
+
+-- =========================================================================
+-- 4. Datos necesarios para los tests de Cypress
+-- =========================================================================
+
+-- Categorías de prueba
+INSERT INTO Category (CategoryResourceId, Name)
+    VALUES
+    (NEWID(), 'Ladrillos'),
+    (NEWID(), 'Cemento');
+
+-- Productos de prueba
+INSERT INTO Product (ProductResourceId, Name, Description, Price, Stock, ImagePath, CategoryId)
+    VALUES
+    (
+        NEWID(),
+        'Ladrillo Hueco',
+        'Ladrillo hueco para construcción.',
+        500,
+        1000,
+        NULL,
+        (SELECT CategoryId FROM Category WHERE Name = 'Ladrillos')
+    ),
+    (
+        NEWID(),
+        'Ladrillo Común',
+        'Ladrillo común para construcción.',
+        400,
+        500,
+        NULL,
+        (SELECT CategoryId FROM Category WHERE Name = 'Ladrillos')
+    ),
+    (
+        NEWID(),
+        'Cemento',
+        'Cemento para construcción.',
+        900,
+        1200,
+        NULL,
+        (SELECT CategoryId FROM Category WHERE Name = 'Cemento')
     );

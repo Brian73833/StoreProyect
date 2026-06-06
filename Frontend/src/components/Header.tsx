@@ -73,8 +73,8 @@ const Header: React.FC = () => {
           )}
           {!isLoggedIn ? (
             <button
+              data-cy="header-login-btn"
               onClick={() => navigate("/auth")}
-              id="header-login-btn"
               className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-[#E2725B] to-[#d4634e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:scale-105 active:scale-[0.98] transition-all duration-300 uppercase tracking-wider"
             >
               <span className="material-symbols-outlined text-base sm:text-lg">
@@ -87,39 +87,34 @@ const Header: React.FC = () => {
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
                 id="header-hamburger-btn"
-                className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-300 ${
-                  menuOpen
+                className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-300 ${menuOpen
                     ? "bg-stone-100 text-[#E2725B]"
                     : "text-stone-600 hover:bg-stone-50 hover:text-stone-800"
-                }`}
+                  }`}
               >
                 <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
                   {userName.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex flex-col gap-[5px] w-5">
                   <span
-                    className={`block h-[2px] bg-current rounded-full transition-all duration-300 origin-center ${
-                      menuOpen ? "rotate-45 translate-y-[7px]" : ""
-                    }`}
+                    className={`block h-[2px] bg-current rounded-full transition-all duration-300 origin-center ${menuOpen ? "rotate-45 translate-y-[7px]" : ""
+                      }`}
                   />
                   <span
-                    className={`block h-[2px] bg-current rounded-full transition-all duration-300 ${
-                      menuOpen ? "opacity-0 scale-0" : "opacity-100"
-                    }`}
+                    className={`block h-[2px] bg-current rounded-full transition-all duration-300 ${menuOpen ? "opacity-0 scale-0" : "opacity-100"
+                      }`}
                   />
                   <span
-                    className={`block h-[2px] bg-current rounded-full transition-all duration-300 origin-center ${
-                      menuOpen ? "-rotate-45 -translate-y-[7px]" : ""
-                    }`}
+                    className={`block h-[2px] bg-current rounded-full transition-all duration-300 origin-center ${menuOpen ? "-rotate-45 -translate-y-[7px]" : ""
+                      }`}
                   />
                 </div>
               </button>
               <div
-                className={`absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl shadow-stone-900/10 border border-stone-100 overflow-hidden transition-all duration-300 origin-top-right ${
-                  menuOpen
+                className={`absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl shadow-stone-900/10 border border-stone-100 overflow-hidden transition-all duration-300 origin-top-right ${menuOpen
                     ? "opacity-100 scale-100 translate-y-0"
                     : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                }`}
+                  }`}
               >
                 <div className="px-5 py-4 bg-gradient-to-r from-stone-50 to-stone-100/50 border-b border-stone-100">
                   <p className="text-sm font-bold text-stone-800 truncate">

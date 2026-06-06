@@ -98,6 +98,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             mail
           </span>
           <input
+            data-cy="login-email"
             name="email"
             type="email"
             value={formData.email}
@@ -120,6 +121,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             lock
           </span>
           <input
+            data-cy="login-password"
             name="password"
             type={showPassword ? "text" : "password"}
             value={formData.password}
@@ -150,6 +152,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
       )}
 
       <button
+        data-cy="login-submit"
         type="submit"
         disabled={loading}
         className="w-full py-4 bg-[#E2725B] hover:bg-[#c95d47] disabled:opacity-60 text-white font-extrabold rounded-2xl shadow-xl transition-all active:scale-[0.98] uppercase tracking-widest text-sm flex items-center justify-center gap-2"

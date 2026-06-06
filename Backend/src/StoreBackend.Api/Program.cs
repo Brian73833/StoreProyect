@@ -45,19 +45,40 @@ builder.Services.AddCors(options =>
     });
 });
 
+var permitLimit = builder.Configuration
+ .GetValue<int>("RateLimiting:PermitLimit");
+
+var windowSeconds = builder.Configuration
+ .GetValue<int>("RateLimiting:WindowSeconds");
+
+var queueLimit = builder.Configuration
+ .GetValue<int>("RateLimiting:QueueLimit");
+
+
 builder.Services.AddRateLimiter(options =>
 {
+    options.AddFixedWindowLimiter("fixed", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = permitLimit;
+        limiterOptions.Window = TimeSpan.FromSeconds(windowSeconds);
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = queueLimit;
+    });
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    options.AddPolicy("AuthPolicy", context =>
-        RateLimitPartition.GetFixedWindowLimiter(
-            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? context.Request.Headers.Host.ToString(),
-            factory: partition => new FixedWindowRateLimiterOptions
+
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.ContentType = "application/json";
+
+        await context.HttpContext.Response.WriteAsync(
+            """
             {
-                AutoReplenishment = true,
-                PermitLimit = 5,
-                QueueLimit = 0,
-                Window = TimeSpan.FromMinutes(1)
-            }));
+                "status": 429,
+                "message": "Demasiadas solicitudes, intenta mas tarde"
+            }
+            """,
+            cancellationToken: token);
+    };
 });
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -110,13 +131,14 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseRateLimiter();
-
 app.UseCors("SecurePolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseRateLimiter();
+
+app.MapControllers()
+    .RequireRateLimiting("fixed");
 
 app.Run();
