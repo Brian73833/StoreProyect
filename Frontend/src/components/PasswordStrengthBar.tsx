@@ -1,10 +1,6 @@
 import React from "react";
 
-interface PasswordStrength {
-  score: number;
-  label: string;
-  color: string;
-}
+import type { PasswordStrength } from "../lib/utils";
 
 interface PasswordStrengthBarProps {
   strength: PasswordStrength;
@@ -14,7 +10,7 @@ const PasswordStrengthBar: React.FC<PasswordStrengthBarProps> = ({ strength }) =
   return (
     <div className="mt-2 space-y-1">
       <div className="flex gap-1">
-        {[1, 2, 3, 4].map((level) => (
+        {[1, 2, 3, 4, 5].map((level) => (
           <div
             key={level}
             className="h-1 flex-1 rounded-full transition-all duration-300"
@@ -25,12 +21,14 @@ const PasswordStrengthBar: React.FC<PasswordStrengthBarProps> = ({ strength }) =
           />
         ))}
       </div>
-      <p
-        className="text-xs font-semibold ml-1"
-        style={{ color: strength.color }}
-      >
-        {strength.label}
-      </p>
+      {strength.score > 0 && (
+        <p
+          className="text-xs font-semibold ml-1"
+          style={{ color: strength.color }}
+        >
+          {strength.label}
+        </p>
+      )}
     </div>
   );
 };

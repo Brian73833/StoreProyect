@@ -118,7 +118,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-stone-200 rounded-full transition-colors"
+            className="w-10 h-10 flex items-center justify-center hover:bg-stone-200 rounded-full transition-colors"
           >
             <span className="material-symbols-outlined">close</span>
           </button>

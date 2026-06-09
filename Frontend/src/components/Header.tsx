@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { logoutUser } from "../services/authService";
+
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -21,15 +21,17 @@ const Header: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    try {
-      logoutUser();
-    } catch (err) {
-      console.error("Error logging out:", err);
-    }
     logout();
     setMenuOpen(false);
     navigate("/welcome");
   };
+
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `px-5 py-2 text-sm font-bold rounded-xl transition-all duration-300 active:scale-95 ${
+      isActive
+        ? "text-primary bg-white shadow-sm"
+        : "text-stone-600 hover:text-primary hover:bg-white"
+    }`;
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-stone-200/60 shadow-sm">
@@ -51,24 +53,15 @@ const Header: React.FC = () => {
           </button>
           {isLoggedIn && (
             <nav className="hidden md:flex items-center gap-1 bg-stone-100/50 p-1.5 rounded-2xl border border-stone-200/50">
-              <button
-                onClick={() => navigate("/")}
-                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-primary hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
-              >
+              <NavLink to="/" className={navLinkClass}>
                 Home
-              </button>
-              <button
-                onClick={() => navigate("/products")}
-                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-primary hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
-              >
+              </NavLink>
+              <NavLink to="/products" className={navLinkClass}>
                 Catálogo
-              </button>
-              <button
-                onClick={() => navigate("/profile")}
-                className="px-5 py-2 text-sm font-bold text-stone-600 hover:text-primary hover:bg-white rounded-xl transition-all duration-300 active:scale-95"
-              >
+              </NavLink>
+              <NavLink to="/profile" className={navLinkClass}>
                 Perfil
-              </button>
+              </NavLink>
             </nav>
           )}
           {!isLoggedIn ? (
@@ -88,8 +81,8 @@ const Header: React.FC = () => {
                 onClick={() => setMenuOpen(!menuOpen)}
                 id="header-hamburger-btn"
                 className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-300 ${menuOpen
-                    ? "bg-stone-100 text-[#E2725B]"
-                    : "text-stone-600 hover:bg-stone-50 hover:text-stone-800"
+                  ? "bg-stone-100 text-[#E2725B]"
+                  : "text-stone-600 hover:bg-stone-50 hover:text-stone-800"
                   }`}
               >
                 <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
@@ -112,8 +105,8 @@ const Header: React.FC = () => {
               </button>
               <div
                 className={`absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl shadow-stone-900/10 border border-stone-100 overflow-hidden transition-all duration-300 origin-top-right ${menuOpen
-                    ? "opacity-100 scale-100 translate-y-0"
-                    : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                  ? "opacity-100 scale-100 translate-y-0"
+                  : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
                   }`}
               >
                 <div className="px-5 py-4 bg-gradient-to-r from-stone-50 to-stone-100/50 border-b border-stone-100">
@@ -138,19 +131,6 @@ const Header: React.FC = () => {
                     </span>
                     <span className="text-sm font-semibold">Home</span>
                   </button>
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      navigate("/profile");
-                    }}
-                    id="header-menu-perfil"
-                    className="w-full flex items-center gap-3 px-5 py-3 text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-all duration-200 group"
-                  >
-                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-primary transition-colors">
-                      person
-                    </span>
-                    <span className="text-sm font-semibold">Perfil</span>
-                  </button>
 
                   <button
                     onClick={() => {
@@ -164,6 +144,20 @@ const Header: React.FC = () => {
                       inventory_2
                     </span>
                     <span className="text-sm font-semibold">Catálogo</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/profile");
+                    }}
+                    id="header-menu-perfil"
+                    className="w-full flex items-center gap-3 px-5 py-3 text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-all duration-200 group"
+                  >
+                    <span className="material-symbols-outlined text-xl text-stone-400 group-hover:text-primary transition-colors">
+                      person
+                    </span>
+                    <span className="text-sm font-semibold">Perfil</span>
                   </button>
 
                   <div className="mx-4 my-1 border-t border-stone-100" />

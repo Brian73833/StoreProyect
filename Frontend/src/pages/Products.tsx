@@ -43,7 +43,6 @@ const Products: React.FC = () => {
 
   return (
     <main className="pt-8 pb-16 sm:pb-20 px-4 sm:px-6 md:px-16 max-w-7xl mx-auto bg-background text-on-surface font-body-md">
-      {" "}
       <div className="mb-6">
         <button
           onClick={() => navigate("/")}
@@ -172,41 +171,6 @@ const Products: React.FC = () => {
           No se encontraron productos.
         </div>
       )}
-      <section className="mt-16 sm:mt-20 pt-10 sm:pt-12 border-t-2 border-slate-400">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
-          <div className="space-y-4 sm:space-y-6">
-            <span className="font-label-caps text-xs text-primary uppercase tracking-widest block">
-              Quality Standards
-            </span>
-            <h2 className="font-headline-xl text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight text-on-surface">
-              Architectural Integrity
-            </h2>
-            <p className="font-body-lg text-lg sm:text-xl text-secondary leading-relaxed">
-              Every ceramic component produced in our factory undergoes rigorous
-              thermal stress testing and compression analysis to ensure
-              structural longevity.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6">
-              <div className="border-l-4 border-primary pl-4">
-                <h4 className="font-headline-md text-2xl font-semibold text-on-surface">
-                  ISO 9001
-                </h4>
-                <p className="font-body-md text-base text-secondary mt-1">
-                  Certified quality management in every kiln batch.
-                </p>
-              </div>
-              <div className="border-l-4 border-primary pl-4">
-                <h4 className="font-headline-md text-2xl font-semibold text-on-surface">
-                  100% Raw Clay
-                </h4>
-                <p className="font-body-md text-base text-secondary mt-1">
-                  Locally sourced, sustainable mineral extraction.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
   );
 };

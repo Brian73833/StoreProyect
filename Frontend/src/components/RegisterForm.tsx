@@ -3,6 +3,8 @@ import { registerUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import { getPasswordStrength } from "../lib/utils";
 import FieldError from "./FieldError";
+import PasswordStrengthBar from "./PasswordStrengthBar";
+import PasswordRequirements from "./PasswordRequirements";
 
 interface RegisterFormProps {
   onSuccess: () => void;
@@ -58,6 +60,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const passwordStrength = getPasswordStrength(formData.password);
 
@@ -93,18 +96,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     }
   };
 
-  const inputClass = (hasError: boolean) =>
-    `w-full pl-12 pr-4 py-4 bg-stone-50 border-2 rounded-2xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-stone-800 placeholder:text-stone-300 ${
-      hasError
-        ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
-        : "border-stone-100 focus:border-[#E2725B] focus:ring-[#E2725B]/5"
-    }`;
-
-  const inputClassPassword = (hasError: boolean) =>
-    `w-full pl-12 pr-12 py-4 bg-stone-50 border-2 rounded-2xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-stone-800 placeholder:text-stone-300 ${
-      hasError
-        ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
-        : "border-stone-100 focus:border-[#E2725B] focus:ring-[#E2725B]/5"
+  const inputClass = (hasError: boolean, withRightPadding = false) =>
+    `w-full pl-12 ${withRightPadding ? "pr-12" : "pr-4"} py-4 bg-stone-50 border-2 rounded-2xl focus:bg-white focus:ring-4 outline-none transition-all font-medium text-stone-800 placeholder:text-stone-300 ${hasError
+      ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
+      : "border-stone-100 focus:border-[#E2725B] focus:ring-[#E2725B]/5"
     }`;
 
   return (
@@ -171,7 +166,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             type={showPassword ? "text" : "password"}
             value={formData.password}
             onChange={handleChange}
-            className={inputClassPassword(!!errors.password)}
+            onFocus={() => setPasswordFocused(true)}
+            onBlur={() => setPasswordFocused(false)}
+            className={inputClass(!!errors.password, true)}
             placeholder="••••••••"
           />
           <button
@@ -185,56 +182,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           </button>
         </div>
 
-        {formData.password && (
-          <div className="mt-2 space-y-1">
-            <div className="flex gap-1">
-              {[1, 2, 3, 4].map((level) => (
-                <div
-                  key={level}
-                  className="h-1 flex-1 rounded-full transition-all duration-300"
-                  style={{
-                    backgroundColor:
-                      level <= passwordStrength.score
-                        ? passwordStrength.color
-                        : "#e7e5e4",
-                  }}
-                />
-              ))}
-            </div>
-            <p
-              className="text-xs font-semibold ml-1"
-              style={{ color: passwordStrength.color }}
-            >
-              {passwordStrength.label}
-            </p>
-          </div>
+        {(passwordFocused || formData.password) && (
+          <PasswordStrengthBar strength={passwordStrength} />
         )}
         <FieldError message={errors.password} />
         {!errors.password && (
-          <ul className="mt-2 space-y-0.5 ml-1">
-            {[
-              { regex: /.{8,}/, text: "Mínimo 8 caracteres" },
-              { regex: /[A-Z]/, text: "Una letra mayúscula" },
-              { regex: /[a-z]/, text: "Una letra minúscula" },
-              { regex: /\d/, text: "Un número" },
-              { regex: /[\W_]/, text: "Un carácter especial (!@#$…)" },
-            ].map(({ regex, text }) => {
-              const met = regex.test(formData.password);
-              return (
-                <li
-                  key={text}
-                  className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
-                    met ? "text-green-600" : "text-stone-400"
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-sm leading-none">
-                    {met ? "check_circle" : "radio_button_unchecked"}
-                  </span>
-                  {text}
-                </li>
-              );
-            })}
-          </ul>
+          <PasswordRequirements password={formData.password} />
         )}
       </div>
 
@@ -254,7 +207,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             type={showConfirmPassword ? "text" : "password"}
             value={formData.confirmPassword}
             onChange={handleChange}
-            className={inputClassPassword(!!errors.confirmPassword)}
+            className={inputClass(!!errors.confirmPassword, true)}
             placeholder="••••••••"
           />
           <button
